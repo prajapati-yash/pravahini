@@ -106,6 +106,7 @@ contract pravahini {
 
     // Function to set a dataset as public
     function setDatasetPublic(uint256 datasetId) public {
+        require(datasetOwners[datasetId] == msg.sender, "Sorry! you're not the owner of this Dataset");
         Dataset storage dataset = datasets[datasetId];
         dataset.isPublic = true;
         dataset.isPrivate = false;
@@ -115,6 +116,7 @@ contract pravahini {
 
     // Function to set a dataset as private
     function setDatasetPrivate(uint256 datasetId) public {
+        require(datasetOwners[datasetId] == msg.sender, "Sorry! you're not the owner of this Dataset");
         Dataset storage dataset = datasets[datasetId];
         dataset.isPublic = false;
         dataset.isPrivate = true;
@@ -124,6 +126,7 @@ contract pravahini {
 
     // Function to set a dataset as for sale with a given price per data
     function setDatasetForSale(uint256 datasetId, uint256 datasetPrice) public {
+        require(datasetOwners[datasetId] == msg.sender, "Sorry! you're not the owner of this Dataset!");
         Dataset storage dataset = datasets[datasetId];
         dataset.isPublic = false;
         dataset.isPrivate = false;
@@ -135,5 +138,26 @@ contract pravahini {
     function getDataset(uint256 datasetId) public view returns (Dataset memory) {
         return datasets[datasetId];
     }
+
+    // Function to purchase the Dataset
+
+    // Event to indicate the dataset purchase
+    event DatasetPurchased(uint256 indexed datasetId, address indexed buyer, address indexed owner, uint256 price);
+
+    // Function to Purchase the Dataset
+    function purchaseDataset(uint256 datasetId) public payable{
+        Dataset storage dataset = datasets[datasetId];
+        require(dataset.isForSale, "Dataset is not For Sale");
+        require(msg.value == dataset.datasetPrice, "Insufficient Payment");
+
+       // Transfer payment to the dataset owner
+        address ownerAddress = datasetOwners[datasetId];
+        payable(ownerAddress).transfer(msg.value);
+
+        // Emit an event to indicate the dataset purchase
+        emit DatasetPurchased(datasetId, msg.sender, ownerAddress, msg.value);
+    }
+
+
 
 }
