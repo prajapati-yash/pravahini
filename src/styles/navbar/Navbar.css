@@ -4,7 +4,6 @@
     /* top: 0; */
 }
 
-
 .nav-link {
     font-size: 1.25rem!important;
     font-weight: 450!important;
@@ -94,6 +93,9 @@
     display:inline-flex!important;
 }
 
+.img-logo{
+    width: 300px;
+}
 
 /* Color of 3 lines */
 
@@ -121,12 +123,22 @@
         display:none;
     }
 
-  }
+}
 
-  @media only screen and (max-width: 450px) {
+@media only screen and (max-width: 576px) {
+    .img-logo{
+        width: 270px;
+    }
+} 
+
+@media only screen and (max-width: 450px) {
     .nav-link {
         font-size: 25px!important;
         font-weight: 500!important;
         line-height: 8vh!important;
     }
-  }
+
+    .img-logo{
+        width: 210px;
+    }
+}    
