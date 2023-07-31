@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+
 contract pravahini {
     // Struct to store user information
     struct User {
@@ -11,7 +12,6 @@ contract pravahini {
         string image;
     }
 
-    //Struct to store the dataset
     struct Dataset {
         string title;
         string description;
@@ -49,8 +49,8 @@ contract pravahini {
             _location,
             _image
         );
-        
-        isRegistered[msg.sender] = true; // Mark the user as registered
+        // Mark the user as registered
+        isRegistered[msg.sender] = true;
     }
 
     // Function to retrieve user information based on the given address
@@ -58,7 +58,12 @@ contract pravahini {
         return registeredUserMapping[_address];
     }
 
-    // Function to Create Dataset
+    // Modifier to check whether user is Authorized or not
+    modifier onlyAuthorized() {
+        require(isRegistered[msg.sender], "User is not Registered!");
+        _;
+    }
+    // Function to set Dataset
     mapping(uint256 => Dataset) private datasets;
     uint256 private nextDatasetId;
     uint256[] private allDatasetIds;
@@ -68,6 +73,9 @@ contract pravahini {
 
     // Mapping of Dataset Owners with the Dataset
     mapping(address => uint256[]) private ownersToDatasetMapping;
+
+    // Mapping of Address with the datasetId 
+    mapping(address => uint256[]) private userSubscriptions;
 
     // Function to create a new dataset
     function createDataset(
@@ -80,11 +88,11 @@ contract pravahini {
         bool _isPublic,
         bool _isPrivate,
         bool _isForSale
+
     ) public {
-        // Check if the user is registered or not
+        // Check if the user is already registered or not
         require(isRegistered[msg.sender], "User is not Registered!");
         uint256 datasetId = nextDatasetId;
-
         // Create a new dataset and store it in the datasets mapping
         datasets[datasetId] = Dataset(
             _title,
@@ -98,15 +106,21 @@ contract pravahini {
             _isForSale  
         );
 
-        datasetOwners[datasetId] = msg.sender; // Set the dataset owner as the creator of the dataset
-        ownersToDatasetMapping[msg.sender].push(datasetId); // Owners to Dataset Mapping
-        allDatasetIds.push(datasetId); // Add the Dataset Id in the allDatasetIds array
-        nextDatasetId++; // Increment the nextDatasetId for the next dataset
+        // Set the dataset owner as the creator of the dataset
+        datasetOwners[datasetId] = msg.sender;
+
+        // Owners to Dataset Mapping
+        ownersToDatasetMapping[msg.sender].push(datasetId);
+
+        // Add the Dataset Id in the allDatasetIds array
+        allDatasetIds.push(datasetId);
+        // Increment the nextDatasetId for the next dataset
+        nextDatasetId++;
     }
 
     // Function to set a dataset as public
     function setDatasetPublic(uint256 datasetId) public {
-        require(datasetOwners[datasetId] == msg.sender, "Sorry! you're not the owner of this Dataset");
+        require(datasetOwners[datasetId] == msg.sender, "Sorry! you're not the owner of this Dataset!");
         Dataset storage dataset = datasets[datasetId];
         dataset.isPublic = true;
         dataset.isPrivate = false;
@@ -116,7 +130,7 @@ contract pravahini {
 
     // Function to set a dataset as private
     function setDatasetPrivate(uint256 datasetId) public {
-        require(datasetOwners[datasetId] == msg.sender, "Sorry! you're not the owner of this Dataset");
+        require(datasetOwners[datasetId] == msg.sender, "Sorry! you're not the owner of this Dataset!");
         Dataset storage dataset = datasets[datasetId];
         dataset.isPublic = false;
         dataset.isPrivate = true;
@@ -139,6 +153,57 @@ contract pravahini {
         return datasets[datasetId];
     }
 
+
+    // Function to search Datasets by Title
+    function searchDatasetByTitle(string memory keyword) public view returns(uint256[] memory){
+        uint256[] memory searchResults;
+        uint256 count = 0;
+        for(uint256 i=0; i<nextDatasetId-1;i++){
+            Dataset memory dataset = datasets[i];
+            // Check if the dataset title contains the keyword
+            if(contains(dataset.title, keyword)){
+                searchResults[count]=i; //Store datasets Id in searchResults array
+                count++;
+            }
+        }
+
+        //Resize the searchResults array to remove any unused elements
+
+        uint256[] memory result = new uint256[](count);
+        for(uint256 i=0; i<count;i++){
+            result[i] =searchResults[i];
+        }
+
+        return result;
+    }
+
+    // Check whether the specific keywoord contains a specific keyword
+
+    function contains(string memory _str, string memory _keyword) internal pure returns (bool){
+        bytes memory strBytes = bytes(_str);
+        bytes memory keywordBytes = bytes(_keyword);
+        uint256 keywordLength = keywordBytes.length;
+        if(strBytes.length < keywordLength){
+            return false;
+        }
+
+        for(uint256 i=0; i < strBytes.length - keywordLength; i++){
+            bool found= true;
+
+            for(uint256 j=0; j < keywordLength;j++){
+                if(strBytes[i+j] != keywordBytes[j]){
+                    found=false;
+                    break;
+                }
+            }
+ 
+            if(found){
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Function to purchase the Dataset
 
     // Event to indicate the dataset purchase
@@ -154,10 +219,39 @@ contract pravahini {
         address ownerAddress = datasetOwners[datasetId];
         payable(ownerAddress).transfer(msg.value);
 
+        userSubscriptions[msg.sender].push(datasetId);
+
         // Emit an event to indicate the dataset purchase
         emit DatasetPurchased(datasetId, msg.sender, ownerAddress, msg.value);
     }
 
+    // Get all Datasets
+    function getAllDatasets() public view returns(Dataset[] memory){
+        Dataset[] memory allDatasets = new Dataset[](allDatasetIds.length);
+        for(uint256 i =0; i < allDatasetIds.length;i++){
+            allDatasets[i] = datasets[allDatasetIds[i]];
+        }
+        return allDatasets;
+    }
 
+    // Get all Datasets of a user
+    function getAllDatasetsOfUser() public view returns(Dataset[] memory){
+        Dataset[] memory allDatasets = new Dataset[](ownersToDatasetMapping[msg.sender].length);
+        uint256[] memory userDatasets = ownersToDatasetMapping[msg.sender];
+        for(uint256 i =0; i < userDatasets.length;i++){
+            allDatasets[i] = datasets[userDatasets[i]];
+        }
+        return allDatasets;
+    }
+
+    // Get all Subscriptions  of a user
+    function getAllDatasetsSubscriptionOfUser() public view returns(Dataset[] memory){
+        Dataset[] memory allDatasets = new Dataset[](userSubscriptions[msg.sender].length);
+        uint256[] memory userSubscriptionsDatasets = userSubscriptions[msg.sender];
+        for(uint256 i =0; i < userSubscriptionsDatasets.length;i++){
+            allDatasets[i] = datasets[userSubscriptionsDatasets[i]];
+        }
+        return allDatasets;
+    }
 
 }
