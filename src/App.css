@@ -1,8 +1,12 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
+  /* padding: 2rem; */
   text-align: center;
+}
+
+.app-container{
+  position: relative;
 }
 
 .logo {
@@ -41,6 +45,3 @@
   color: #888;
 }
 
-body{
-  background: linear-gradient(to right, #E9F1FF, #B5D2FE)
-} 
