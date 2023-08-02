@@ -1,5 +1,6 @@
 .register-main-container{
-    background: linear-gradient(to left, #C5DDF3, #E1EFFC) !important;
+    /* background: linear-gradient(to left, #C5DDF3, #E1EFFC) !important; */
+    background: linear-gradient(to right, rgb(233, 241, 255), rgb(181, 210, 254));
 }
 
 /* Heading css */
