@@ -33,7 +33,10 @@
     box-shadow: none;
     border: 0;
 }
- 
+.navbar.scrolled {
+    background: linear-gradient(to right, rgb(233, 241, 255), rgb(181, 210, 254)); /* Change the background color when scrolling */
+    
+  }
 .navbar-toggler span {
     margin: 0;
     padding: 0;
