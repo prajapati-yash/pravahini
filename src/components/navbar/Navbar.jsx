@@ -1,6 +1,7 @@
 import {React, useEffect, useState} from "react";
 import "../../styles/navbar/Navbar.css";
-import logo from "../../assets/navbar/pravahini-logo1.png";
+// import logo from "../../assets/navbar/pravahini-logo1.png";
+import logo from "../../assets/navbar/logo.png";
 import { ConnectKitButton } from "connectkit";
 
 const navigation = [
