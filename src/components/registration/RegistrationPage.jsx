@@ -18,7 +18,7 @@ function RegistrationPage() {
   });
 
   const fileInputRef = useRef(null);
-  const [selectedFileName, setSelectedFileName] = useState('');
+  const [selectedFileName, setSelectedFileName] = useState("");
 
   const handleLogoClick = () => {
     fileInputRef.current.click();
@@ -35,7 +35,7 @@ function RegistrationPage() {
       reader.onloadend = () => {
         const fileData = reader.result;
         // Now you can use the file data as needed
-        console.log('File Data:', fileData);
+        console.log("File Data:", fileData);
       };
 
       reader.readAsDataURL(selectedFile); // Read file as data URL (you can use other methods depending on your requirements)
@@ -74,10 +74,10 @@ function RegistrationPage() {
     <div className="register-main-container">
       <div className="register-heading">Register Here!</div>
       <div className="d-flex flex-md-row flex-column-reverse align-items-center">
-        <div className="col-md-5">
+        <div className="col-lg-5">
           <img className="register-hero-img" src={registerImg} />
         </div>
-        <div className="content-component col-md-5">
+        <div className="content-component col-lg-5">
           <div
             className="d-flex pb-3 upload-container"
             onClick={handleLogoClick}
@@ -89,18 +89,21 @@ function RegistrationPage() {
               ref={fileInputRef}
               style={{ display: "none" }}
               onChange={handleFileChange}
-            ></input>  
+            ></input>
           </div>
 
           <div className="selected-image">
             {selectedFileName && <p>Selected Image: {selectedFileName}</p>}
-          </div> 
+          </div>
 
           <div className="">
             {howWorksContent.map((item, key) => (
               <div className="d-flex flex-column flex-lg-row py-2 py-sm-3 register-input-component">
                 <div className="d-flex col-md-6 col-xl-4 register-input-text-component">
-                  <img className="col-2 register-input-img" src={item.thumbnail} />
+                  <img
+                    className="col-2 register-input-img"
+                    src={item.thumbnail}
+                  />
                   <div className="col-lg-5 col-xl-4 px-4 register-input-text">
                     {item.head}
                   </div>

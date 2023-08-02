@@ -4,12 +4,17 @@
     /* top: 0; */
 }
 
-.nav-link {
+.navbar.scrolled {
+    background: linear-gradient(to right, rgb(233, 241, 255), rgb(181, 210, 254)); /* Change the background color when scrolling */
+    
+  }
+
+.navbar-link {
     font-size: 1.25rem!important;
     font-weight: 450!important;
 }
 
-.nav-link:hover{
+.navbar-link:hover{
     color: #C28A3F!important;
 }
 
@@ -28,7 +33,10 @@
     box-shadow: none;
     border: 0;
 }
- 
+.navbar.scrolled {
+    background: linear-gradient(to right, rgb(233, 241, 255), rgb(181, 210, 254)); /* Change the background color when scrolling */
+    
+  }
 .navbar-toggler span {
     margin: 0;
     padding: 0;
@@ -122,6 +130,13 @@
     .for-desktop{
         display:none;
     }
+    .navbar-light{
+        background: linear-gradient(to right, rgb(233, 241, 255), rgb(181, 210, 254));
+    }
+
+    .navbar-content{
+        display: flex;
+    }
 
 }
 
@@ -133,7 +148,7 @@
 
 @media only screen and (max-width: 450px) {
     .nav-link {
-        font-size: 25px!important;
+        font-size: 20px!important;
         font-weight: 500!important;
         line-height: 8vh!important;
     }

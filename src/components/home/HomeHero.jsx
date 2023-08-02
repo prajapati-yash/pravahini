@@ -1,7 +1,7 @@
 import React from "react";
 import "../../styles/home/HomeHero.css";
 import arrow from "../../assets/home/arrow.png";
-import union from "../../assets/home/union.png";
+import union from "../../assets/home/union-2.png";
 import union1 from "../../assets/home/union-1.png";
 import heroimg from "../../assets/home/heroImage.png";
 import search from "../../assets/home/search.png";
@@ -11,8 +11,8 @@ import unioncopy from "../../assets/home/union-copy.png";
 
 function HomeHero() {
   return (
-    <div className="d-flex hero-main-container px-4 px-sm-5 my-xl-4 mx-2">
-      <div className="container-fluid hero-container px-4 py-3 px-sm-5 py-sm-4 col-md-6">
+    <div className="d-flex flex-lg-row flex-column hero-main-container px-4 px-sm-5 my-xl-4 mx-2">
+      <div className="container-fluid hero-container px-4 py-3 px-sm-5 py-sm-4 col-lg-6">
         <div>
           <p className="hero-text">Welcome to Pravahini (प्रवाहिनी)</p>
           <p className="hero-sub-text ">
@@ -32,7 +32,7 @@ function HomeHero() {
           </div>
         </div>
       </div>
-      <div className="col-md-6 hero-img-container">
+      <div className="col-lg-6 hero-img-container">
         <img className="img-union" src={union} />
         <img className="img-security " src={security} />
         <img className="img-hero" src={heroimg} />
