@@ -16,7 +16,7 @@
 }
 
 .hero-sub-text{
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 400;
     color: #1D1D1D;
     text-align: left;
@@ -26,7 +26,7 @@
     background-color: #fff;
     border-radius: 2rem;
     width: 45%;
-    /* justify-content: center; */
+    cursor: pointer;
 }
 
 .hero-button-text{
@@ -55,25 +55,26 @@
 
 .hero-img-container{
     padding-left: 1rem;
+    position: relative;
 }
 
 .img-union{
     width: 100%;
-    margin-top: -25%;
+    margin-top: -50%;
     position: relative;
 }
 
 .img-security{
     width: 45%;
     position: relative;
-    margin-top: -55%;
+    margin-top: -58%;
     margin-right: 50%;
 }
 
 .img-hero{
     width: 45%;
     position: relative;
-    margin-top: -48%;
+    margin-top: -50%;
     margin-left: 52%;
 }
 
@@ -112,17 +113,64 @@
     }
 }
 
-@media only screen and (max-width: 992px) {
+@media only screen and (max-width: 991px) {
     .hero-button {
         width: 75%;
+    }
+    .img-hero, .img-link, .img-search, .img-security{
+        display: none;
+    }
+
+    .hero-container{
+        z-index: 10;
+        /* margin-bottom: 20rem; */
+          
+    }
+    /* .hero-container{
+        margin-bottom: 10rem;
+    } */
+
+    .img-union{
+        width: 45%;
+        margin-top: -40rem;
+        margin-left: 4rem;
+        /* margin-left: %; */
+        position: absolute;
+        z-index: 1;
+        display: none;
+    }
+
+    .img-union1{
+        width: 45%;
+        position: absolute;
+        z-index: 1;
+        margin-left: -25rem;
+        margin-top: -30rem;
+        display: none;
+    }
+
+    .hero-text{
+        /* font-size: 2.5rem; */
+        text-align: center;
+    }
+
+    .hero-sub-text{
+        /* font-size: 1rem; */
+        text-align: center;
+    }
+    .hero-button{
+        align-items: center;
+        justify-content: center;
+        width: 50%;
+        justify-content: center;  
+    }
+
+    .get-started-container{
+        display: flex;
     }
 }
 
 @media only screen and (max-width: 767px) {
-    .img-hero, .img-link, .img-search, .img-security, .img-union, .img-union1{
-        display: none;
-    }
-
     .hero-container{
         position: relative;
     }
@@ -145,7 +193,7 @@
         align-items: center;
         justify-content: center;
         width: 50%;
-        justify-content: center;
+        justify-content: center;  
     }
 
     .get-started-container{
