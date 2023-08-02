@@ -16,6 +16,7 @@ const navigation = [
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  
 
 
   useEffect(()=>{
