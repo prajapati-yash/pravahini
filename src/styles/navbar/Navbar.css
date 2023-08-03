@@ -6,8 +6,13 @@
 
 .navbar.scrolled {
     background: linear-gradient(to right, rgb(233, 241, 255), rgb(181, 210, 254)); /* Change the background color when scrolling */
-    
-  }
+}
+
+.navbar-container{
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
 
 .navbar-link {
     font-size: 1.25rem!important;
@@ -15,7 +20,7 @@
 }
 
 .navbar-link:hover{
-    color: #C28A3F!important;
+    color: #4250FF !important;
 }
 
  .navbar-toggler {
@@ -112,6 +117,10 @@
     background: black;
 }
 
+.navbar-image{
+    margin-right: 1rem;
+}
+
 @media only screen and (max-width: 991px) {
     ul {
         height: 100vh!important;
@@ -137,12 +146,21 @@
     .navbar-content{
         display: flex;
     }
+    .navbar-link{
+        font-size: 1.1rem!important;
+    }
+    .img-logo{
+        width: 250px;
+    }
 
 }
 
 @media only screen and (max-width: 576px) {
     .img-logo{
-        width: 270px;
+        width: 200px;
+    }
+    .navbar-link{
+        font-size: 1rem!important;
     }
 } 
 
@@ -154,6 +172,10 @@
     }
 
     .img-logo{
-        width: 210px;
+        width: 150px;
+    }
+
+    .navbar-link{
+        font-size: 0.8rem!important;
     }
 }    

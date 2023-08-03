@@ -5,7 +5,7 @@ import Footer from "../components/footer/Footer";
 
 function Registration() {
   return (
-    <div style={{ background: "linear-gradient(to left, #C5DDF3, #E1EFFC)" }}>
+    <div style={{ background: "linear-gradient(to right, #E9F1FF, #B5D2FE)" }}>
       <Navbar />
       <RegistrationPage />
       <Footer/>
