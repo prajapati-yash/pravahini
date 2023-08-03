@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Registration from "./pages/Registration";
 import Dashboard from "./pages/Dashboard";
@@ -10,15 +10,15 @@ function App() {
 
   return (
     <div className="app-container">
-    <BrowserRouter>
+    <Router>
 
       <Routes>
-        <Route path="/" element={<Home/>}></Route>
-        <Route path="/register" element={<Registration/>}></Route>
+        <Route path="/" element={<Home/>}/>
+        <Route path="/register" element={<Registration/>}/>
         <Route path="/user-dashboard" element={<Dashboard/>}></Route>
         <Route path="/user-dashboard/*" element={<Dashboard/>}></Route>
       </Routes>
-    </BrowserRouter>
+    </Router>
       
 
     </div>
