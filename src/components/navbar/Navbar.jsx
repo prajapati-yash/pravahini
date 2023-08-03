@@ -101,7 +101,7 @@ export default function Navbar() {
                 <a
                   className="nav-link navbar-link p-0 active d-flex align-items-center"
                   aria-current="page"
-                  href="#"
+                  href=""
                 >
                   <img
                     className="navbar-image"
