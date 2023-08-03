@@ -4,7 +4,7 @@ import "../../styles/registration/RegistrationPage.css";
 import upload from "../../assets/registration/upload.png";
 import name from "../../assets/registration/name.png";
 import occupation from "../../assets/registration/occupation.png";
-import organization from "../../assets/registration/organization.png";
+import organization from "../../assets/registration/organization.png"
 import location from "../../assets/registration/location.png";
 import registerImg from "../../assets/registration/registration-bg.png";
 
