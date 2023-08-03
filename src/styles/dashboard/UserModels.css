@@ -5,7 +5,7 @@
 
 .user-model-details{
     text-align: left;
-    padding: 2rem;
+    padding: 1.5rem;
 }
 
 .user-model-title{
@@ -29,6 +29,7 @@
     font-size: 0.8rem;
     color: #4250FF;
     font-weight: 300;
+    cursor: pointer;
 }
 
 @media only screen and (max-width: 768px) {

@@ -4,7 +4,7 @@ import "../../styles/registration/RegistrationPage.css";
 import upload from "../../assets/registration/upload.png";
 import name from "../../assets/registration/name.png";
 import occupation from "../../assets/registration/occupation.png";
-import organization from "../../assets/registration/organization.png";
+// import organization from "../../assets/registration/organization.png"
 import location from "../../assets/registration/location.png";
 import registerImg from "../../assets/registration/registration-bg.png";
 
@@ -73,7 +73,7 @@ function RegistrationPage() {
   return (
     <div className="register-main-container">
       <div className="register-heading">Register Here!</div>
-      <div className="d-flex flex-md-row flex-column-reverse align-items-center">
+      <div className="d-flex flex-lg-row flex-column-reverse align-items-center">
         <div className="col-lg-5">
           <img className="register-hero-img" src={registerImg} />
         </div>
