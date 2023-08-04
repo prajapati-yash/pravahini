@@ -1,7 +1,7 @@
 import React from "react";
-import RegistrationPage from "../components/registration/RegistrationPage";
-import Navbar from "../components/navbar/Navbar";
-import Footer from "../components/footer/Footer";
+import RegistrationPage from "../components/registration/RegistrationPage.js";
+import Navbar from "../components/navbar/Navbar.js";
+import Footer from "../components/footer/Footer.js";
 
 function Registration() {
   return (

@@ -1,8 +1,10 @@
 import { React, useEffect, useState } from "react";
-import "../../styles/navbar/Navbar.css";
+// import "../../styles/navbar/Navbar.css";
+
+import "../../styles/navbar/Navbar.css"
 // import logo from "../../assets/navbar/pravahini-logo1.png";
 import logo from "../../assets/navbar/logo.png";
-import { ConnectKitButton } from "connectkit";
+// import { ConnectKitButton } from "connectkit";
 import create1 from "../../assets/sidebar/create-black.png";
 import create2 from "../../assets/sidebar/create-white.png";
 import dashboard1 from "../../assets/sidebar/dashboard-black.png";
@@ -176,7 +178,7 @@ export default function Navbar() {
               </li>
 
               <div className="py-3 py-lg-none">
-                <ConnectKitButton />
+                {/* <ConnectKitButton /> */}
               </div>
             </ul>
           </div>
