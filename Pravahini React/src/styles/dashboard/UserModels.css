@@ -1,0 +1,87 @@
+.user-model-component{
+    background-color: white;
+    border-radius: 3rem;
+}
+
+.user-model-details{
+    text-align: left;
+    padding: 1.5rem;
+}
+
+.user-model-title{
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
+.user-model-desc{
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #535353;
+}
+
+.user-model-badge{
+    color: #4250FF;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.user-model-btn{
+    font-size: 0.8rem;
+    color: #4250FF;
+    font-weight: 300;
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+    .user-model-title{
+        font-size: 1.1rem;
+    }
+
+    .user-model-desc{
+        font-size: 1rem;
+    }
+
+    .user-model-badge{
+        font-size: 1rem;
+    }
+}
+
+@media only screen and (max-width: 470px) {
+    .user-model-details{
+        padding: 0.8rem;
+    }
+
+    .user-model-title{
+        font-size: 1rem;
+    }
+
+    .user-model-desc{
+        font-size: 0.9rem;
+    }
+
+    .user-model-badge{
+        font-size: 0.9rem;
+    }
+}
+
+@media only screen and (max-width: 375px) {
+    .user-model-component{
+        border-radius: 1.6rem;
+    }
+    
+    .user-model-details{
+        padding: 0.8rem;
+    }
+
+    .user-model-title{
+        font-size: 0.9rem;
+    }
+
+    .user-model-desc{
+        font-size: 0.8rem;
+    }
+
+    .user-model-badge{
+        font-size: 0.8rem;
+    }
+}
