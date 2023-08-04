@@ -15,5 +15,4 @@ const AppRouter = () => {
       </Router>
     );
   };
-
 export default AppRouter;
