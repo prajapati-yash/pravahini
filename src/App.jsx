@@ -17,15 +17,15 @@ function App() {
 
   return (
     <div className="app-container">
-      {/* <BrowserRouter>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/register" render={()=> <Registration />}/>
           <Route path="/user-dashboard" element={<Dashboard />}></Route>
           <Route path="/user-dashboard/*" element={<Dashboard />}></Route>
         </Routes>
-      </BrowserRouter> */}
-      <RouterProvider router={router}/>
+      </BrowserRouter>
+      {/* <RouterProvider router={router}/> */}
     </div>
   );
 }
