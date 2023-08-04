@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Registration from "./pages/Registration";
 import Dashboard from "./pages/Dashboard";
 
+
 const AppRouter = () => {
     return (
       <Router>
