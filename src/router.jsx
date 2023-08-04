@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from "./pages/Home";
 import Registration from "./pages/Registration";
 import Dashboard from "./pages/Dashboard";
@@ -6,14 +6,14 @@ import Dashboard from "./pages/Dashboard";
 
 const AppRouter = () => {
     return (
-      <Router>
-        <Switch>
+      <Routes>
+        <Routes>
           <Route path="/" component={Home}/>
           <Route path="/register" compponent={Registration}/>
-          <Route path="/user-dashboard" component={Dashboard}></Route>
-          <Route path="/user-dashboard/*" component={Dashboard}></Route>
-        </Switch>
-      </Router>
+          <Route path="/user-dashboard" component={Dashboard}/>
+          <Route path="/user-dashboard/*" component={Dashboard}/>
+        </Routes>
+      </Routes>
     );
   };
 export default AppRouter;
