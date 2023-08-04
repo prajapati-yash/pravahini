@@ -8,6 +8,7 @@ const AppRouter = () => {
     return (
       <Routes>
         <Routes>
+          
           <Route path="/" component={Home}/>
           <Route path="/register" compponent={Registration}/>
           <Route path="/user-dashboard" component={Dashboard}/>
