@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "../../styles/sidebar/Sidebar.css";
 import create1 from "../../assets/sidebar/create-black.png";
 import create2 from "../../assets/sidebar/create-white.png";
@@ -24,9 +24,7 @@ function Sidebar() {
     <div className="sidebar pt-4 sidebar-container">
       <div className="collapse show" id="sidebarContent">
         <ul className="nav flex-column">
-          <li
-            className="nav-item py-2 sidebar-items"
-          >
+          <li className="nav-item py-2 sidebar-items">
             <a
               className={`nav-link sidebar-content align-items-center ${
                 activeComponent === "create" ? "active" : ""
@@ -73,9 +71,13 @@ function Sidebar() {
             </a>
           </li>
           <li className="nav-item py-2">
-            <a className={`nav-link sidebar-content align-items-center ${
+            <a
+              className={`nav-link sidebar-content align-items-center ${
                 activeComponent === "dataset" ? "active" : ""
-              }`} href="#" onClick={() => handleItemClick("dataset")}>
+              }`}
+              href="#"
+              onClick={() => handleItemClick("dataset")}
+            >
               <img
                 className="sidebar-image"
                 src={dataset1}
@@ -92,9 +94,13 @@ function Sidebar() {
             </a>
           </li>
           <li className="nav-item py-2">
-            <a className={`nav-link sidebar-content align-items-center ${
+            <a
+              className={`nav-link sidebar-content align-items-center ${
                 activeComponent === "model" ? "active" : ""
-              }`} href="#" onClick={() => handleItemClick("model")}>
+              }`}
+              href="#"
+              onClick={() => handleItemClick("model")}
+            >
               <img
                 className="sidebar-image"
                 src={model1}
@@ -111,9 +117,13 @@ function Sidebar() {
             </a>
           </li>
           <li className="nav-item py-2">
-            <a className={`nav-link sidebar-content align-items-center ${
+            <a
+              className={`nav-link sidebar-content align-items-center ${
                 activeComponent === "code" ? "active" : ""
-              }`} href="#" onClick={() => handleItemClick("code")}>
+              }`}
+              href="#"
+              onClick={() => handleItemClick("code")}
+            >
               <img
                 className="sidebar-image"
                 src={code1}
@@ -130,9 +140,13 @@ function Sidebar() {
             </a>
           </li>
           <li className="nav-item py-2">
-            <a className={`nav-link sidebar-content align-items-center ${
+            <a
+              className={`nav-link sidebar-content align-items-center ${
                 activeComponent === "computation" ? "active" : ""
-              }`} href="#" onClick={() => handleItemClick("computation")}>
+              }`}
+              href="#"
+              onClick={() => handleItemClick("computation")}
+            >
               <img
                 className="sidebar-image"
                 src={computation1}

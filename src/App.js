@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Registration from "./pages/Registration";
 import Dashboard from "./pages/Dashboard";
+import Dataset from "./pages/Dataset";
 import { useState } from "react";
 import "./App.css";
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/register" element={ <Registration />}/>
           <Route path="/user-dashboard" element={<Dashboard />}/>
           <Route path="/user-dashboard/*" element={<Dashboard />}/>
+          <Route path="/dataset/create-dataset" element={<Dataset/>}></Route>
         </Routes>
       </BrowserRouter>
       {/* <RouterProvider router={router}/> */}
