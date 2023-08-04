@@ -51,9 +51,9 @@ const config = createConfig(
 ReactDOM.createRoot(document.getElementById('root')).render(
   <WagmiConfig config={config}>
     <ConnectKitProvider theme="midnight">
-      <React.StrictMode>
+      
         <App />
-      </React.StrictMode>
+    
     </ConnectKitProvider>
   </WagmiConfig>,
 )
