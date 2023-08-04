@@ -15,6 +15,7 @@ import code1 from "../../assets/sidebar/code-black.png";
 import code2 from "../../assets/sidebar/code-white.png";
 import computation1 from "../../assets/sidebar/computation-black.png";
 import computation2 from "../../assets/sidebar/computation-white.png";
+import { useNavigate } from "react-router";
 
 const navigation = [
   {
@@ -28,6 +29,7 @@ const navigation = [
 ];
 
 export default function Navbar() {
+  const navigate=useNavigate();
   const [scrolled, setScrolled] = useState(false);
   
 
@@ -98,10 +100,10 @@ export default function Navbar() {
                 </a>
               </li>
               <li className="navbar-content nav-item d-lg-none">
-                <a
+                <div
                   className="nav-link navbar-link p-0 active d-flex align-items-center"
                   aria-current="page"
-                  href=""
+                 onClick={()=>navigate('/user-dashboard')}
                 >
                   <img
                     className="navbar-image"
@@ -110,7 +112,7 @@ export default function Navbar() {
                     width={18}
                   />
                   Dashboard
-                </a>
+                </div>
               </li>
               <li className="navbar-content nav-item d-lg-none">
                 <a
