@@ -4,17 +4,17 @@ import "../../styles/registration/RegistrationPage.css";
 import upload from "../../assets/registration/upload.png";
 import name from "../../assets/registration/name.png";
 import occupation from "../../assets/registration/occupation.png";
-import organization from "../../assets/registration/organization.png"
+import organization from "../../assets/registration/organization.png";
 import location from "../../assets/registration/location.png";
 import registerImg from "../../assets/registration/registration-bg.png";
 
 function RegistrationPage() {
   const [formData, setFormData] = useState({
-    userName: null,
-    userOccupation: null,
-    userOrganization: null,
-    userLocation: null,
-    userImage: null,
+    userName: "",
+    userOccupation: "",
+    userOrganization: "",
+    userLocation: "",
+    userImage: "",
   });
 
   const fileInputRef = useRef(null);
@@ -27,23 +27,20 @@ function RegistrationPage() {
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
 
-    // Do whatever you need to do with the selected file
-    // For example, you can read the file data using FileReader API
     if (selectedFile) {
       const reader = new FileReader();
 
       reader.onloadend = () => {
         const fileData = reader.result;
-        // Now you can use the file data as needed
         console.log("File Data:", fileData);
       };
 
-      reader.readAsDataURL(selectedFile); // Read file as data URL (you can use other methods depending on your requirements)
+      reader.readAsDataURL(selectedFile); 
       setSelectedFileName(selectedFile.name);
     }
   };
 
-  const howWorksContent = [
+  const registerData = [
     {
       thumbnail: name,
       head: "Name",
@@ -97,23 +94,23 @@ function RegistrationPage() {
           </div>
 
           <div className="">
-            {howWorksContent.map((item, key) => (
-              <div className="d-flex flex-column flex-lg-row py-2 py-sm-3 register-input-component">
-                <div className="d-flex col-md-6 col-xl-4 register-input-text-component">
+            {registerData.map((item, key) => (
+              <div className="d-flex flex-column flex-lg-row py-2 py-sm-2 py-md-3 register-input-component">
+                <div className="d-flex col-6 col-xl-4 register-input-text-component">
                   <img
                     className="col-2 register-input-img"
-                    src={item.thumbnail}
+                    src={item.thumbnail} 
                   />
                   <div className="col-lg-5 col-xl-4 px-4 register-input-text">
                     {item.head}
                   </div>
                 </div>
-                <div className="col-md-6 register-input-field">
+                <div className="d-flex col-6 register-input-field">
                   <input
                     type="text"
-                    id="userName"
-                    name="userName"
-                    className="py-sm-2 py-1 input-form-data"
+                    id="form-data"
+                    name="form-data"
+                    className="py-md-1 py-sm-1 input-form-data"
                     placeholder={item.placeholder}
                     value={item.value}
                     onChange={(e) => {
@@ -130,7 +127,7 @@ function RegistrationPage() {
 
             <button
               type="submit"
-              className="btn rounded-pill my-2 py-2 px-5 register-btn"
+              className="btn rounded-pill my-2 py-sm-2 px-sm-5 px-4 register-btn"
             >
               Register
             </button>
