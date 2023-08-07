@@ -73,7 +73,7 @@
 .dashboard-dataset-btn:hover,
 .dashboard-model-btn:hover,
 .dashboard-subscription-btn:hover{
-     background-color: #6A79FF;
+    background-color: #6A79FF;
     color: white;
     box-shadow: 2px 2px 3px 2px rgba(180, 164, 246, 0.308);
     border: 1px solid #4250FF;

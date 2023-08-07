@@ -81,7 +81,7 @@ function CreateDataset() {
   };
 
   return (
-    <div className="d-flex py-3 px-md-5 px-sm-4 px-sm-3 justify-content-center">
+    <div className="d-flex py-3 px-md-5 px-sm-4 px-sm-3 justify-content-center" style={{ background: "linear-gradient(to right, #E9F1FF, #B5D2FE)" }}>
       <div className="col-lg-8 col-md-9 col-10 py-4 create-dataset-main-container">
         <div className="py-4 create-dataset-heading">Create Dataset</div>
         <div className="create-dataset-content py-2">

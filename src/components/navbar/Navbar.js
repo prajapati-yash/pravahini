@@ -109,13 +109,16 @@ export default function Navbar() {
             id="navbarRightAlignExample"
           >
             <ul className="navbar-nav ml-auto align-items-center mb-2 mb-lg-0 navbar-container">
-              <li className="nav-item py-2 d-lg-none">
+              <li className="nav-item dropdown py-2 d-lg-none">
                 <a
-                  className={`nav-link navbar-content px-1 p-0 active d-flex align-items-center ${
+                  className={`nav-link dropdown-toggle navbar-content px-1 p-0 active d-flex align-items-center ${
                     activeComponent === "create" ? "activeState" : ""
                   }`}
                   aria-current="page"
                   href="#"
+                  role="button" 
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
                   onClick={() => handleItemClick("create")}
                 >
                   <img
@@ -132,6 +135,10 @@ export default function Navbar() {
                   />
                   Create
                 </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">Create Dataset</a></li>
+                  <li><a class="dropdown-item" href="#">Create Model</a></li>
+                </ul>  
               </li>
               <li className="nav-item py-2 d-lg-none">
                 <a

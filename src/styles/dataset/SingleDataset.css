@@ -1,0 +1,109 @@
+.single-dataset-head{
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.single-dataset-subhead{
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.single-dataset-details{
+  background: linear-gradient(to right, #6A79FF, #4250FF);
+  border-top-left-radius: 6rem;
+  border-bottom-left-radius: 6rem;
+}
+
+.single-dataset-download{
+  background-color: white;
+  color: #4250FF;
+  font-size: 1.3rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+}
+
+.single-dataset-download:hover{
+  color: #4250FF;
+  box-shadow: -4px 4px 8px 4px rgba(58, 57, 57, 0.4);
+}
+
+.single-dataset-details-head{
+  padding-bottom: 0.3rem;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 400;
+
+}
+
+.single-dataset-details-value{
+  /* width: 90%; */
+  background: linear-gradient(to right, #FFFFFF48, #FFFFFF78);
+  border-radius: 0.4rem;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+  color: white;
+  font-size: 1rem;
+}
+
+.dataset-buy-btn{
+  background-color: #000000;
+  color: #FFB800;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dataset-buy-btn:hover{
+  color: white;
+  box-shadow: 4px 4px 8px 4px rgba(58, 57, 57, 0.4);
+}
+
+@media only screen and (max-width: 767px){
+  .single-dataset-details{
+    border-top-right-radius: 6rem;
+    border-bottom-left-radius: 0rem;
+  }
+
+  .single-dataset-content{
+    padding-left: 8rem;
+    padding-right: 8rem;
+  }
+}
+
+@media only screen and (max-width: 576px){
+  .single-dataset-content{
+    padding-left: 6rem;
+    padding-right: 6rem;
+  }
+  .dataset-buy-btn{
+    padding: 0.8rem 2rem;
+  }
+}
+
+@media only screen and (max-width: 470px){
+  .single-dataset-details{
+    border-top-right-radius: 5rem;
+    border-top-left-radius: 5rem;
+  }
+  .single-dataset-content{
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+@media only screen and (max-width: 375px){
+  .single-dataset-details{
+    border-top-right-radius: 4rem;
+    border-top-left-radius: 4rem;
+  }  
+
+  .single-dataset-download{
+    font-size: 1.2rem;
+  }
+
+  .single-dataset-content{
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+}
