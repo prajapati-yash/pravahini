@@ -6,7 +6,7 @@ import img from "../../assets/home/security.png";
 const blocks = [
   {
     title: "Dataset1",
-    description: "Description of dataset 1 involves analysing quality data",
+    description: "Description of dataset 1 involves analysing quality data Description of dataset 1 involves analysing quality data",
   },
   {
     title: "Dataset2",
