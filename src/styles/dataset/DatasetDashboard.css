@@ -101,6 +101,60 @@
     color: #ffffff; 
 }
 
+/* Dataset Component css */
+
+.all-datasets-main{
+    margin-right: 0rem;
+    margin-left: 0rem;
+}
+
+.all-datasets-component{
+    background-color: white;
+    border-radius: 2rem;
+}
+
+.all-dataset-img-div{
+    overflow: hidden;
+    /* height: 60%; */
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 1rem;
+    background-color: white;
+}
+
+.all-dataset-img{
+    width: 60%;
+}
+
+.all-dataset-details{
+    text-align: left;
+    padding: 1rem;
+}
+
+.all-dataset-title{
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
+.all-dataset-desc{
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #535353;
+}
+
+.all-dataset-badge{
+    color: #4250FF;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.all-dataset-btn{
+    font-size: 0.8rem;
+    color: #4250FF;
+    font-weight: 300;
+    cursor: pointer;
+}
+
 @media only screen and (max-width: 992px){
     .dataset-search-div{
         width: 70%;
@@ -118,6 +172,18 @@
 
     .dataset-search-div img {
         margin-left: 85%;
+    }
+
+    .all-dataset-title{
+        font-size: 1.1rem;
+    }
+
+    .all-dataset-desc{
+        font-size: 1rem;
+    }
+
+    .all-dataset-badge{
+        font-size: 1rem;
     }
 }
 
@@ -144,6 +210,7 @@
     }
 }
 
+
 @media only screen and (max-width: 470px){
     .dataset-dash-head{
         font-size: 1.7rem;
@@ -164,6 +231,22 @@
     .dataset-search-div img {
         width: 2.1rem;
         margin-left: 83%;
+    }
+
+    .all-dataset-details{
+        padding: 0.8rem;
+    }
+
+    .all-dataset-title{
+        font-size: 1rem;
+    }
+
+    .all-dataset-desc{
+        font-size: 0.9rem;
+    }
+
+    .all-dataset-badge{
+        font-size: 0.9rem;
     }
 }
 
@@ -191,5 +274,25 @@
 
     .dataset-search-bar{
         padding: 0.4rem;
+    }
+
+    .all-datasets-component{
+        border-radius: 1.6rem;
+    }
+    
+    .all-dataset-details{
+        padding: 0.8rem;
+    }
+
+    .all-dataset-title{
+        font-size: 0.9rem;
+    }
+
+    .all-dataset-desc{
+        font-size: 0.8rem;
+    }
+
+    .all-dataset-badge{
+        font-size: 0.8rem;
     }
 }

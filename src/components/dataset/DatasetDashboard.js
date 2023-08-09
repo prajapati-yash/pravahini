@@ -3,9 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import img from "../../assets/dataset/filter.png";
 import img1 from "../../assets/home/security.png";
-import AllDatasets from './AllDatasets';
 import "../../styles/dataset/DatasetDashboard.css";
-import "../../styles/dataset/AllDataset.css";
 
 const blocks = [
   {

@@ -1,27 +1,27 @@
-.create-dataset-main-container{
+.create-model-main-container{
     background: linear-gradient(to right, #6A79FF, #4250FF);
     border-radius: 6rem;
     border: 1px solid white;
 }
 
-.create-dataset-heading{
+.create-model-heading{
     font-size: 2rem;
     color: white;
     font-weight: 600;
     letter-spacing: 3px;
 }
 
-.create-dataset-content{
+.create-model-content{
     padding-left: 15%;
     padding-right: 15%;
 }
 
-.create-dataset-head{
+.create-model-head{
     color: white;
     font-size: 1.2rem;
 }
 
-.dataset-input-form-data{
+.model-input-form-data{
     width:100%;
     border: 0.4px solid white;
     border-radius: 0.3rem;
@@ -29,72 +29,72 @@
     color: white;
 }
 
-.dataset-input-form-data::placeholder{
+.model-input-form-data::placeholder{
     padding-left: 0.1rem;
     color: #4250FF;
 }
 
-.dataset-input-form-data:focus{
+.model-input-form-data:focus{
     color: white;
     border: 1.5px solid white !important;
     outline: none !important;
 }
 
-.dataset-dropdown{
+.model-dropdown{
    color: black;
 }
 
 /* Upload File */
-.upload-dataset,
-.dataset-upload-image,
-.dataset-upload-licence{
+.upload-model,
+.model-upload-doc,
+.model-upload-licence{
     justify-content: flex-start;
     align-items: center;
     cursor: pointer;
 }
 
-.upload-dataset-icon,
-.dataset-upload-image-icon,
-.dataset-upload-licence-icon{
+.upload-model-icon,
+.model-upload-doc-icon,
+.model-upload-licence-icon{
     width: 1.8rem;
 }
 
-.upload-dataset-text,
-.dataset-image-text,
-.dataset-licence-text{
+.upload-model-text,
+.model-doc-text,
+.model-licence-text{
     color: white;
-    font-size: 1.2rem;
+    padding-left: 1rem;
     padding-left: 0.5rem;
+    font-size: 1.2rem;
     font-weight: 500;
-    justify-content: flex-start;
 }
 
-.upload-dataset-selected-file,
-.dataset-image-selected-file,
-.dataset-licence-selected-file{
+.upload-model-selected-file,
+.model-doc-selected-file,
+.model-licence-selected-file{
     color: #C5DDF3;
     font-size: 1rem;
 }
 
-.dataset-selected-file-text{
+.model-selected-file-text{
     padding-left: 0.6rem;
 }
 
-.dataset-button{
+.model-button{
     background-color: #4250FF !important;
     border: 2px solid white !important;
 }
 
-.dataset-button:checked{
+.model-button:checked{
     background-color: white !important;
     border-color: white !important;
 }
 
-.dataset-btn-text{
+.model-btn-text{
     color: white;
 }
 
-.create-dataset-btn{
+.create-model-btn{
     background-color: #FFB800;
     color: white;
     font-size: 1.2rem;
@@ -102,74 +102,82 @@
     cursor: pointer;
 }
 
-.create-dataset-btn:hover{
+.create-model-btn:hover{
     box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.4);
     color: white;
 }
 
 @media only screen and (max-width: 1200px){
-    .upload-dataset-icon,
-    .dataset-upload-image-icon,
-    .dataset-upload-licence-icon{
+    .upload-model-icon,
+    .model-upload-doc-icon,
+    .model-upload-licence-icon{
         width: 1.7rem;
     }
 }
 
 @media only screen and (max-width: 767px){
-    .create-dataset-main-container{
+    .create-model-main-container{
         border-radius: 5rem;
     }
-    .create-dataset-content{
+    .create-model-content{
         padding-left: 10%;
         padding-right: 10%;
     }
 }
 
 @media only screen and (max-width: 576px){
-    .create-dataset-main-container{
+    .create-model-main-container{
         border-radius: 4rem;
     }
-    .create-dataset-content{
+    .create-model-content{
         padding-left: 8%;
         padding-right: 8%;
     }
 }
 
 @media only screen and (max-width: 470px){
-    .create-dataset-main-container{
+    .create-model-main-container{
         border-radius: 3rem;
     }
-    .create-dataset-content{
+    .create-model-content{
         padding-left: 6%;
         padding-right: 6%;
     }
 
-    .create-dataset-heading{
+    .create-model-heading{
         font-size: 1.5rem;
     }
 
-    .dataset-input-form-data{
+    .model-input-form-data{
         width:90%;
         display: flex;
         justify-content: flex-start;
     }
 
-    .upload-dataset-text,
-    .dataset-image-text,
-    .dataset-licence-text{
+    .upload-model-text,
+    .model-doc-text,
+    .model-licence-text{
         padding-left: 1rem;
         font-size: 1rem;
     }
 
-    .upload-dataset-icon,
-    .dataset-upload-image-icon,
-    .dataset-upload-licence-icon{
+    .upload-model-icon,
+    .model-upload-doc-icon,
+    .model-upload-licence-icon{
         width: 1.6rem;
     }
 
-    .dataset-selected-file-text{
+    .model-selected-file-text{
         font-size: 0.8rem;
         padding-left: 1rem;
     }
 }
 
+@media only screen and (max-width: 375px){
+    .upload-model-text,
+    .model-doc-text,
+    .model-licence-text{
+        /* padding-left: 1rem; */
+        font-size: 0.9rem;
+    }
+}

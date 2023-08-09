@@ -43,6 +43,10 @@ function CreateDataset() {
       reader.onloadend = () => {
         const fileData = reader.result;
         console.log("File Data:", fileData);
+        setCreateDataset({
+          ...createDataset,
+          datasetUpload: fileData, 
+        });
       };
 
       reader.readAsDataURL(selectedFile);
@@ -58,6 +62,10 @@ function CreateDataset() {
       reader.onloadend = () => {
         const fileData = reader.result;
         console.log("File Data:", fileData);
+        setCreateDataset({
+          ...createDataset,
+          datasetImage: fileData, 
+        });
       };
 
       reader.readAsDataURL(selectedFile);
@@ -73,6 +81,10 @@ function CreateDataset() {
       reader.onloadend = () => {
         const fileData = reader.result;
         console.log("File Data:", fileData);
+        setCreateDataset({
+          ...createDataset,
+          datasetLicence: fileData, 
+        });
       };
 
       reader.readAsDataURL(selectedFile);
@@ -83,7 +95,7 @@ function CreateDataset() {
   return (
     <div className="d-flex py-3 px-md-5 px-sm-4 px-sm-3 justify-content-center" style={{ background: "linear-gradient(to right, #E9F1FF, #B5D2FE)" }}>
       <div className="col-lg-8 col-md-9 col-10 py-4 create-dataset-main-container">
-        <div className="py-4 create-dataset-heading">Create Dataset</div>
+        <div className="py-sm-4 py-3 create-dataset-heading">Create Dataset</div>
         <div className="create-dataset-content py-2">
           <div className="py-2">
             <div className="d-flex justify-content-flex-start create-dataset-head">
@@ -192,70 +204,85 @@ function CreateDataset() {
           </div>
 
           <div
-            className="d-flex py-2 upload-dataset"
+            className="d-flex py-2 flex-column"
             onClick={handleDatasetClick}
           >
-            <img
-              className="upload-dataset-icon"
-              src={upload}
-              id="upload-dataset"
-            ></img>
-            <div className="upload-dataset-text">Upload Dataset</div>
-            <input
-              type="file"
-              ref={fileInputRefDataset}
-              style={{ display: "none" }}
-              onChange={handleFileChangeDataset}
-            ></input>
-            <div className="d-flex px-4 upload-dataset-selected-file">
+            <div className="d-flex upload-dataset">
+              <div className="col-1 ">
+                <img
+                  className="upload-dataset-icon"
+                  src={upload}
+                  id="upload-dataset"
+                ></img>
+              </div>
+              <div className="upload-dataset-text">Upload Dataset</div>
+              <input
+                type="file"
+                ref={fileInputRefDataset}
+                style={{ display: "none" }}
+                onChange={handleFileChangeDataset}
+              ></input>
+            </div>
+            <div className="d-flex upload-dataset-selected-file">
+            <div className="col-1"></div>
               {selectedFileNameDataset && (
-                <div>Selected File: {selectedFileNameDataset}</div>
+                <div className="dataset-selected-file-text">File: {selectedFileNameDataset}</div>
               )}
             </div>
           </div>
 
           <div
-            className="d-flex py-2 dataset-upload-image"
+            className="d-flex py-2 flex-column"
             onClick={handleDatasetImgClick}
           >
-            <img
-              className="dataset-upload-image-icon"
-              src={upload}
-              id="dataset-upload-image"
-            ></img>
-            <div className="dataset-image-text">Upload Dataset Image</div>
-            <input
-              type="file"
-              ref={fileInputRefDatasetImg}
-              style={{ display: "none" }}
-              onChange={handleFileChangeDatasetImg}
-            ></input>
-            <div className="d-flex px-4 dataset-image-selected-file">
+            <div className="d-flex dataset-upload-image">
+              <div className="col-1">
+                <img
+                  className="dataset-upload-image-icon"
+                  src={upload}
+                  id="dataset-upload-image"
+                ></img>
+              </div>
+              <div className="dataset-image-text">Upload Dataset Image</div>
+              <input
+                type="file"
+                ref={fileInputRefDatasetImg}
+                style={{ display: "none" }}
+                onChange={handleFileChangeDatasetImg}
+              ></input>
+            </div>
+            <div className="d-flex dataset-image-selected-file">
+              <div className="col-1"></div>
               {selectedFileNameDatasetImg && (
-                <div>Selected File: {selectedFileNameDatasetImg}</div>
+                <div className="dataset-selected-file-text">File: {selectedFileNameDatasetImg}</div>
               )}
             </div>
           </div>
 
           <div
-            className="d-flex py-2 dataset-upload-licence"
+            className="d-flex py-2 flex-column"
             onClick={handleLicenceClick}
           >
-            <img
-              className="dataset-upload-licence-icon"
-              src={upload}
-              id="dataset-upload-licence"
-            ></img>
-            <div className="dataset-licence-text">Upload Licence</div>
-            <input
-              type="file"
-              ref={fileInputRefLicence}
-              style={{ display: "none" }}
-              onChange={handleLicenceFileChange}
-            ></input>
-            <div className="d-flex px-4 dataset-licence-selected-file">
+            <div className="d-flex dataset-upload-licence">
+              <div className="col-1">
+                <img
+                  className="dataset-upload-licence-icon"
+                  src={upload}
+                  id="dataset-upload-licence"
+                ></img>
+              </div>  
+              <div className="dataset-licence-text">Upload Licence</div>
+              <input
+                type="file"
+                ref={fileInputRefLicence}
+                style={{ display: "none" }}
+                onChange={handleLicenceFileChange}
+              ></input>
+            </div>
+            <div className="d-flex dataset-licence-selected-file">
+              <div className="col-1"></div>
               {selectedFileNameLicence && (
-                <div>Selected File: {selectedFileNameLicence}</div>
+                <div className="dataset-selected-file-text">File: {selectedFileNameLicence}</div>
               )}
             </div>
           </div>

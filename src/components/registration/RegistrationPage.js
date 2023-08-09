@@ -33,6 +33,10 @@ function RegistrationPage() {
       reader.onloadend = () => {
         const fileData = reader.result;
         console.log("File Data:", fileData);
+        setFormData({
+          ...formData,
+          userImage: fileData,
+        });
       };
 
       reader.readAsDataURL(selectedFile); 
