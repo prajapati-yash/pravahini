@@ -3,6 +3,10 @@ import Home from "./pages/Home";
 import Registration from "./pages/Registration";
 import Dashboard from "./pages/Dashboard";
 import Dataset from "./pages/Dataset";
+import CreateDataset from "./components/dataset/CreateDataset";
+import SingleDataset from "./components/dataset/SingleDataset";
+import CreateModel from "./components/model/CreateModel";
+import Model from "./pages/Model";
 import { useState } from "react";
 import "./App.css";
 
@@ -19,7 +23,12 @@ function App() {
           <Route path="/register" element={ <Registration />}/>
           <Route path="/user-dashboard" element={<Dashboard />}/>
           <Route path="/user-dashboard/*" element={<Dashboard />}/>
-          <Route path="/dataset/create-dataset" element={<Dataset/>}></Route>
+          <Route path="/dataset/dashboard" element={<Dataset/>}></Route>
+          <Route path="/dataset/create-dataset" element={<CreateDataset/>}></Route>
+          <Route path="/dataset/single-dataset" element={<SingleDataset/>}></Route>
+          {/* <Route path="/dataset/*" element={<Dataset/>}></Route> */}
+          <Route path="/model/create-model" element={<CreateModel/>}></Route>
+          <Route path="/model/dashboard" element={<Model/>}></Route>
         </Routes>
       </BrowserRouter>
       {/* <RouterProvider router={router}/> */}

@@ -24,12 +24,15 @@ function Sidebar() {
     <div className="sidebar pt-4 sidebar-container">
       <div className="collapse show" id="sidebarContent">
         <ul className="nav flex-column">
-          <li className="nav-item py-2 sidebar-items">
+          <li className="nav-item dropdown-center py-2 sidebar-items">
             <a
-              className={`nav-link sidebar-content align-items-center ${
+              className={`nav-link dropdown-toggle sidebar-content align-items-center ${
                 activeComponent === "create" ? "active" : ""
               }`}
               href="#"
+              role="button" 
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
               onClick={() => handleItemClick("create")}
             >
               <img
@@ -46,6 +49,10 @@ function Sidebar() {
               />
               Create
             </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Create Dataset</a></li>
+              <li><a class="dropdown-item" href="#">Create Model</a></li>
+            </ul>
           </li>
           <li className="nav-item py-2 sidebar-items">
             <a

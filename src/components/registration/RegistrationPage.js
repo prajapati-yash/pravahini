@@ -10,11 +10,11 @@ import registerImg from "../../assets/registration/registration-bg.png";
 
 function RegistrationPage() {
   const [formData, setFormData] = useState({
-    userName: null,
-    userOccupation: null,
-    userOrganization: null,
-    userLocation: null,
-    userImage: null,
+    userName: "",
+    userOccupation: "",
+    userOrganization: "",
+    userLocation: "",
+    userImage: "",
   });
 
   const fileInputRef = useRef(null);
@@ -33,6 +33,10 @@ function RegistrationPage() {
       reader.onloadend = () => {
         const fileData = reader.result;
         console.log("File Data:", fileData);
+        setFormData({
+          ...formData,
+          userImage: fileData,
+        });
       };
 
       reader.readAsDataURL(selectedFile); 
