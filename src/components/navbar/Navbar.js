@@ -2,7 +2,6 @@ import { React, useEffect, useState } from "react";
 import "../../styles/navbar/Navbar.css";
 // import logo from "../../assets/navbar/pravahini-logo1.png";
 import logo from "../../assets/navbar/logo.png";
-import { ConnectKitButton } from "connectkit";
 import create1 from "../../assets/sidebar/create-black.png";
 import create2 from "../../assets/sidebar/create-white.png";
 import dashboard1 from "../../assets/sidebar/dashboard-black.png";
@@ -15,31 +14,6 @@ import code1 from "../../assets/sidebar/code-black.png";
 import code2 from "../../assets/sidebar/code-white.png";
 import computation1 from "../../assets/sidebar/computation-black.png";
 import computation2 from "../../assets/sidebar/computation-white.png";
-
-import styled from "styled-components";
-const StyledButton = styled.button`
-  cursor: pointer;
-  position: relative;
-  display: inline-block;
-  padding: 14px 24px;
-  color: #ffffff;
-  background: #ffb800;
-  font-size: 16px;
-  font-weight: 600;
-  border: 2px solid white;
-  border-radius: 10rem;
-  box-shadow: 0 4px 24px -6px #1a88f8;
-
-  transition: 200ms ease;
-  &:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 6px 40px -6px #1a88f8;
-  }
-  &:active {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 32px -6px #1a88f8;
-  }
-`;
 
 const navigation = [
   {
@@ -260,20 +234,6 @@ export default function Navbar() {
                   Decentralized Computation
                 </a>
               </li>
-
-              <div className="py-3 py-lg-none d-flex">
-                <ConnectKitButton.Custom>
-                  {({ isConnected, show, truncatedAddress, ensName }) => {
-                    return (
-                      <StyledButton onClick={show}>
-                        {isConnected
-                          ? ensName ?? truncatedAddress
-                          : "Connect Wallet"}
-                      </StyledButton>
-                    );
-                  }}
-                </ConnectKitButton.Custom>
-              </div>
             </ul>
           </div>
         </div>

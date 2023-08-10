@@ -33,10 +33,11 @@ const blocks = [
 ];
 
 function DatasetDashboard() {
-  const [activeComponent, setActiveComponent] = useState("userDatasets");
+  const [activeComponent, setActiveComponent] = useState("allDatasets");
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredDatasets, setFilteredDatasets] = useState(blocks);
   const navigate = useNavigate();
+  const datasetDivRef = React.useRef(null);
 
   const handleCreateDatasetButton = (e) => {
     navigate("/dataset/create-dataset");
@@ -44,8 +45,15 @@ function DatasetDashboard() {
 
   const handleAllDatasetClick = (e) => {
     e.preventDefault();
-    navigate("/dataset/all-datasets");
     setActiveComponent("allDatasets");
+    setFilteredDatasets(blocks);
+    
+    if (datasetDivRef.current) {
+      datasetDivRef.current.scrollIntoView({
+        behavior: "smooth", // You can change this to "auto" if you prefer instant scrolling
+        block: "start",     // Scroll to the start of the section
+      });
+    }
   };
 
   const handleSearchChange = (query) => {
@@ -150,7 +158,7 @@ function DatasetDashboard() {
             <li><a class="dropdown-item" href="#">Science & Technology</a></li>
           </ul>
         </div>
-        <div>
+        <div ref={datasetDivRef}>
           <div className="row px-0 all-datasets-main mt-4 py-3 px-sm-3 container-fluid justify-content-around">
             {filteredDatasets.map((item, key) => (
               <div className="col-xxl-3 col-md-5 col-sm-7 col-11 mx-1 mb-5 all-datasets-component" index={key}>
