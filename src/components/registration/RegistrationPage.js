@@ -10,11 +10,11 @@ import registerImg from "../../assets/registration/registration-bg.png";
 
 function RegistrationPage() {
   const [formData, setFormData] = useState({
-    userName: "",
-    userOccupation: "",
-    userOrganization: "",
-    userLocation: "",
-    userImage: "",
+    userName: null,
+    userOccupation: null,
+    userOrganization: null,
+    userLocation: null,
+    userImage: null,
   });
 
   const fileInputRef = useRef(null);
