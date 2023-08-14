@@ -1,11 +1,11 @@
 import React from 'react';
-import DatasetDashboard from '../components/dataset/DatasetDashboard';
-import CreateDataset from '../components/dataset/CreateDataset';
+import ComputationAbout from '../components/computation/ComputationAbout';
+import ComputationDetails from '../components/computation/ComputationDetails';
 import Navbar from '../components/navbar/Navbar';
+import Sidebar from '../components/sidebar/Sidebar'; 
 import Footer from '../components/footer/Footer';
-import Sidebar from '../components/sidebar/Sidebar';
 
-function Dataset() {
+function Computation() {
   return (
     <div style={{ background: "linear-gradient(to right, #E9F1FF, #B5D2FE)" }}>
       <Navbar />
@@ -16,8 +16,8 @@ function Dataset() {
               <Sidebar />
             </div>
             <div className="col-lg-9">
-              <DatasetDashboard />
-              
+              <ComputationAbout /> 
+              <ComputationDetails />
             </div>
           </div>
         </div>
@@ -27,4 +27,4 @@ function Dataset() {
   )
 }
 
-export default Dataset
+export default Computation
