@@ -1,0 +1,60 @@
+.efficient-about-heading-container{
+  background-color: #FFFFFF87;
+  border-radius: 1.2rem;
+  border: 2px solid white;
+}
+
+.efficient-about-head{
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: left;
+  color: #4250FF;
+}
+
+.efficient-about-subhead{
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: left;
+}
+
+.efficient-instruction-heading{
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.accordian-div{
+  background: linear-gradient(to left, #6A79FF, #4250FF);
+  color: white;
+  padding: 1.8rem;
+  border-radius: 2rem;
+  margin-top: 1rem;
+}
+
+@media only screen and (max-width:767px){
+  .efficient-about-head,
+  .efficient-about-subhead,
+  .efficient-instruction-heading{
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 576px){
+  .efficient-about-head{
+    font-size: 1.8rem;
+  }
+
+  .efficient-instruction-heading{
+    font-size: 1.6rem;
+  }
+}
+
+@media only screen and (max-width: 470px){
+  .efficient-about-head{
+    font-size: 1.6rem;
+  }
+
+  .efficient-instruction-heading{
+    font-size: 1.5rem;
+  }
+}

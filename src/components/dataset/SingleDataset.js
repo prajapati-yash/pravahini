@@ -107,7 +107,7 @@ function SingleDataset() {
   };
 
   return (
-    <div className='d-flex flex-md-row flex-column' style={{ background: "linear-gradient(to right, #E9F1FF, #B5D2FE)" }}>
+    <div className='d-flex flex-md-row flex-column'>
       <div className='py-3 col-md-7 col-lg-8'>
         <div className='py-3'>
           <div className='single-dataset-head'>Title</div>
