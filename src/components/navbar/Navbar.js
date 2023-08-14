@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from "react";
 import "../../styles/navbar/Navbar.css";
 // import logo from "../../assets/navbar/pravahini-logo1.png";
+import { NavLink } from "react-router-dom";
 import logo from "../../assets/navbar/logo.png";
 import create1 from "../../assets/sidebar/create-black.png";
 import create2 from "../../assets/sidebar/create-white.png";
@@ -14,20 +15,9 @@ import code1 from "../../assets/sidebar/code-black.png";
 import code2 from "../../assets/sidebar/code-white.png";
 import computation1 from "../../assets/sidebar/computation-black.png";
 import computation2 from "../../assets/sidebar/computation-white.png";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-const navigation = [
-  {
-    title: "About Us",
-    link: "/",
-  },
-  {
-    title: "Connect Wallet",
-    link: "/",
-  },
-];
-
-
-export default function Navbar() {
+function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
@@ -44,11 +34,16 @@ export default function Navbar() {
     };
   }, []);
 
-  const [activeComponent, setActiveComponent] = useState("dashboard");
+  const [activeComponent, setActiveComponent] = useState("/");
+  const [createDropDown, setCreateDropDown] = useState(false);
 
   const handleItemClick = (componentName) => {
     setActiveComponent(componentName);
   };
+
+  const showCreateDropDown = () => {
+    setCreateDropDown(!createDropDown) ;
+  }
 
   return (
     <>
@@ -83,16 +78,11 @@ export default function Navbar() {
             id="navbarRightAlignExample"
           >
             <ul className="navbar-nav ml-auto align-items-center mb-2 mb-lg-0 navbar-container">
-              <li className="nav-item dropdown py-2 d-lg-none">
+              <li className="nav-item py-2 d-lg-none" onClick={showCreateDropDown}>
                 <a
-                  className={`nav-link dropdown-toggle navbar-content px-1 p-0 active d-flex align-items-center ${
-                    activeComponent === "create" ? "activeState" : ""
+                  className={`nav-link navbar-content px-1 p-0 d-flex align-items-center ${
+                    (activeComponent === "create" && createDropDown) ? "active" : ""
                   }`}
-                  aria-current="page"
-                  href="#"
-                  role="button" 
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
                   onClick={() => handleItemClick("create")}
                 >
                   <img
@@ -108,20 +98,25 @@ export default function Navbar() {
                     width={20}
                   />
                   Create
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Create Dataset</a></li>
-                  <li><a class="dropdown-item" href="#">Create Model</a></li>
-                </ul>  
+                  <div className="px-2"><i class="fa-solid fa-angle-down"></i></div>
+                </a> 
+                {createDropDown && (
+                  <div className="create-dropdown p-3 text-center" onClick={showCreateDropDown}>
+                    <div className={`d-flex py-1`}>
+                      <a href="/dataset/create-dataset" className="link-style">
+                        Create Dataset
+                      </a>
+                    </div>
+                    <div className={`d-flex py-1`}>
+                      <a href="/model/create-model" className="link-style">Create Model</a>
+                    </div>
+                  </div>
+                )}
               </li>
               <li className="nav-item py-2 d-lg-none">
-                <a
-                  className={`nav-link navbar-content px-1 p-0 active d-flex align-items-center ${
-                    activeComponent === "dashboard" ? "activeState" : ""
-                  }`}
-                  aria-current="page"
-                  href="#"
-                  onClick={() => handleItemClick("dashboard")}
+                <NavLink
+                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
+                  to="/user-dashboard"
                 >
                   <img
                     className="navbar-image"
@@ -136,16 +131,12 @@ export default function Navbar() {
                     width={18}
                   />
                   Dashboard
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item py-2 d-lg-none">
-                <a
-                  className={`nav-link navbar-content px-1 p-0 active d-flex align-items-center ${
-                    activeComponent === "dataset" ? "activeState" : ""
-                  }`}
-                  aria-current="page"
-                  href="#"
-                  onClick={() => handleItemClick("dataset")}
+                <NavLink
+                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center" 
+                  to="/dataset"
                 >
                   <img
                     className="navbar-image"
@@ -160,16 +151,12 @@ export default function Navbar() {
                     width={20}
                   />
                   Dataset Marketplace
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item py-2 d-lg-none">
-                <a
-                  className={`nav-link navbar-content px-1 p-0 active d-flex align-items-center ${
-                    activeComponent === "model" ? "activeState" : ""
-                  }`}
-                  aria-current="page"
-                  href="#"
-                  onClick={() => handleItemClick("model")}
+                <NavLink
+                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
+                  to="/model"
                 >
                   <img
                     className="navbar-image"
@@ -184,16 +171,12 @@ export default function Navbar() {
                     width={20}
                   />
                   Model Marketplace
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item py-2 d-lg-none">
-                <a
-                  className={`nav-link navbar-content px-1 p-0 active d-flex align-items-center ${
-                    activeComponent === "code" ? "activeState" : ""
-                  }`}
-                  aria-current="page"
-                  href="#"
-                  onClick={() => handleItemClick("code")}
+                <NavLink
+                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
+                  to="/user-dashboard"
                 >
                   <img
                     className="navbar-image"
@@ -208,16 +191,12 @@ export default function Navbar() {
                     width={20}
                   />
                   Code
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item py-2 d-lg-none">
-                <a
-                  className={`nav-link navbar-content px-1 p-0 active d-flex align-items-center ${
-                    activeComponent === "computation" ? "activeState" : ""
-                  }`}
-                  aria-current="page"
-                  href="#"
-                  onClick={() => handleItemClick("computation")}
+                <NavLink
+                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
+                  to="/computation/dashboard"
                 >
                   <img
                     className="navbar-image"
@@ -232,7 +211,11 @@ export default function Navbar() {
                     width={20}
                   />
                   Decentralized Computation
-                </a>
+                </NavLink>
+              </li>
+
+              <li className="nav-item py-2">
+                  <ConnectButton />
               </li>
             </ul>
           </div>
@@ -241,12 +224,5 @@ export default function Navbar() {
     </>
   );
 }
-function NavLink({ body }) {
-  return (
-    <li className="nav-item px-2">
-      <a className="nav-link p-0 active" aria-current="page" href={body.link}>
-        {body.title}
-      </a>
-    </li>
-  );
-}
+
+export default Navbar;
