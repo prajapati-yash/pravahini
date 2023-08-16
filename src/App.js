@@ -35,7 +35,8 @@ function App() {
           <Route path="/model/*" element={<Model/>}></Route>
           <Route path="/model/create-model" element={<ModelForm/>}></Route>
           <Route path="/model/single-model" element={<IndividualModel/>}></Route>
-          <Route path="/computation/dashboard" element={<Computation/>}></Route>
+          <Route path="/computation" element={<Computation/>}></Route>
+          <Route path="/computation/*" element={<Computation/>}></Route>
           <Route path="/computation/visualization" element={<Visualization/>}></Route>
           <Route path="/computation/efficient" element={<EfficientComputation/>}></Route>
         </Routes>

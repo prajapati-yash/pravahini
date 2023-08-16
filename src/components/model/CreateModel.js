@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from "react";
 import upload from "../../assets/registration/upload.png";
-import '../../styles/model/CreateModel.css';
-import Navbar from '../navbar/Navbar';
-import Sidebar from '../sidebar/Sidebar';
-import Footer from '../footer/Footer';
+import "../../styles/model/CreateModel.css";
+import Navbar from "../navbar/Navbar";
+import Sidebar from "../sidebar/Sidebar";
+import Footer from "../footer/Footer";
 
 function CreateModel() {
   const [createModel, setCreateModel] = useState({
@@ -48,7 +48,7 @@ function CreateModel() {
         console.log("File Data:", fileData);
         setCreateModel({
           ...createModel,
-          modelUpload: fileData, 
+          modelUpload: fileData,
         });
       };
 
@@ -67,7 +67,7 @@ function CreateModel() {
         console.log("File Data:", fileData);
         setCreateModel({
           ...createModel,
-          modelLicence: fileData, 
+          modelLicence: fileData,
         });
       };
 
@@ -86,7 +86,7 @@ function CreateModel() {
         console.log("File Data:", fileData);
         setCreateModel({
           ...createModel,
-          modelDocumentation: fileData, 
+          modelDocumentation: fileData,
         });
       };
 
@@ -156,11 +156,12 @@ function CreateModel() {
                   id="category"
                   name="category"
                   className="py-md-1 py-sm-1 model-input-form-data"
-                  placeholder='Select Category'
+                  placeholder="Select Category"
                   value={createModel.modelCategory}
                   onChange={(e) => {
                     setCreateModel({
-                      ...createModel, modelCategory: e.target.value,
+                      ...createModel,
+                      modelCategory: e.target.value,
                     });
                   }}
                   defaultValue=""
@@ -222,7 +223,8 @@ function CreateModel() {
                   value={createModel.modelPrice}
                   onChange={(e) => {
                     setCreateModel({
-                      ...createModel, modelPrice: e.target.value,
+                      ...createModel,
+                      modelPrice: e.target.value,
                     });
                   }}
                   required
@@ -230,10 +232,7 @@ function CreateModel() {
               </div>
             </div>
 
-            <div
-              className="d-flex py-2 flex-column"
-              onClick={handleModelClick}
-            >
+            <div className="d-flex py-2 flex-column" onClick={handleModelClick}>
               <div className="d-flex upload-model">
                 <div className="col-1 ">
                   <img
@@ -253,7 +252,9 @@ function CreateModel() {
               <div className="d-flex upload-model-selected-file">
                 <div className="col-1"></div>
                 {selectedFileNameModel && (
-                  <div className="model-selected-file-text">File: {selectedFileNameModel}</div>
+                  <div className="model-selected-file-text">
+                    File: {selectedFileNameModel}
+                  </div>
                 )}
               </div>
             </div>
@@ -281,7 +282,9 @@ function CreateModel() {
               <div className="d-flex model-licence-selected-file">
                 <div className="col-1"></div>
                 {selectedFileNameLicence && (
-                  <div className="model-selected-file-text">File: {selectedFileNameLicence}</div>
+                  <div className="model-selected-file-text">
+                    File: {selectedFileNameLicence}
+                  </div>
                 )}
               </div>
             </div>
@@ -309,7 +312,9 @@ function CreateModel() {
               <div className="d-flex model-doc-selected-file">
                 <div className="col-1"></div>
                 {selectedFileNameModelDoc && (
-                  <div className="model-selected-file-text">File: {selectedFileNameModelDoc}</div>
+                  <div className="model-selected-file-text">
+                    File: {selectedFileNameModelDoc}
+                  </div>
                 )}
               </div>
             </div>
@@ -356,9 +361,7 @@ function CreateModel() {
         </div>
       </div>
     </div>
-
-    
-  )
+  );
 }
 
-export default CreateModel
+export default CreateModel;

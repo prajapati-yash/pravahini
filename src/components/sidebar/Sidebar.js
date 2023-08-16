@@ -150,7 +150,7 @@ function Sidebar() {
           <li className="nav-item py-2">
             <NavLink
               className={`nav-link sidebar-content align-items-center`}
-              to="/computation/dashboard"
+              to="/computation"
             >
               <img
                 className="sidebar-image"

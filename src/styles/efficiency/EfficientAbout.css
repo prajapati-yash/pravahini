@@ -31,6 +31,24 @@
   margin-top: 1rem;
 }
 
+.accordion-box-border{
+  border-radius: 2.4rem !important;
+}
+
+.accordion-list-item{
+  text-align: left;
+}
+
+.efficient-url-container {
+  max-width: 100%; /* Adjust this value based on your design */
+  overflow: hidden; /* Hide overflowing content */
+}
+
+.efficient-url-text {
+  overflow: auto; /* Show horizontal and vertical scrollbars when needed */
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
 @media only screen and (max-width:767px){
   .efficient-about-head,
   .efficient-about-subhead,

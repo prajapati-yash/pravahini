@@ -101,6 +101,21 @@
     color: #ffffff; 
 }
 
+.dataset-filter-items{
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.dataset-filter-items:hover{
+    color: #FFB800;
+}
+
+.dataset-active-filter{
+    text-decoration: underline;
+    color: #4250FF;
+}
+
 /* Dataset Component css */
 
 .all-datasets-main{

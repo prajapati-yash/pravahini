@@ -101,6 +101,21 @@
   color: #ffffff; 
 }
 
+.model-filter-items{
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.model-filter-items:hover{
+  color: #FFB800;
+}
+
+.model-active-filter{
+  text-decoration: underline;
+  color: #4250FF;
+}
+
 /* model Component css */
 
 .all-model-main{

@@ -75,16 +75,28 @@ function UserDetails() {
           </div>
           <div>
             <div className="d-flex py-1 details-content">
-              <div className="col-md-3 px-3 px-sm-0 col-sm-4 col-5 d-flex justify-content-flex-start user-details-head">Occupation</div>
-              <div className="d-flex col-md-4 col-6 user-details-div">occupation</div>
+              <div className="col-md-3 px-3 px-sm-0 col-sm-4 col-5 d-flex justify-content-flex-start user-details-head">
+                Occupation
+              </div>
+              <div className="d-flex col-md-4 col-6 user-details-div">
+                occupation
+              </div>
             </div>
             <div className="d-flex py-1 details-content">
-              <div className="col-md-3 px-3 px-sm-0 col-sm-4 col-5 d-flex justify-content-flex-start user-details-head">Organization</div>
-              <div className="d-flex col-md-4 col-6 user-details-div">organization</div>
+              <div className="col-md-3 px-3 px-sm-0 col-sm-4 col-5 d-flex justify-content-flex-start user-details-head">
+                Organization
+              </div>
+              <div className="d-flex col-md-4 col-6 user-details-div">
+                organization
+              </div>
             </div>
             <div className="d-flex py-1 details-content">
-              <div className="col-md-3 px-3 px-sm-0 col-sm-4 col-5 d-flex justify-content-flex-start user-details-head">Location</div>
-              <div className="d-flex col-md-4 col-6 user-details-div">location</div>
+              <div className="col-md-3 px-3 px-sm-0 col-sm-4 col-5 d-flex justify-content-flex-start user-details-head">
+                Location
+              </div>
+              <div className="d-flex col-md-4 col-6 user-details-div">
+                location
+              </div>
             </div>
           </div>
         </div>
@@ -134,9 +146,7 @@ function UserDetails() {
               </button>
               <button
                 className={`my-sm-4 mx-sm-3 my-3 mx-2 px-4 py-2 subscription-model-btn ${
-                  activeComponent === "subscribedModels"
-                    ? "active-button"
-                    : ""
+                  activeComponent === "subscribedModels" ? "active-button" : ""
                 }`}
                 onClick={handleSubscribedModels}
               >

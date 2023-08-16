@@ -48,7 +48,7 @@ function CreateDataset() {
         console.log("File Data:", fileData);
         setCreateDataset({
           ...createDataset,
-          datasetUpload: fileData, 
+          datasetUpload: fileData,
         });
       };
 
@@ -67,7 +67,7 @@ function CreateDataset() {
         console.log("File Data:", fileData);
         setCreateDataset({
           ...createDataset,
-          datasetImage: fileData, 
+          datasetImage: fileData,
         });
       };
 
@@ -86,7 +86,7 @@ function CreateDataset() {
         console.log("File Data:", fileData);
         setCreateDataset({
           ...createDataset,
-          datasetLicence: fileData, 
+          datasetLicence: fileData,
         });
       };
 
@@ -96,10 +96,12 @@ function CreateDataset() {
   };
 
   return (
-    <div> 
-      <div className="d-flex py-3 px-md-5 px-sm-4 px-sm-3 justify-content-center" >
+    <div>
+      <div className="d-flex py-3 px-md-5 px-sm-4 px-sm-3 justify-content-center">
         <div className="col-lg-11 col-10 py-4 create-dataset-main-container">
-          <div className="py-sm-4 py-3 create-dataset-heading">Create Dataset</div>
+          <div className="py-sm-4 py-3 create-dataset-heading">
+            Create Dataset
+          </div>
           <div className="create-dataset-content py-2">
             <div className="py-2">
               <div className="d-flex justify-content-flex-start create-dataset-head">
@@ -228,9 +230,11 @@ function CreateDataset() {
                 ></input>
               </div>
               <div className="d-flex upload-dataset-selected-file">
-              <div className="col-1"></div>
+                <div className="col-1"></div>
                 {selectedFileNameDataset && (
-                  <div className="dataset-selected-file-text">File: {selectedFileNameDataset}</div>
+                  <div className="dataset-selected-file-text">
+                    File: {selectedFileNameDataset}
+                  </div>
                 )}
               </div>
             </div>
@@ -258,7 +262,9 @@ function CreateDataset() {
               <div className="d-flex dataset-image-selected-file">
                 <div className="col-1"></div>
                 {selectedFileNameDatasetImg && (
-                  <div className="dataset-selected-file-text">File: {selectedFileNameDatasetImg}</div>
+                  <div className="dataset-selected-file-text">
+                    File: {selectedFileNameDatasetImg}
+                  </div>
                 )}
               </div>
             </div>
@@ -274,7 +280,7 @@ function CreateDataset() {
                     src={upload}
                     id="dataset-upload-licence"
                   ></img>
-                </div>  
+                </div>
                 <div className="dataset-licence-text">Upload Licence</div>
                 <input
                   type="file"
@@ -286,7 +292,9 @@ function CreateDataset() {
               <div className="d-flex dataset-licence-selected-file">
                 <div className="col-1"></div>
                 {selectedFileNameLicence && (
-                  <div className="dataset-selected-file-text">File: {selectedFileNameLicence}</div>
+                  <div className="dataset-selected-file-text">
+                    File: {selectedFileNameLicence}
+                  </div>
                 )}
               </div>
             </div>
@@ -331,9 +339,8 @@ function CreateDataset() {
             </div>
           </div>
         </div>
-      </div>          
+      </div>
     </div>
-    
   );
 }
 
