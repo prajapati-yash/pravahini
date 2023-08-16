@@ -1,10 +1,8 @@
 import { React, useEffect, useState } from "react";
-// import "../../styles/navbar/Navbar.css";
-
-import "../../styles/navbar/Navbar.css"
+import "../../styles/navbar/Navbar.css";
 // import logo from "../../assets/navbar/pravahini-logo1.png";
+import { NavLink } from "react-router-dom";
 import logo from "../../assets/navbar/logo.png";
-// import { ConnectKitButton } from "connectkit";
 import create1 from "../../assets/sidebar/create-black.png";
 import create2 from "../../assets/sidebar/create-white.png";
 import dashboard1 from "../../assets/sidebar/dashboard-black.png";
@@ -17,26 +15,15 @@ import code1 from "../../assets/sidebar/code-black.png";
 import code2 from "../../assets/sidebar/code-white.png";
 import computation1 from "../../assets/sidebar/computation-black.png";
 import computation2 from "../../assets/sidebar/computation-white.png";
-import { useNavigate } from "react-router";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-const navigation = [
-  {
-    title: "About Us",
-    link: "/",
-  },
-  {
-    title: "Connect Wallet",
-    link: "/",
-  },
-];
-
-export default function Navbar() {
-  const navigate=useNavigate();
+function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  
+  const [activeComponent, setActiveComponent] = useState("/");
+  const [createDropDown, setCreateDropDown] = useState(false);
 
 
-  useEffect(()=>{
+  useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
         setScrolled(true);
@@ -51,8 +38,14 @@ export default function Navbar() {
     };
   }, []);
 
+  const handleItemClick = (componentName) => {
+    setActiveComponent(componentName);
+  };
 
- 
+  const showCreateDropDown = () => {
+    setCreateDropDown(!createDropDown) ;
+  }
+
   return (
     <>
       <nav
@@ -86,11 +79,12 @@ export default function Navbar() {
             id="navbarRightAlignExample"
           >
             <ul className="navbar-nav ml-auto align-items-center mb-2 mb-lg-0 navbar-container">
-              <li className="navbar-content nav-item d-lg-none">
+              <li className="nav-item py-2 d-lg-none" onClick={showCreateDropDown}>
                 <a
-                  className="nav-link navbar-link p-0 active d-flex align-items-center"
-                  aria-current="page"
-                  href="#"
+                  className={`nav-link navbar-content px-1 p-0 d-flex align-items-center ${
+                    (activeComponent === "create" && createDropDown) ? "active" : ""
+                  }`}
+                  onClick={() => handleItemClick("create")}
                 >
                   <img
                     className="navbar-image"
@@ -98,14 +92,32 @@ export default function Navbar() {
                     height={20}
                     width={20}
                   />
+                  <img
+                    className="navbar-image-hover"
+                    src={create2}
+                    height={20}
+                    width={20}
+                  />
                   Create
-                </a>
+                  <div className="px-2"><i class="fa-solid fa-angle-down"></i></div>
+                </a> 
+                {createDropDown && (
+                  <div className="create-dropdown p-3 text-center" onClick={showCreateDropDown}>
+                    <div className={`d-flex py-1`}>
+                      <a href="/dataset/create-dataset" className="link-style">
+                        Create Dataset
+                      </a>
+                    </div>
+                    <div className={`d-flex py-1`}>
+                      <a href="/model/create-model" className="link-style">Create Model</a>
+                    </div>
+                  </div>
+                )}
               </li>
-              <li className="navbar-content nav-item d-lg-none">
-                <div
-                  className="nav-link navbar-link p-0 active d-flex align-items-center"
-                  aria-current="page"
-                 onClick={()=>navigate('/user-dashboard')}
+              <li className="nav-item py-2 d-lg-none">
+                <NavLink
+                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
+                  to="/user-dashboard"
                 >
                   <img
                     className="navbar-image"
@@ -113,14 +125,19 @@ export default function Navbar() {
                     height={18}
                     width={18}
                   />
+                  <img
+                    className="navbar-image-hover"
+                    src={dashboard2}
+                    height={18}
+                    width={18}
+                  />
                   Dashboard
-                </div>
+                </NavLink>
               </li>
-              <li className="navbar-content nav-item d-lg-none">
-                <a
-                  className="nav-link navbar-link p-0 active d-flex align-items-center"
-                  aria-current="page"
-                  href="#"
+              <li className="nav-item py-2 d-lg-none">
+                <NavLink
+                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center" 
+                  to="/dataset"
                 >
                   <img
                     className="navbar-image"
@@ -128,14 +145,19 @@ export default function Navbar() {
                     height={20}
                     width={20}
                   />
+                  <img
+                    className="navbar-image-hover"
+                    src={dataset2}
+                    height={20}
+                    width={20}
+                  />
                   Dataset Marketplace
-                </a>
+                </NavLink>
               </li>
-              <li className="navbar-content nav-item d-lg-none">
-                <a
-                  className="nav-link navbar-link p-0 active d-flex align-items-center"
-                  aria-current="page"
-                  href="#"
+              <li className="nav-item py-2 d-lg-none">
+                <NavLink
+                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
+                  to="/model"
                 >
                   <img
                     className="navbar-image"
@@ -143,14 +165,19 @@ export default function Navbar() {
                     height={20}
                     width={20}
                   />
+                  <img
+                    className="navbar-image-hover"
+                    src={model2}
+                    height={20}
+                    width={20}
+                  />
                   Model Marketplace
-                </a>
+                </NavLink>
               </li>
-              <li className="navbar-content nav-item d-lg-none">
-                <a
-                  className="nav-link navbar-link p-0 active d-flex align-items-center"
-                  aria-current="page"
-                  href="#"
+              <li className="nav-item py-2 d-lg-none">
+                <NavLink
+                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
+                  to="/user-dashboard"
                 >
                   <img
                     className="navbar-image"
@@ -158,14 +185,19 @@ export default function Navbar() {
                     height={20}
                     width={20}
                   />
+                  <img
+                    className="navbar-image-hover"
+                    src={code2}
+                    height={20}
+                    width={20}
+                  />
                   Code
-                </a>
+                </NavLink>
               </li>
-              <li className="navbar-content nav-item d-lg-none">
-                <a
-                  className="nav-link navbar-link p-0 active d-flex align-items-center"
-                  aria-current="page"
-                  href="#"
+              <li className="nav-item py-2 d-lg-none">
+                <NavLink
+                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
+                  to="/computation/dashboard"
                 >
                   <img
                     className="navbar-image"
@@ -173,13 +205,19 @@ export default function Navbar() {
                     height={20}
                     width={20}
                   />
+                  <img
+                    className="navbar-image-hover"
+                    src={computation2}
+                    height={20}
+                    width={20}
+                  />
                   Decentralized Computation
-                </a>
+                </NavLink>
               </li>
 
-              <div className="py-3 py-lg-none">
-                {/* <ConnectKitButton /> */}
-              </div>
+              <li className="nav-item py-2">
+                  <ConnectButton />
+              </li>
             </ul>
           </div>
         </div>
@@ -187,12 +225,5 @@ export default function Navbar() {
     </>
   );
 }
-function NavLink({ body }) {
-  return (
-    <li className="nav-item px-2">
-      <a className="nav-link p-0 active" aria-current="page" href={body.link}>
-        {body.title}
-      </a>
-    </li>
-  );
-}
+
+export default Navbar;

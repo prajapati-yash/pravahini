@@ -14,15 +14,6 @@
     align-items: center;
 }
 
-.navbar-link {
-    font-size: 1.25rem!important;
-    font-weight: 450!important;
-}
-
-.navbar-link:hover{
-    color: #4250FF !important;
-}
-
  .navbar-toggler {
     width: 20px;
     height: 20px;
@@ -117,8 +108,76 @@
     background: black;
 }
 
-.navbar-image{
+/* .navbar-image{
     margin-right: 1rem;
+} */
+
+.navbar-content{
+    font-size: 1.25rem!important;
+    font-weight: 450!important;
+    /* color: white; */
+}
+
+.navbar-content:hover{
+    background: linear-gradient(to right, #4250FF, #6A79FF);  
+    border-radius: 0.5rem;
+    color: white !important;
+}
+
+.navbar-image-hover{
+    display: none;
+}
+
+.navbar-image-hover,
+.navbar-image{
+    margin-right: 10px !important;
+}
+
+.navbar-content:hover{
+    .navbar-image{
+        display: none !important;
+    }
+    .navbar-image-hover{
+        display: flex !important;
+    }
+}
+
+.navbar-content.active {
+    background: linear-gradient(to right, #4250FF, #6A79FF);
+    border-radius: 0.5rem !important;
+    color: #ffffff !important;
+
+    .navbar-image{
+        display: none !important;
+    }
+    .navbar-image-hover{
+        display: flex !important;
+    }
+}
+
+.create-dropdown{
+    background-color: white;
+    text-align: left;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+}
+
+.link-style{
+    text-decoration: none;
+    color: black !important;
+    padding: 0.2rem 0.5rem;
+}
+
+.link-style:hover{
+    background-color: #4250FF;
+    color: white !important;
+    border-radius: 0.5rem;
+}
+
+.link-style.active{
+    color: white !important;
+    background-color: #4250FF;
+    border-radius: 0.5rem;
 }
 
 @media only screen and (max-width: 991px) {
@@ -129,7 +188,7 @@
         /* height: 100vh!important; */
         font-size: 20px!important;
         font-weight: 500!important;
-        line-height: 8vh!important;
+        line-height: 5vh!important;
     }
 
     .for-mob{
@@ -146,20 +205,19 @@
     .navbar-content{
         display: flex;
     }
-    .navbar-link{
+    .navbar-content{
         font-size: 1.1rem!important;
     }
     .img-logo{
         width: 250px;
     }
-
 }
 
 @media only screen and (max-width: 576px) {
     .img-logo{
         width: 200px;
     }
-    .navbar-link{
+    .navbar-content{
         font-size: 1rem!important;
     }
 } 
@@ -168,14 +226,14 @@
     .nav-link {
         font-size: 20px!important;
         font-weight: 500!important;
-        line-height: 8vh!important;
+        line-height: 5vh!important;
     }
 
     .img-logo{
         width: 150px;
     }
 
-    .navbar-link{
-        font-size: 0.8rem!important;
+    .navbar-content{
+        font-size: 1rem!important;
     }
 }    

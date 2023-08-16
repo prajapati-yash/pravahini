@@ -28,9 +28,6 @@
     width: 45%;
     cursor: pointer;
     border: 2px solid #FFB800;
-}
-
-.hero-button-text{
     color: #FFB800;
     font-size: 1.3rem;
     font-weight: 600;
@@ -97,6 +94,11 @@
     position: relative;
     margin-top: -42%;
     margin-left: 25%;
+}
+
+.hero-button:hover{
+    background-color: #f9f6f6 !important;
+    /* color: white !important; */
 }
 
 @media only screen and (max-width: 1200px) {

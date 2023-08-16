@@ -8,7 +8,7 @@ import search from "../../assets/home/search.png";
 import security from "../../assets/home/security.png";
 import link from "../../assets/home/link.png";
 import unioncopy from "../../assets/home/union-copy.png";
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function HomeHero() {
   const navigate = useNavigate();
@@ -46,7 +46,7 @@ function HomeHero() {
         </div>
 
         <div className="get-started-container justify-content-center" >
-          <div className="hero-button ps-3 d-flex align-items-center " onClick={()=> navigate("/register")}  style={startBtnStyle}>
+          <div className="hero-button ps-3 d-flex align-items-center " onClick={()=> navigate("/user-dashboard")}  style={startBtnStyle}>
             <span className="py-3 hero-button-text " >Get Started</span>
             <span className="d-end hero-arrow mx-2 ">
               <img className="img-arrow" src={arrow} alt="" srcset="" />

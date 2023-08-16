@@ -1,5 +1,6 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/sidebar/Sidebar.css";
+import { NavLink } from "react-router-dom";
 import create1 from "../../assets/sidebar/create-black.png";
 import create2 from "../../assets/sidebar/create-white.png";
 import dashboard1 from "../../assets/sidebar/dashboard-black.png";
@@ -14,24 +15,28 @@ import computation1 from "../../assets/sidebar/computation-black.png";
 import computation2 from "../../assets/sidebar/computation-white.png";
 
 function Sidebar() {
-  const [activeComponent, setActiveComponent] = useState("dashboard");
+  const [activeComponent, setActiveComponent] = useState("/");
+  const [createDropDown, setCreateDropDown] = useState(false);
 
   const handleItemClick = (componentName) => {
     setActiveComponent(componentName);
   };
 
+  const showCreateDropDown = () => {
+    setCreateDropDown(!createDropDown) ;
+  }
+
   return (
-    <div className="sidebar pt-4 sidebar-container">
+    <div className="sidebar pt-4 sidebar-container position-fixed">
       <div className="collapse show" id="sidebarContent">
         <ul className="nav flex-column">
-          <li
-            className="nav-item py-2 sidebar-items"
-          >
+          <li className="nav-item dropdown-center py-2 sidebar-items" 
+              onClick={showCreateDropDown}
+              >
             <a
               className={`nav-link sidebar-content align-items-center ${
-                activeComponent === "create" ? "active" : ""
+                (activeComponent === "create"  && createDropDown) ? "active" : ""
               }`}
-              href="#"
               onClick={() => handleItemClick("create")}
             >
               <img
@@ -47,15 +52,25 @@ function Sidebar() {
                 width={20}
               />
               Create
+              <div className="px-2"><i class="fa-solid fa-angle-down"></i></div>
             </a>
+            {createDropDown && (
+              <div className="create-dropdown p-3 text-center" onClick={showCreateDropDown}>
+                <div className={`d-flex py-1`}>
+                  <a href="/dataset/create-dataset" className="link-style">
+                    Create Dataset
+                  </a>
+                </div>
+                <div className={`d-flex py-1`}>
+                  <a href="/model/create-model" className="link-style">Create Model</a>
+                </div>
+              </div>
+            )}
           </li>
           <li className="nav-item py-2 sidebar-items">
-            <a
-              className={`nav-link sidebar-content align-items-center ${
-                activeComponent === "dashboard" ? "active" : ""
-              }`}
-              href="/user-dashboard"
-              onClick={() => handleItemClick("dashboard")}
+            <NavLink
+              className="nav-link sidebar-content align-items-center"
+              to="/user-dashboard"
             >
               <img
                 className="sidebar-image"
@@ -70,12 +85,13 @@ function Sidebar() {
                 width={18}
               />
               Dashboard
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item py-2">
-            <a className={`nav-link sidebar-content align-items-center ${
-                activeComponent === "dataset" ? "active" : ""
-              }`} href="#" onClick={() => handleItemClick("dataset")}>
+            <NavLink
+              className="nav-link sidebar-content align-items-center"
+              to="/dataset"
+            >
               <img
                 className="sidebar-image"
                 src={dataset1}
@@ -89,12 +105,13 @@ function Sidebar() {
                 width={20}
               />
               Dataset Marketplace
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item py-2">
-            <a className={`nav-link sidebar-content align-items-center ${
-                activeComponent === "model" ? "active" : ""
-              }`} href="#" onClick={() => handleItemClick("model")}>
+            <NavLink
+              className={`nav-link sidebar-content align-items-center `}
+              to="/model"
+            >
               <img
                 className="sidebar-image"
                 src={model1}
@@ -108,12 +125,13 @@ function Sidebar() {
                 width={20}
               />
               Model Marketplace
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item py-2">
-            <a className={`nav-link sidebar-content align-items-center ${
-                activeComponent === "code" ? "active" : ""
-              }`} href="#" onClick={() => handleItemClick("code")}>
+            <NavLink
+              className={`nav-link sidebar-content align-items-center`}
+              to="/user-dashboard"
+            >
               <img
                 className="sidebar-image"
                 src={code1}
@@ -127,12 +145,13 @@ function Sidebar() {
                 width={20}
               />
               Code
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item py-2">
-            <a className={`nav-link sidebar-content align-items-center ${
-                activeComponent === "computation" ? "active" : ""
-              }`} href="#" onClick={() => handleItemClick("computation")}>
+            <NavLink
+              className={`nav-link sidebar-content align-items-center`}
+              to="/computation/dashboard"
+            >
               <img
                 className="sidebar-image"
                 src={computation1}
@@ -146,7 +165,7 @@ function Sidebar() {
                 width={20}
               />
               Decentralized computation
-            </a>
+            </NavLink>
           </li>
         </ul>
       </div>
