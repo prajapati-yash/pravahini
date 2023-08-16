@@ -27,6 +27,7 @@
     border-radius: 2rem;
     width: 45%;
     cursor: pointer;
+    border: 2px solid #FFB800;
 }
 
 .hero-button-text{

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState} from "react";
 import "../../styles/home/HomeHero.css";
 import arrow from "../../assets/home/arrow.png";
 import union from "../../assets/home/union-2.png";
@@ -12,6 +12,26 @@ import { useNavigate } from "react-router";
 
 function HomeHero() {
   const navigate = useNavigate();
+  const [isShaking, setShaking] = useState(false);
+  useEffect(()=>{
+    const interval = setInterval(()=>{
+      setShaking(!isShaking);
+    },1500)
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isShaking])
+
+  
+  const startBtnStyle = {
+
+    animation: isShaking ? 'shake 1.5s ease-in-out' : 'none',
+    transformOrigin: 'center',
+    boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.3)',
+  }
+
+
   return (
     <div className="d-flex flex-lg-row flex-column hero-main-container px-4 px-sm-5 my-xl-4 mx-2">
       <div className="container-fluid hero-container px-4 py-3 px-sm-5 py-sm-4 col-lg-6">
@@ -25,9 +45,9 @@ function HomeHero() {
           </p>
         </div>
 
-        <div className="get-started-container justify-content-center">
-          <div className="hero-button ps-3 d-flex align-items-center">
-            <span className="py-3 hero-button-text " onClick={()=> navigate("/register")}>Get Started</span>
+        <div className="get-started-container justify-content-center" >
+          <div className="hero-button ps-3 d-flex align-items-center " onClick={()=> navigate("/register")}  style={startBtnStyle}>
+            <span className="py-3 hero-button-text " >Get Started</span>
             <span className="d-end hero-arrow mx-2 ">
               <img className="img-arrow" src={arrow} alt="" srcset="" />
             </span>
