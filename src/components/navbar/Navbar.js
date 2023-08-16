@@ -17,6 +17,7 @@ import computation1 from "../../assets/sidebar/computation-black.png";
 import computation2 from "../../assets/sidebar/computation-white.png";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
+
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
@@ -29,21 +30,26 @@ function Navbar() {
     };
     window.addEventListener("scroll", handleScroll);
 
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
+
   const [activeComponent, setActiveComponent] = useState("/");
   const [createDropDown, setCreateDropDown] = useState(false);
+
 
   const handleItemClick = (componentName) => {
     setActiveComponent(componentName);
   };
 
+
   const showCreateDropDown = () => {
     setCreateDropDown(!createDropDown) ;
   }
+
 
   return (
     <>
@@ -59,6 +65,7 @@ function Navbar() {
             <img src={logo} className="img-logo" />
           </a>
 
+
           <button
             type="button"
             className="navbar-toggler collapsed d-flex d-lg-none flex-column justify-content-around"
@@ -72,6 +79,7 @@ function Navbar() {
             <span className="toggler-icon middle-bar"></span>
             <span className="toggler-icon bottom-bar"></span>
           </button>
+
 
           <div
             className="collapse navbar-collapse justify-content-end"
@@ -99,7 +107,7 @@ function Navbar() {
                   />
                   Create
                   <div className="px-2"><i class="fa-solid fa-angle-down"></i></div>
-                </a> 
+                </a>
                 {createDropDown && (
                   <div className="create-dropdown p-3 text-center" onClick={showCreateDropDown}>
                     <div className={`d-flex py-1`}>
@@ -135,7 +143,7 @@ function Navbar() {
               </li>
               <li className="nav-item py-2 d-lg-none">
                 <NavLink
-                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center" 
+                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
                   to="/dataset"
                 >
                   <img
@@ -214,6 +222,7 @@ function Navbar() {
                 </NavLink>
               </li>
 
+
               <li className="nav-item py-2">
                   <ConnectButton />
               </li>
@@ -224,5 +233,6 @@ function Navbar() {
     </>
   );
 }
+
 
 export default Navbar;
