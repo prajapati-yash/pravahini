@@ -42,7 +42,10 @@ function HowItWorks() {
       <div className="how-works-content">
         <div>
           {howWorksContent.map((item, key) => (
-            <div className="pb-4 d-flex align-items-center" index={key}>
+            <div
+              className="pb-4 d-flex align-items-center onHoverHowItContent"
+              index={key}
+            >
               <div className="col-1">
                 <div className="circle-number">
                   <span className="text-number">{item.number}</span>

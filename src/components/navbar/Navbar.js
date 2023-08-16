@@ -15,10 +15,14 @@ import code1 from "../../assets/sidebar/code-black.png";
 import code2 from "../../assets/sidebar/code-white.png";
 import computation1 from "../../assets/sidebar/computation-black.png";
 import computation2 from "../../assets/sidebar/computation-white.png";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [activeComponent, setActiveComponent] = useState("/");
+  const [createDropDown, setCreateDropDown] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -33,9 +37,6 @@ function Navbar() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  const [activeComponent, setActiveComponent] = useState("/");
-  const [createDropDown, setCreateDropDown] = useState(false);
 
   const handleItemClick = (componentName) => {
     setActiveComponent(componentName);
@@ -103,10 +104,8 @@ function Navbar() {
                     width={20}
                   />
                   Create
-                  <div className="px-2">
-                    <i class="fa-solid fa-angle-down"></i>
-                  </div>
-                </a>
+                  <div className="px-2"><i class="fa-solid fa-angle-down"></i></div>
+                </a> 
                 {createDropDown && (
                   <div
                     className="create-dropdown p-3 text-center"
@@ -147,7 +146,7 @@ function Navbar() {
               </li>
               <li className="nav-item py-2 d-lg-none">
                 <NavLink
-                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
+                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center" 
                   to="/dataset"
                 >
                   <img
@@ -236,5 +235,4 @@ function Navbar() {
     </>
   );
 }
-
 export default Navbar;
