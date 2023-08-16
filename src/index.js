@@ -3,24 +3,27 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import '@rainbow-me/rainbowkit/styles.css';
-
+import {    darkTheme,
+  } from '@rainbow-me/rainbowkit';
 import {
   getDefaultWallets,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
+  polygonMumbai,
   mainnet,
   polygon,
   optimism,
   arbitrum,
   zora,
+  polygonMumbai,
 } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
 const { chains, publicClient } = configureChains(
-  [ mainnet, polygon, optimism, arbitrum, zora],
+  [polygonMumbai, mainnet, polygon, optimism, arbitrum, zora],
   [
     alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
     publicProvider()
@@ -43,7 +46,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
       <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider chains={chains}  coolMode>
+        <RainbowKitProvider chains={chains} theme={darkTheme()} coolMode>
           <App />
         </RainbowKitProvider>
       </WagmiConfig>
