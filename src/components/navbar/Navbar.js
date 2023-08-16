@@ -19,10 +19,6 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [activeComponent, setActiveComponent] = useState("/");
-  const [createDropDown, setCreateDropDown] = useState(false);
-
-
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -37,6 +33,9 @@ function Navbar() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const [activeComponent, setActiveComponent] = useState("/");
+  const [createDropDown, setCreateDropDown] = useState(false);
 
   const handleItemClick = (componentName) => {
     setActiveComponent(componentName);

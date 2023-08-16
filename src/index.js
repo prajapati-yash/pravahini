@@ -17,7 +17,6 @@ import {
   optimism,
   arbitrum,
   zora,
-  polygonMumbai,
 } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
