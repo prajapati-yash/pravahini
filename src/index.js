@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import '@rainbow-me/rainbowkit/styles.css';
+
 import {    darkTheme,
   } from '@rainbow-me/rainbowkit';
 import {
@@ -30,13 +31,11 @@ const { chains, publicClient } = configureChains(
   ]
 );
 
-
 const { connectors } = getDefaultWallets({
   appName: 'My RainbowKit App',
   projectId: 'YOUR_PROJECT_ID',
   chains
 });
-
 
 const wagmiConfig = createConfig({
   autoConnect: true,

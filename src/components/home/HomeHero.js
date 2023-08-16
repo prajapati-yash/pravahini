@@ -10,7 +10,6 @@ import link from "../../assets/home/link.png";
 import unioncopy from "../../assets/home/union-copy.png";
 import { Navigate, useNavigate } from "react-router-dom";
 
-
 function HomeHero() {
   const navigate = useNavigate();
   const [isShaking, setShaking] = useState(false);
@@ -23,8 +22,6 @@ function HomeHero() {
       clearInterval(interval);
     };
   }, [isShaking])
-
-
  
   const startBtnStyle = {
     animation: isShaking ? 'shake 1.5s ease-in-out' : 'none',
@@ -44,7 +41,6 @@ function HomeHero() {
             Computation of your ML Models.
           </p>
         </div>
-
 
         <div className="get-started-container justify-content-center" >
           <div className="hero-button ps-3 d-flex align-items-center " onClick={()=> navigate("/user-dashboard")}  style={startBtnStyle}>

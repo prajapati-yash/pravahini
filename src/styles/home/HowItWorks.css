@@ -5,6 +5,15 @@
     border: 1px solid white;
     padding: 2rem;
 }
+.onHoverHowItContent:hover .circle-number{
+    background-color:#fff;
+}
+ .onHoverHowItContent:hover .text-number{
+    color: #333232;
+}
+ .onHoverHowItContent:hover .how-works-mono-content{
+    background-color: #4c55d2;
+}
 
 .how-works-title{
     font-size: 2.2rem;

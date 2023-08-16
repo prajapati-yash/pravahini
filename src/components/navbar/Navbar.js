@@ -20,6 +20,9 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [activeComponent, setActiveComponent] = useState("/");
+  const [createDropDown, setCreateDropDown] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -37,19 +40,13 @@ function Navbar() {
   }, []);
 
 
-  const [activeComponent, setActiveComponent] = useState("/");
-  const [createDropDown, setCreateDropDown] = useState(false);
-
-
   const handleItemClick = (componentName) => {
     setActiveComponent(componentName);
   };
 
-
   const showCreateDropDown = () => {
     setCreateDropDown(!createDropDown) ;
   }
-
 
   return (
     <>
@@ -107,7 +104,9 @@ function Navbar() {
                   />
                   Create
                   <div className="px-2"><i class="fa-solid fa-angle-down"></i></div>
+
                 </a>
+
                 {createDropDown && (
                   <div className="create-dropdown p-3 text-center" onClick={showCreateDropDown}>
                     <div className={`d-flex py-1`}>
@@ -222,7 +221,6 @@ function Navbar() {
                 </NavLink>
               </li>
 
-
               <li className="nav-item py-2">
                   <ConnectButton />
               </li>
@@ -233,6 +231,6 @@ function Navbar() {
     </>
   );
 }
-
-
 export default Navbar;
+
+
