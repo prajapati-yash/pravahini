@@ -4,12 +4,15 @@ import './index.css';
 import App from './App';
 import '@rainbow-me/rainbowkit/styles.css';
 
+import {    darkTheme,
+  } from '@rainbow-me/rainbowkit';
 import {
   getDefaultWallets,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
+  polygonMumbai,
   mainnet,
   polygon,
   optimism,
@@ -19,8 +22,9 @@ import {
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
+
 const { chains, publicClient } = configureChains(
-  [ mainnet, polygon, optimism, arbitrum, zora],
+  [polygonMumbai, mainnet, polygon, optimism, arbitrum, zora],
   [
     alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
     publicProvider()
@@ -39,11 +43,12 @@ const wagmiConfig = createConfig({
   publicClient
 })
 
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
       <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider chains={chains}  coolMode>
+        <RainbowKitProvider chains={chains} theme={darkTheme()} coolMode>
           <App />
         </RainbowKitProvider>
       </WagmiConfig>
@@ -51,7 +56,7 @@ root.render(
    
 );
 
+
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-

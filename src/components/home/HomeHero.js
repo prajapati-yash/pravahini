@@ -22,15 +22,12 @@ function HomeHero() {
       clearInterval(interval);
     };
   }, [isShaking])
-
-  
+ 
   const startBtnStyle = {
-
     animation: isShaking ? 'shake 1.5s ease-in-out' : 'none',
     transformOrigin: 'center',
     boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.3)',
   }
-
 
   return (
     <div className="d-flex flex-lg-row flex-column hero-main-container px-4 px-sm-5 my-xl-4 mx-2">
@@ -65,5 +62,6 @@ function HomeHero() {
     </div>
   );
 }
+
 
 export default HomeHero;
