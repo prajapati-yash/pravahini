@@ -105,7 +105,7 @@ function RegistrationPage() {
                     className="col-2 register-input-img"
                     src={item.thumbnail}
                   />
-                  <div className="col-lg-5 col-xl-4 px-4 register-input-text">
+                  <div className="col-lg-5 col-xl-4 px-sm-4 px-3 register-input-text">
                     {item.head}
                   </div>
                 </div>

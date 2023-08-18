@@ -191,27 +191,32 @@ function DatasetDashboard() {
             </button>
             <ul class="dropdown-menu">
               <li>
-                <a class="dropdown-item" href="#">
+                <a
+                  className={`dropdown-item ${
+                    activeComponent === "allDatasets" ? "active-button" : ""
+                  }`}
+                  href="#"
+                >
                   All Datasets
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Drugs and Medicines
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Education
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Earth and Nature
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Science and Technology
                 </a>
               </li>

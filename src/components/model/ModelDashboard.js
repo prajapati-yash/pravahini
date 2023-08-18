@@ -190,27 +190,32 @@ function ModelDashboard() {
             </button>
             <ul class="dropdown-menu">
               <li>
-                <a class="dropdown-item" href="#">
-                  All Datasets
+                <a
+                  className={`dropdown-item ${
+                    activeComponent === "allModels" ? "active-button" : ""
+                  }`}
+                  href="#"
+                >
+                  All Models
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Drugs and Medicines
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Education
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Earth and Nature
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="#">
+                <a className="dropdown-item" href="#">
                   Science and Technology
                 </a>
               </li>
