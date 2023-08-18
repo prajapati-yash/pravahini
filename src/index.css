@@ -12,6 +12,20 @@ code {
     monospace;
 }
 
+
+body::-webkit-scrollbar {
+  width: 0.5em;
+}
+ 
+body::-webkit-scrollbar-track {
+  background-color: rgb(181, 210, 254);
+}
+ 
+body::-webkit-scrollbar-thumb {
+  background-color: #4250ff;
+  border-radius: 5rem;
+} 
+
 @keyframes shake {
   0%, 100% { transform: translateY(0); }
   25% { transform: translateY(-5px); }
