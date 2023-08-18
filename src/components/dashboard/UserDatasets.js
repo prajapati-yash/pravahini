@@ -38,7 +38,10 @@ function UserDatasets() {
   return (
     <div className="row px-0 user-dataset-main mt-4 py-3 px-sm-3 container-fluid justify-content-around">
       {blocks.map((item, key) => (
-        <div className="col-xxl-3 col-md-5 col-sm-7 col-11 mx-1 mb-5 user-dataset-component" index={key}>
+        <div
+          className="col-xxl-3 col-md-5 col-sm-7 col-11 mx-1 mb-5 user-dataset-component"
+          index={key}
+        >
           <div className="user-dataset-img-div">
             <img src={img} className="user-dataset-img"></img>
           </div>

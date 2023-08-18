@@ -39,7 +39,7 @@ function RegistrationPage() {
         });
       };
 
-      reader.readAsDataURL(selectedFile); 
+      reader.readAsDataURL(selectedFile);
       setSelectedFileName(selectedFile.name);
     }
   };
@@ -47,7 +47,7 @@ function RegistrationPage() {
   const registerData = [
     {
       thumbnail: name,
-      head: "Name",
+      head: "Name*",
       placeholder: "Enter your name",
       value: formData.userName,
     },
@@ -103,9 +103,9 @@ function RegistrationPage() {
                 <div className="d-flex col-6 col-xl-4 register-input-text-component">
                   <img
                     className="col-2 register-input-img"
-                    src={item.thumbnail} 
+                    src={item.thumbnail}
                   />
-                  <div className="col-lg-5 col-xl-4 px-4 register-input-text">
+                  <div className="col-lg-5 col-xl-4 px-sm-4 px-3 register-input-text">
                     {item.head}
                   </div>
                 </div>
