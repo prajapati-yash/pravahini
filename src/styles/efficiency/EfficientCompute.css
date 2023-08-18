@@ -3,7 +3,7 @@
   /* background: linear-gradient(to bottom, #4250FF, #6B7AFF); */
   border-top-left-radius: 4rem;
   border-bottom-left-radius: 4rem;
-  height: 100vh;
+  padding-bottom: 5rem;
 }
 
 .efficient-compute-img{
@@ -40,8 +40,24 @@
 }
 
 .efficient-compute-dataset-img{
+  cursor: pointer;
   width: 2.6rem;
   margin-left: 1.2rem;
+}
+
+.efficient-display-url-container{
+  border-radius: 0.5rem;
+  margin-right: 2rem;
+}
+
+.efficient-display-urls{
+  color: #000;
+  padding-left: 0.4rem;
+}
+
+.efficient-display-urls-btn{
+  border-radius: 0.5rem;
+  outline: none;
 }
 
 .efficient-compute-model-btn{

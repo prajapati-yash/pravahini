@@ -15,8 +15,7 @@ import code1 from "../../assets/sidebar/code-black.png";
 import code2 from "../../assets/sidebar/code-white.png";
 import computation1 from "../../assets/sidebar/computation-black.png";
 import computation2 from "../../assets/sidebar/computation-white.png";
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -104,8 +103,18 @@ function Navbar() {
                     width={20}
                   />
                   Create
-                  <div className="px-2"><i class="fa-solid fa-angle-down"></i></div>
-                </a> 
+                  <div className="px-2">
+                    <i
+                      className="fas fa-angle-down"
+                      style={{
+                        transform: createDropDown
+                          ? "rotate(-180deg)"
+                          : "rotate(0)",
+                        transition: "transform 0.5s ease-in-out",
+                      }}
+                    ></i>
+                  </div>
+                </a>
                 {createDropDown && (
                   <div
                     className="create-dropdown p-3 text-center"
@@ -146,8 +155,8 @@ function Navbar() {
               </li>
               <li className="nav-item py-2 d-lg-none">
                 <NavLink
-                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center" 
-                  to="/dataset"
+                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
+                  to="/dataset-marketplace"
                 >
                   <img
                     className="navbar-image"
@@ -167,7 +176,7 @@ function Navbar() {
               <li className="nav-item py-2 d-lg-none">
                 <NavLink
                   className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
-                  to="/model"
+                  to="/model-marketplace"
                 >
                   <img
                     className="navbar-image"
@@ -207,7 +216,7 @@ function Navbar() {
               <li className="nav-item py-2 d-lg-none">
                 <NavLink
                   className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
-                  to="/computation"
+                  to="/de-computation"
                 >
                   <img
                     className="navbar-image"

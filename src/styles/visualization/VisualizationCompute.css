@@ -3,7 +3,7 @@
   /* background: linear-gradient(to bottom, #4250FF, #6B7AFF); */
   border-top-left-radius: 4rem;
   border-bottom-left-radius: 4rem;
-  height: 100vh;
+  padding-bottom: 5rem;
 }
 
 .visualization-compute-img{
@@ -42,6 +42,21 @@
 .visualization-compute-dataset-img{
   width: 2.6rem;
   margin-left: 1.2rem;
+}
+
+.visualization-display-url-container{
+  border-radius: 0.5rem;
+  margin-right: 2rem;
+}
+
+.visualization-display-urls{
+  color: #000;
+  padding-left: 0.4rem;
+}
+
+.visualization-display-urls-btn{
+  border-radius: 0.5rem;
+  outline: none;
 }
 
 .visualization-compute-model-btn{

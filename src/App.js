@@ -27,18 +27,18 @@ function App() {
           <Route path="/register" element={ <Registration />}/>
           <Route path="/user-dashboard" element={<Dashboard />}/>
           <Route path="/user-dashboard/*" element={<Dashboard />}/>
-          <Route path="/dataset" element={<Dataset/>}></Route>
-          <Route path="/dataset/*" element={<Dataset/>}></Route>
-          <Route path="/dataset/create-dataset" element={<DatasetForm/>}></Route>
-          <Route path="/dataset/single-dataset" element={<IndividualDataset/>}></Route>
-          <Route path="/model" element={<Model/>}></Route>
-          <Route path="/model/*" element={<Model/>}></Route>
-          <Route path="/model/create-model" element={<ModelForm/>}></Route>
-          <Route path="/model/single-model" element={<IndividualModel/>}></Route>
-          <Route path="/computation" element={<Computation/>}></Route>
-          <Route path="/computation/*" element={<Computation/>}></Route>
-          <Route path="/computation/visualization" element={<Visualization/>}></Route>
-          <Route path="/computation/efficient" element={<EfficientComputation/>}></Route>
+          <Route path="/dataset-marketplace" element={<Dataset/>}></Route>
+          <Route path="/dataset-marketplace/*" element={<Dataset/>}></Route>
+          <Route path="/dataset-marketplace/create-dataset" element={<DatasetForm/>}></Route>
+          <Route path="/dataset-marketplace/single-dataset" element={<IndividualDataset/>}></Route>
+          <Route path="/model-marketplace" element={<Model/>}></Route>
+          <Route path="/model-marketplace/*" element={<Model/>}></Route>
+          <Route path="/model-marketplace/create-model" element={<ModelForm/>}></Route>
+          <Route path="/model-marketplace/single-model" element={<IndividualModel/>}></Route>
+          <Route path="/de-computation" element={<Computation/>}></Route>
+          <Route path="/de-computation/*" element={<Computation/>}></Route>
+          <Route path="/de-computation/advanced-visualization-computing" element={<Visualization/>}></Route>
+          <Route path="/de-computation/efficient-computing" element={<EfficientComputation/>}></Route>
         </Routes>
       </BrowserRouter>
       {/* <RouterProvider router={router}/> */}

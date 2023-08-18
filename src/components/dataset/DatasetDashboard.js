@@ -45,10 +45,6 @@ function DatasetDashboard() {
     setFilterDropdown(!filterDropdown);
   };
 
-  const handleCreateDatasetButton = (e) => {
-    navigate("/dataset/create-dataset");
-  };
-
   const handleAllDatasetClick = (e) => {
     e.preventDefault();
     setActiveComponent("allDatasets");
@@ -83,13 +79,13 @@ function DatasetDashboard() {
             </div>
           </div>
 
-          {/* Categories */}
+          {/* Create and search */}
 
           <div>
             <button
               type="submit"
               className="btn rounded-pill my-1 py-sm-2 px-sm-3 dash-create-dataset-btn"
-              onClick={handleCreateDatasetButton}
+              onClick={() => navigate("/dataset-marketplace/create-dataset")}
             >
               Create Dataset
             </button>
@@ -103,11 +99,35 @@ function DatasetDashboard() {
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
               />
-              <img src={img} alt="search icon" />
+              <div class="dropdown dataset-dropdown-container">
+                <img
+                  src={img}
+                  alt="Image"
+                  class="dropdown-toggle"
+                  id="dropdownMenuButton"
+                  data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                />
+                <div
+                  className="dropdown-menu"
+                  aria-labelledby="dropdownMenuButton"
+                >
+                  <a className="dropdown-item" href="#">
+                    Paid
+                  </a>
+                  <a className="dropdown-item" href="#">
+                    Free
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Categories */}
+
       <div>
         <div className="d-lg-flex py-4 justify-content-center dataset-dash-btns d-none">
           <button
@@ -160,64 +180,43 @@ function DatasetDashboard() {
         {/* Filter categories dropdown */}
 
         <div className="py-3 px-md-5 px-sm-4 px-3 d-lg-none dataset-dash-btns">
-          <div className="d-flex justify-content-end">
+          <div className="d-flex justify-content-end dropdown">
             <button
               type="button"
-              className="d-flex dataset-dropdown-btn"
-              onClick={showFilterDropdown}
+              className="dataset-dropdown-btn dropdown-toggle"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
             >
               Filter category
-              <div className="px-2">
-                <i class="fa-solid fa-angle-down"></i>
-              </div>
             </button>
-          </div>
-          {filterDropdown && (
-            <div
-              className="p-3 text-center dataset-filter-dropdown "
-              onClick={showFilterDropdown}
-            >
-              <div>
-                <li
-                  className={`d-flex dataset-filter-items justify-content-end py-1 ${
-                    activeComponent === "allDatasets" ? "dataset-active-filter" : ""
-                  }`}
-                  onClick={handleAllDatasetClick}
-                >
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="#">
                   All Datasets
-                </li>
-                <li
-                  className={`d-flex dataset-filter-items justify-content-end py-1 ${
-                    activeComponent === "drugs&med" ? "dataset-active-filter" : ""
-                  }`}
-                >
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
                   Drugs and Medicines
-                </li>
-                <li
-                  className={`d-flex dataset-filter-items justify-content-end py-1 ${
-                    activeComponent === "education" ? "dataset-active-filter" : ""
-                  }`}
-                  onClick={handleAllDatasetClick}
-                >
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
                   Education
-                </li>
-                <li
-                  className={`d-flex dataset-filter-items justify-content-end py-1 ${
-                    activeComponent === "earth&nature" ? "dataset-active-filter" : ""
-                  }`}
-                >
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
                   Earth and Nature
-                </li>
-                <li
-                  className={`d-flex dataset-filter-items justify-content-end py-1 ${
-                    activeComponent === "sci&tech" ? "dataset-active-filter" : ""
-                  }`}
-                >
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
                   Science and Technology
-                </li>
-              </div>
-            </div>
-          )}
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
 
         {/* All dataset component */}
@@ -238,7 +237,9 @@ function DatasetDashboard() {
                   <div className="all-dataset-badge">Free</div>
                   <div
                     className="all-dataset-btn"
-                    onClick={() => navigate("/dataset/single-dataset")}
+                    onClick={() =>
+                      navigate("/dataset-marketplace/single-dataset")
+                    }
                   >
                     View More &gt;
                   </div>

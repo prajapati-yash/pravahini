@@ -45,10 +45,6 @@ function ModelDashboard() {
     setFilterDropdown(!filterDropdown);
   };
 
-  const handleCreateModelButton = (e) => {
-    navigate("/model/create-model");
-  };
-
   const handleAllModelClick = (e) => {
     e.preventDefault();
     setActiveComponent("allModels");
@@ -84,12 +80,12 @@ function ModelDashboard() {
             </div>
           </div>
 
-          {/* Categories */}
+          {/* Create and search */}
           <div>
             <button
               type="submit"
               className="btn rounded-pill my-1 py-sm-2 px-sm-3 dash-create-model-btn"
-              onClick={handleCreateModelButton}
+              onClick={() => navigate("/model-marketplace/create-model")}
             >
               Create Model
             </button>
@@ -103,11 +99,34 @@ function ModelDashboard() {
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
               />
-              <img src={img} alt="search icon" />
+              <div class="dropdown model-dropdown-container">
+                <img
+                  src={img}
+                  alt="Image"
+                  class="dropdown-toggle"
+                  id="dropdownMenuButton"
+                  data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                />
+                <div
+                  className="dropdown-menu"
+                  aria-labelledby="dropdownMenuButton"
+                >
+                  <a className="dropdown-item" href="#">
+                    Paid
+                  </a>
+                  <a className="dropdown-item" href="#">
+                    Free
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Categories */}
       <div>
         <div className="d-lg-flex py-4 justify-content-center model-dash-btns d-none">
           <button
@@ -156,68 +175,47 @@ function ModelDashboard() {
             Science & Technology
           </button>
         </div>
-        
+
         {/* Filter category dropdown */}
 
         <div className="py-3 px-md-5 px-sm-4 px-3 d-lg-none model-dash-btns">
-          <div className="d-flex justify-content-end">
+          <div className="d-flex justify-content-end dropdown">
             <button
               type="button"
-              className="d-flex model-dropdown-btn"
-              onClick={showFilterDropdown}
+              className="model-dropdown-btn dropdown-toggle"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
             >
               Filter category
-              <div className="px-2">
-                <i class="fa-solid fa-angle-down"></i>
-              </div>
             </button>
-          </div>
-          {filterDropdown && (
-            <div
-              className="p-3 text-center model-filter-dropdown "
-              onClick={showFilterDropdown}
-            >
-              <div>
-                <li
-                  className={`d-flex model-filter-items justify-content-end py-1 ${
-                    activeComponent === "allModels" ? "model-active-filter" : ""
-                  }`}
-                  onClick={handleAllModelClick}
-                >
-                  All Models
-                </li>
-                <li
-                  className={`d-flex model-filter-items justify-content-end py-1 ${
-                    activeComponent === "drugs&med" ? "model-active-filter" : ""
-                  }`}
-                >
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="#">
+                  All Datasets
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
                   Drugs and Medicines
-                </li>
-                <li
-                  className={`d-flex model-filter-items justify-content-end py-1 ${
-                    activeComponent === "education" ? "model-active-filter" : ""
-                  }`}
-                  onClick={handleAllModelClick}
-                >
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
                   Education
-                </li>
-                <li
-                  className={`d-flex model-filter-items justify-content-end py-1 ${
-                    activeComponent === "earth&nature" ? "model-active-filter" : ""
-                  }`}
-                >
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
                   Earth and Nature
-                </li>
-                <li
-                  className={`d-flex model-filter-items justify-content-end py-1 ${
-                    activeComponent === "sci&tech" ? "model-active-filter" : ""
-                  }`}
-                >
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
                   Science and Technology
-                </li>
-              </div>
-            </div>
-          )}
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
 
         {/* All Models component */}
@@ -238,7 +236,7 @@ function ModelDashboard() {
                   <div className="all-model-badge">Free</div>
                   <div
                     className="all-model-btn"
-                    onClick={() => navigate("/model/single-model")}
+                    onClick={() => navigate("/model-marketplace/single-model")}
                   >
                     View More &gt;
                   </div>

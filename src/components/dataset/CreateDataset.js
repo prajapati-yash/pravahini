@@ -105,7 +105,7 @@ function CreateDataset() {
           <div className="create-dataset-content py-2">
             <div className="py-2">
               <div className="d-flex justify-content-flex-start create-dataset-head">
-                Dataset Title
+                Dataset Title *
               </div>
               <div className="">
                 <input
@@ -128,7 +128,7 @@ function CreateDataset() {
 
             <div className="py-3">
               <div className="d-flex justify-content-flex-start create-dataset-head">
-                Description
+                Description *
               </div>
               <div className="">
                 <input
@@ -151,7 +151,7 @@ function CreateDataset() {
 
             <div className="py-3">
               <div className="d-flex justify-content-flex-start create-dataset-head">
-                Categories
+                Categories *
               </div>
               <div className="">
                 <select
@@ -188,7 +188,7 @@ function CreateDataset() {
 
             <div className="py-3">
               <div className="d-flex justify-content-flex-start create-dataset-head">
-                Price Per Data
+                Price Per Data *
               </div>
               <div className="">
                 <input
@@ -221,12 +221,13 @@ function CreateDataset() {
                     id="upload-dataset"
                   ></img>
                 </div>
-                <div className="upload-dataset-text">Upload Dataset</div>
+                <div className="upload-dataset-text">Upload Dataset *</div>
                 <input
                   type="file"
                   ref={fileInputRefDataset}
                   style={{ display: "none" }}
                   onChange={handleFileChangeDataset}
+                  required
                 ></input>
               </div>
               <div className="d-flex upload-dataset-selected-file">
@@ -251,12 +252,13 @@ function CreateDataset() {
                     id="dataset-upload-image"
                   ></img>
                 </div>
-                <div className="dataset-image-text">Upload Dataset Image</div>
+                <div className="dataset-image-text">Upload Dataset Image *</div>
                 <input
                   type="file"
                   ref={fileInputRefDatasetImg}
                   style={{ display: "none" }}
                   onChange={handleFileChangeDatasetImg}
+                  required
                 ></input>
               </div>
               <div className="d-flex dataset-image-selected-file">
@@ -281,12 +283,13 @@ function CreateDataset() {
                     id="dataset-upload-licence"
                   ></img>
                 </div>
-                <div className="dataset-licence-text">Upload Licence</div>
+                <div className="dataset-licence-text">Upload Licence *</div>
                 <input
                   type="file"
                   ref={fileInputRefLicence}
                   style={{ display: "none" }}
                   onChange={handleLicenceFileChange}
+                  required
                 ></input>
               </div>
               <div className="d-flex dataset-licence-selected-file">
@@ -306,6 +309,7 @@ function CreateDataset() {
                   type="radio"
                   name="dataset-btn"
                   value="free"
+                  required
                 />
                 <label className="px-1 dataset-btn-text">Public(free)</label>
               </div>
@@ -315,6 +319,7 @@ function CreateDataset() {
                   type="radio"
                   name="dataset-btn"
                   value="private"
+                  required
                 />
                 <label className="px-1 dataset-btn-text">Private</label>
               </div>
@@ -324,6 +329,7 @@ function CreateDataset() {
                   type="radio"
                   name="dataset-btn"
                   value="sell"
+                  required
                 />
                 <label className="px-1 dataset-btn-text">Sell</label>
               </div>

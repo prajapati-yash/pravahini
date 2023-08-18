@@ -1,12 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import hero from "../../assets/computation/efficient2.png";
 import add from "../../assets/computation/add.png";
 import "../../styles/efficiency/EfficientCompute.css";
 
 function EfficientCompute() {
+  const [urls, setUrls] = useState([]);
+  const [currentUrl, setCurrentUrl] = useState("");
+
+  const handleDatasetUrlChange = (event) => {
+    setCurrentUrl(event.target.value);
+  };
+
+  const handleAddUrl = () => {
+    if (currentUrl.trim() !== "") {
+      setUrls([...urls, currentUrl]);
+      setCurrentUrl("");
+    }
+  };
+
+  const handleRemoveUrl = (index) => {
+    const newUrls = urls.filter((_, i) => i !== index);
+    setUrls(newUrls);
+  };
+
   return (
     <div>
-      <div className="py-4 efficient-compute-container">
+      <div className="pt-4 efficient-compute-container">
         <div>
           <img src={hero} className="efficient-compute-img" />
         </div>
@@ -25,11 +44,32 @@ function EfficientCompute() {
                     type="text"
                     className="efficient-compute-dataset-input"
                     placeholder="Enter Dataset URL"
+                    onChange={handleDatasetUrlChange}
                   />
                 </div>
                 <div className="d-flex">
-                  <img className="efficient-compute-dataset-img" src={add} />
+                  <img
+                    className="efficient-compute-dataset-img"
+                    src={add}
+                    onClick={handleAddUrl}
+                  />
                 </div>
+              </div>
+              <div>
+                {urls.map((url, index) => (
+                  <div
+                    key={index}
+                    className="d-flex align-items-center mb-2 bg-white efficient-display-url-container"
+                  >
+                    <div className="flex-grow-1 efficient-display-urls">{url}</div>
+                    <button
+                      className="btn btn-danger efficient-display-urls-btn"
+                      onClick={() => handleRemoveUrl(index)}
+                    >
+                      <i className="fas fa-times"></i>
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
 

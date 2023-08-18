@@ -47,7 +47,7 @@ function RegistrationPage() {
   const registerData = [
     {
       thumbnail: name,
-      head: "Name",
+      head: "Name*",
       placeholder: "Enter your name",
       value: formData.userName,
     },

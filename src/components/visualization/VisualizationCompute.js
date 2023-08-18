@@ -1,12 +1,31 @@
-import React from "react";
+import React, {useState} from "react";
 import "../../styles/visualization/VisualizationCompute.css";
 import hero from "../../assets/computation/visualization2.png";
 import add from "../../assets/computation/add.png";
 
 function VisualizationCompute() {
+  const [urls, setUrls] = useState([]);
+  const [currentUrl, setCurrentUrl] = useState("");
+
+  const handleDatasetUrlChange = (event) => {
+    setCurrentUrl(event.target.value);
+  };
+
+  const handleAddUrl = () => {
+    if (currentUrl.trim() !== "") {
+      setUrls([...urls, currentUrl]);
+      setCurrentUrl("");
+    }
+  };
+
+  const handleRemoveUrl = (index) => {
+    const newUrls = urls.filter((_, i) => i !== index);
+    setUrls(newUrls);
+  };
+
   return (
     <div>
-      <div className="py-4 visualization-compute-container">
+      <div className="pt-4 visualization-compute-container">
         <div>
           <img src={hero} className="visualization-compute-img" />
         </div>
@@ -25,14 +44,32 @@ function VisualizationCompute() {
                     type="text"
                     className="visualization-compute-dataset-input"
                     placeholder="Enter Dataset URL"
+                    onChange={handleDatasetUrlChange}
                   />
                 </div>
                 <div className="d-flex">
                   <img
                     className="visualization-compute-dataset-img"
                     src={add}
+                    onClick={handleAddUrl}
                   />
                 </div>
+              </div>
+              <div>
+                {urls.map((url, index) => (
+                  <div
+                    key={index}
+                    className="d-flex align-items-center mb-2 bg-white visualization-display-url-container"
+                  >
+                    <div className="flex-grow-1 visualization-display-urls">{url}</div>
+                    <button
+                      className="btn btn-danger visualization-display-urls-btn"
+                      onClick={() => handleRemoveUrl(index)}
+                    >
+                      <i className="fas fa-times"></i>
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
 

@@ -20,24 +20,26 @@ function ComputationDetails() {
             <div className="py-2">
               <img className="computation-details-img1" src={efficient} />
             </div>
-            <div className="py-2 px-3 computation-efficient-lib">
-              <div className="computation-details-lib">Libraries: </div>
-              <div className="computation-details-lib-text">
-                Numpy, Pandas, Scikit-learn, Matplotlib, Seaborn
+            <div className="pb-md-5">
+              <div className="py-2 px-3 computation-efficient-lib">
+                <div className="computation-details-lib">Libraries: </div>
+                <div className="computation-details-lib-text">
+                  Numpy, Pandas, Scikit-learn, Matplotlib, Seaborn
+                </div>
               </div>
-            </div>
-            <div className="py-2 px-3 computation-efficient-purpose">
-              <div className="computation-details-purpose">Purpose: </div>
-              <div className="computation-details-purpose-text">
-                Designed for general-purpose computing tasks, this container is
-                equipped with essential libraries for data manipulation, machine
-                learning, and visualization.
+              <div className="py-2 px-3 computation-efficient-purpose">
+                <div className="computation-details-purpose">Purpose: </div>
+                <div className="computation-details-purpose-text">
+                  Designed for general-purpose computing tasks, this container
+                  is equipped with essential libraries for data manipulation,
+                  machine learning, and visualization.
+                </div>
               </div>
             </div>
             <div className="py-2">
               <button
                 className="py-2 px-4 btn rounded-pill computation-details-btn1"
-                onClick={() => navigate("/computation/efficient")}
+                onClick={() => navigate("/de-computation/efficient-computing")}
               >
                 Use Now
               </button>
@@ -52,26 +54,30 @@ function ComputationDetails() {
             <div className="py-2">
               <img className="computation-details-img2" src={advanced} />
             </div>
-            <div className="py-2 px-3 computation-visual-lib">
-              <div className="computation-details-lib">Libraries: </div>
-              <div className="computation-details-lib-text">
-                Numpy, Scipy, Scikit-learn, Theano, TensorFlow, Keras, PyTorch,
-                Pandas, Matplotlib, Seaborn, Plotly
+            <div className="pb-md-5">
+              <div className="py-2 px-3 computation-visual-lib">
+                <div className="computation-details-lib">Libraries: </div>
+                <div className="computation-details-lib-text">
+                  Numpy, Scipy, Scikit-learn, Theano, TensorFlow, Keras,
+                  PyTorch, Pandas, Matplotlib, Seaborn, Plotly
+                </div>
+              </div>
+              <div className="py-2 px-3 computation-visual-purpose">
+                <div className="computation-details-purpose">Purpose: </div>
+                <div className="computation-details-purpose-text">
+                  Tailored for demanding computation and advanced visualization,
+                  this container houses a comprehensive suite of libraries,
+                  enabling you to tackle complex ML models and generate visually
+                  compelling outputs
+                </div>
               </div>
             </div>
-            <div className="py-2 px-3 computation-visual-purpose">
-              <div className="computation-details-purpose">Purpose: </div>
-              <div className="computation-details-purpose-text">
-                Tailored for demanding computation and advanced visualization,
-                this container houses a comprehensive suite of libraries,
-                enabling you to tackle complex ML models and generate visually
-                compelling outputs
-              </div>
-            </div>
-            <div className="py-2">
+            <div className="py-2 mt-auto">
               <button
                 className="py-2 px-4 btn rounded-pill computation-details-btn2"
-                onClick={() => navigate("/computation/visualization")}
+                onClick={() =>
+                  navigate("/de-computation/advanced-visualization-computing")
+                }
               >
                 Use Now
               </button>
