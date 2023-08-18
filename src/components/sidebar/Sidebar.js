@@ -23,19 +23,20 @@ function Sidebar() {
   };
 
   const showCreateDropDown = () => {
-    setCreateDropDown(!createDropDown) ;
-  }
+    setCreateDropDown(!createDropDown);
+  };
 
   return (
     <div className="sidebar pt-4 sidebar-container position-fixed">
       <div className="collapse show" id="sidebarContent">
         <ul className="nav flex-column">
-          <li className="nav-item dropdown-center py-2 sidebar-items" 
-              onClick={showCreateDropDown}
-              >
+          <li
+            className="nav-item dropdown-center py-2 sidebar-items"
+            onClick={showCreateDropDown}
+          >
             <a
               className={`nav-link sidebar-content align-items-center ${
-                (activeComponent === "create"  && createDropDown) ? "active" : ""
+                activeComponent === "create" && createDropDown ? "active" : ""
               }`}
               onClick={() => handleItemClick("create")}
             >
@@ -52,17 +53,30 @@ function Sidebar() {
                 width={20}
               />
               Create
-              <div className="px-2"><i class="fa-solid fa-angle-down"></i></div>
+              <div className="px-2">
+                <i
+                  className="fas fa-angle-down"
+                  style={{
+                    transform: createDropDown ? "rotate(-180deg)" : "rotate(0)",
+                    transition: "transform 0.5s ease-in-out",
+                  }}
+                ></i>
+              </div>
             </a>
             {createDropDown && (
-              <div className="create-dropdown p-3 text-center" onClick={showCreateDropDown}>
+              <div
+                className="create-dropdown p-3 text-center"
+                onClick={showCreateDropDown}
+              >
                 <div className={`d-flex py-1`}>
-                  <a href="/dataset/create-dataset" className="link-style">
+                  <a href="/dataset-marketplace/create-dataset" className="link-style">
                     Create Dataset
                   </a>
                 </div>
                 <div className={`d-flex py-1`}>
-                  <a href="/model/create-model" className="link-style">Create Model</a>
+                  <a href="/model-marketplace/create-model" className="link-style">
+                    Create Model
+                  </a>
                 </div>
               </div>
             )}
@@ -90,7 +104,7 @@ function Sidebar() {
           <li className="nav-item py-2">
             <NavLink
               className="nav-link sidebar-content align-items-center"
-              to="/dataset"
+              to="/dataset-marketplace"
             >
               <img
                 className="sidebar-image"
@@ -110,7 +124,7 @@ function Sidebar() {
           <li className="nav-item py-2">
             <NavLink
               className={`nav-link sidebar-content align-items-center `}
-              to="/model"
+              to="/model-marketplace"
             >
               <img
                 className="sidebar-image"
@@ -150,7 +164,7 @@ function Sidebar() {
           <li className="nav-item py-2">
             <NavLink
               className={`nav-link sidebar-content align-items-center`}
-              to="/computation/dashboard"
+              to="/de-computation"
             >
               <img
                 className="sidebar-image"

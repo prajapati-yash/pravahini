@@ -15,10 +15,13 @@ import code1 from "../../assets/sidebar/code-black.png";
 import code2 from "../../assets/sidebar/code-white.png";
 import computation1 from "../../assets/sidebar/computation-black.png";
 import computation2 from "../../assets/sidebar/computation-white.png";
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [activeComponent, setActiveComponent] = useState("/");
+  const [createDropDown, setCreateDropDown] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -34,16 +37,15 @@ function Navbar() {
     };
   }, []);
 
-  const [activeComponent, setActiveComponent] = useState("/");
-  const [createDropDown, setCreateDropDown] = useState(false);
 
   const handleItemClick = (componentName) => {
     setActiveComponent(componentName);
   };
 
   const showCreateDropDown = () => {
-    setCreateDropDown(!createDropDown) ;
-  }
+    setCreateDropDown(!createDropDown);
+  };
+
 
   return (
     <>
@@ -78,10 +80,15 @@ function Navbar() {
             id="navbarRightAlignExample"
           >
             <ul className="navbar-nav ml-auto align-items-center mb-2 mb-lg-0 navbar-container">
-              <li className="nav-item py-2 d-lg-none" onClick={showCreateDropDown}>
+              <li
+                className="nav-item py-2 d-lg-none"
+                onClick={showCreateDropDown}
+              >
                 <a
                   className={`nav-link navbar-content px-1 p-0 d-flex align-items-center ${
-                    (activeComponent === "create" && createDropDown) ? "active" : ""
+                    activeComponent === "create" && createDropDown
+                      ? "active"
+                      : ""
                   }`}
                   onClick={() => handleItemClick("create")}
                 >
@@ -98,17 +105,35 @@ function Navbar() {
                     width={20}
                   />
                   Create
-                  <div className="px-2"><i class="fa-solid fa-angle-down"></i></div>
-                </a> 
+
+                  <div className="px-2">
+                    <i
+                      className="fas fa-angle-down"
+                      style={{
+                        transform: createDropDown
+                          ? "rotate(-180deg)"
+                          : "rotate(0)",
+                        transition: "transform 0.5s ease-in-out",
+                      }}
+                    ></i>
+                  </div>
+
+                </a>
+
                 {createDropDown && (
-                  <div className="create-dropdown p-3 text-center" onClick={showCreateDropDown}>
+                  <div
+                    className="create-dropdown p-3 text-center"
+                    onClick={showCreateDropDown}
+                  >
                     <div className={`d-flex py-1`}>
                       <a href="/dataset/create-dataset" className="link-style">
                         Create Dataset
                       </a>
                     </div>
                     <div className={`d-flex py-1`}>
-                      <a href="/model/create-model" className="link-style">Create Model</a>
+                      <a href="/model/create-model" className="link-style">
+                        Create Model
+                      </a>
                     </div>
                   </div>
                 )}
@@ -135,8 +160,8 @@ function Navbar() {
               </li>
               <li className="nav-item py-2 d-lg-none">
                 <NavLink
-                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center" 
-                  to="/dataset"
+                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
+                  to="/dataset-marketplace"
                 >
                   <img
                     className="navbar-image"
@@ -156,7 +181,7 @@ function Navbar() {
               <li className="nav-item py-2 d-lg-none">
                 <NavLink
                   className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
-                  to="/model"
+                  to="/model-marketplace"
                 >
                   <img
                     className="navbar-image"
@@ -196,7 +221,7 @@ function Navbar() {
               <li className="nav-item py-2 d-lg-none">
                 <NavLink
                   className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
-                  to="/computation/dashboard"
+                  to="/de-computation"
                 >
                   <img
                     className="navbar-image"
@@ -215,7 +240,7 @@ function Navbar() {
               </li>
 
               <li className="nav-item py-2">
-                  <ConnectButton />
+                <ConnectButton />
               </li>
             </ul>
           </div>
@@ -224,5 +249,4 @@ function Navbar() {
     </>
   );
 }
-
 export default Navbar;

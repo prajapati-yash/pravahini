@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from "react";
 import upload from "../../assets/registration/upload.png";
-import '../../styles/model/CreateModel.css';
-import Navbar from '../navbar/Navbar';
-import Sidebar from '../sidebar/Sidebar';
-import Footer from '../footer/Footer';
+import "../../styles/model/CreateModel.css";
+import Navbar from "../navbar/Navbar";
+import Sidebar from "../sidebar/Sidebar";
+import Footer from "../footer/Footer";
 
 function CreateModel() {
   const [createModel, setCreateModel] = useState({
@@ -48,7 +48,7 @@ function CreateModel() {
         console.log("File Data:", fileData);
         setCreateModel({
           ...createModel,
-          modelUpload: fileData, 
+          modelUpload: fileData,
         });
       };
 
@@ -67,7 +67,7 @@ function CreateModel() {
         console.log("File Data:", fileData);
         setCreateModel({
           ...createModel,
-          modelLicence: fileData, 
+          modelLicence: fileData,
         });
       };
 
@@ -86,7 +86,7 @@ function CreateModel() {
         console.log("File Data:", fileData);
         setCreateModel({
           ...createModel,
-          modelDocumentation: fileData, 
+          modelDocumentation: fileData,
         });
       };
 
@@ -103,7 +103,7 @@ function CreateModel() {
           <div className="create-model-content py-2">
             <div className="py-2">
               <div className="d-flex justify-content-flex-start create-model-head">
-                Model Title
+                Model Title *
               </div>
               <div className="">
                 <input
@@ -126,7 +126,7 @@ function CreateModel() {
 
             <div className="py-3">
               <div className="d-flex justify-content-flex-start create-model-head">
-                Description
+                Description *
               </div>
               <div className="">
                 <input
@@ -149,18 +149,19 @@ function CreateModel() {
 
             <div className="py-3">
               <div className="d-flex justify-content-flex-start create-model-head">
-                Categories
+                Categories *
               </div>
               <div className="">
                 <select
                   id="category"
                   name="category"
                   className="py-md-1 py-sm-1 model-input-form-data"
-                  placeholder='Select Category'
+                  placeholder="Select Category"
                   value={createModel.modelCategory}
                   onChange={(e) => {
                     setCreateModel({
-                      ...createModel, modelCategory: e.target.value,
+                      ...createModel,
+                      modelCategory: e.target.value,
                     });
                   }}
                   defaultValue=""
@@ -187,7 +188,7 @@ function CreateModel() {
 
             <div className="py-3">
               <div className="d-flex justify-content-flex-start create-model-head">
-                Tags/keywords
+                Tags/keywords *
               </div>
               <div className="">
                 <input
@@ -210,7 +211,7 @@ function CreateModel() {
 
             <div className="py-3">
               <div className="d-flex justify-content-flex-start create-model-head">
-                Model Price
+                Model Price *
               </div>
               <div className="">
                 <input
@@ -222,7 +223,8 @@ function CreateModel() {
                   value={createModel.modelPrice}
                   onChange={(e) => {
                     setCreateModel({
-                      ...createModel, modelPrice: e.target.value,
+                      ...createModel,
+                      modelPrice: e.target.value,
                     });
                   }}
                   required
@@ -230,10 +232,7 @@ function CreateModel() {
               </div>
             </div>
 
-            <div
-              className="d-flex py-2 flex-column"
-              onClick={handleModelClick}
-            >
+            <div className="d-flex py-2 flex-column" onClick={handleModelClick}>
               <div className="d-flex upload-model">
                 <div className="col-1 ">
                   <img
@@ -242,18 +241,21 @@ function CreateModel() {
                     id="upload-model"
                   ></img>
                 </div>
-                <div className="upload-model-text">Upload Model</div>
+                <div className="upload-model-text">Upload Model *</div>
                 <input
                   type="file"
                   ref={fileInputRefModel}
                   style={{ display: "none" }}
                   onChange={handleFileChangeModel}
+                  required
                 ></input>
               </div>
               <div className="d-flex upload-model-selected-file">
                 <div className="col-1"></div>
                 {selectedFileNameModel && (
-                  <div className="model-selected-file-text">File: {selectedFileNameModel}</div>
+                  <div className="model-selected-file-text">
+                    File: {selectedFileNameModel}
+                  </div>
                 )}
               </div>
             </div>
@@ -270,18 +272,21 @@ function CreateModel() {
                     id="model-upload-licence"
                   ></img>
                 </div>
-                <div className="model-licence-text">Upload Model Licence</div>
+                <div className="model-licence-text">Upload Model Licence *</div>
                 <input
                   type="file"
                   ref={fileInputRefLicence}
                   style={{ display: "none" }}
                   onChange={handleFileChangeLicence}
+                  required
                 ></input>
               </div>
               <div className="d-flex model-licence-selected-file">
                 <div className="col-1"></div>
                 {selectedFileNameLicence && (
-                  <div className="model-selected-file-text">File: {selectedFileNameLicence}</div>
+                  <div className="model-selected-file-text">
+                    File: {selectedFileNameLicence}
+                  </div>
                 )}
               </div>
             </div>
@@ -298,18 +303,23 @@ function CreateModel() {
                     id="model-upload-doc"
                   ></img>
                 </div>
-                <div className="model-doc-text">Upload Usage documentation</div>
+                <div className="model-doc-text">
+                  Upload Usage documentation *
+                </div>
                 <input
                   type="file"
                   ref={fileInputRefModelDoc}
                   style={{ display: "none" }}
                   onChange={handleFileChangeModelDoc}
+                  required
                 ></input>
               </div>
               <div className="d-flex model-doc-selected-file">
                 <div className="col-1"></div>
                 {selectedFileNameModelDoc && (
-                  <div className="model-selected-file-text">File: {selectedFileNameModelDoc}</div>
+                  <div className="model-selected-file-text">
+                    File: {selectedFileNameModelDoc}
+                  </div>
                 )}
               </div>
             </div>
@@ -321,6 +331,7 @@ function CreateModel() {
                   type="radio"
                   name="model-btn"
                   value="free"
+                  required
                 />
                 <label className="px-1 model-btn-text">Public(free)</label>
               </div>
@@ -330,6 +341,7 @@ function CreateModel() {
                   type="radio"
                   name="model-btn"
                   value="private"
+                  required
                 />
                 <label className="px-1 model-btn-text">Private</label>
               </div>
@@ -339,6 +351,7 @@ function CreateModel() {
                   type="radio"
                   name="model-btn"
                   value="sell"
+                  required
                 />
                 <label className="px-1 model-btn-text">Sell</label>
               </div>
@@ -356,9 +369,7 @@ function CreateModel() {
         </div>
       </div>
     </div>
-
-    
-  )
+  );
 }
 
-export default CreateModel
+export default CreateModel;
