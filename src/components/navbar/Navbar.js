@@ -37,6 +37,7 @@ function Navbar() {
     };
   }, []);
 
+
   const handleItemClick = (componentName) => {
     setActiveComponent(componentName);
   };
@@ -44,6 +45,7 @@ function Navbar() {
   const showCreateDropDown = () => {
     setCreateDropDown(!createDropDown);
   };
+
 
   return (
     <>
@@ -103,6 +105,7 @@ function Navbar() {
                     width={20}
                   />
                   Create
+
                   <div className="px-2">
                     <i
                       className="fas fa-angle-down"
@@ -114,7 +117,9 @@ function Navbar() {
                       }}
                     ></i>
                   </div>
+
                 </a>
+
                 {createDropDown && (
                   <div
                     className="create-dropdown p-3 text-center"

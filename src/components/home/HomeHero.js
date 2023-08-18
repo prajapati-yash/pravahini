@@ -23,6 +23,7 @@ function HomeHero() {
     };
   }, [isShaking]);
 
+
   const startBtnStyle = {
     animation: isShaking ? "shake 1.5s ease-in-out" : "none",
     transformOrigin: "center",
@@ -42,6 +43,7 @@ function HomeHero() {
           </p>
         </div>
 
+
         <div className="get-started-container justify-content-center">
           <div
             className="hero-button ps-3 d-flex align-items-center "
@@ -49,6 +51,7 @@ function HomeHero() {
             style={startBtnStyle}
           >
             <span className="py-3 hero-button-text ">Get Started</span>
+
             <span className="d-end hero-arrow mx-2 ">
               <img className="img-arrow" src={arrow} alt="" srcset="" />
             </span>
