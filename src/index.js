@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import '@rainbow-me/rainbowkit/styles.css';
-
 import {    darkTheme,
   } from '@rainbow-me/rainbowkit';
 import {
