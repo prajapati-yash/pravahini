@@ -33,7 +33,9 @@ function Sidebar() {
           <li
             className="nav-item dropdown-center py-2 sidebar-items"
             onClick={showCreateDropDown}
+
             style={{ cursor: "pointer" }}
+
           >
             <a
               className={`nav-link sidebar-content align-items-center ${
@@ -70,18 +72,22 @@ function Sidebar() {
                 onClick={showCreateDropDown}
               >
                 <div className={`d-flex py-1`}>
+
                   <a
                     href="/dataset-marketplace/create-dataset"
                     className="link-style"
                   >
+
                     Create Dataset
                   </a>
                 </div>
                 <div className={`d-flex py-1`}>
+
                   <a
                     href="/model-marketplace/create-model"
                     className="link-style"
                   >
+
                     Create Model
                   </a>
                 </div>

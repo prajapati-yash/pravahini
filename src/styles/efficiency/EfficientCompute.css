@@ -49,20 +49,25 @@
   transform: scale(1.1);
 }
 
-.efficient-display-url-container {
+
+.efficient-display-url-container{
   border-radius: 0.5rem;
   margin-right: 2rem;
 }
 
-.efficient-display-urls {
+
+.efficient-display-urls{
+
   color: #000;
   padding-left: 0.4rem;
 }
+
 
 .efficient-display-urls-btn {
   border-radius: 0.5rem;
   outline: none;
 }
+
 
 .efficient-compute-model-btn {
   background-color: #ffb800;

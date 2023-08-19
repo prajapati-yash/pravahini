@@ -135,6 +135,7 @@
 .dropdown-item:hover{
   background-color: #6a79ff !important;
   color: white;
+
 }
 
 /* Dataset Component css */
@@ -196,9 +197,11 @@
     width: 70%;
   }
 
+
   .dataset-dropdown-container {
     margin-left: 88%;
   }
+
 
   .dropdown-menu.show{
     max-height: 200px;
@@ -231,6 +234,7 @@
   .dataset-dash-head {
     font-size: 1.9rem;
   }
+
 
   .dash-create-dataset-btn {
     font-size: 1.1rem;
@@ -339,6 +343,7 @@
   .all-dataset-desc {
     font-size: 0.8rem;
   }
+
 
   .all-dataset-badge {
     font-size: 0.8rem;
