@@ -51,7 +51,6 @@
   font-size: 1rem;
   text-align: left;
 }
-
 .computation-details-btn1,
 .computation-details-btn2 {
   color: white;
@@ -67,7 +66,10 @@
 .computation-details-btn1:hover,
 .computation-details-btn2:hover {
   color: #ffb800;
-  background-color: #000000;
+  background-color: white;
+  border: 2px solid #ffb800;
+  transform: translateX(-50%) scale(1.1);
+  transition: all 0.2s ease-in-out;
 }
 
 @media only screen and (max-width: 1418px) and (min-width: 767px) {

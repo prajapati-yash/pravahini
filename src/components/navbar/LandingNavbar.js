@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/navbar/Navbar.css";
-import "../../styles/navbar/LandingNavbar.css"
+import "../../styles/navbar/LandingNavbar.css";
 import { NavLink } from "react-router-dom";
 import logo from "../../assets/navbar/logo.png";
 import create1 from "../../assets/sidebar/create-black.png";
