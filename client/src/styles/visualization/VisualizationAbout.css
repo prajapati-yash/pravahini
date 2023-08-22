@@ -1,0 +1,97 @@
+.visualization-about-heading-container {
+  background-color: #ffffff87;
+  border-radius: 1.2rem;
+  border: 2px solid white;
+}
+
+.visualization-about-head {
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: left;
+  color: #4250ff;
+}
+
+.visualization-about-subhead {
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: left;
+}
+
+.visualization-instruction-heading {
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.accordian-div {
+  background: linear-gradient(to left, #6a79ff, #4250ff);
+  color: white;
+  padding: 1.8rem;
+  border-radius: 2rem;
+  margin-top: 1rem;
+}
+
+.accordion-box-border {
+  border-radius: 2.4rem !important;
+}
+
+.accordion-box-border {
+  border-radius: 2.4rem !important;
+}
+
+.accordion-list-item {
+  text-align: left;
+}
+
+.visualization-url-container {
+  max-width: 100%; /* Adjust this value based on your design */
+  overflow: hidden; /* Hide overflowing content */
+}
+
+.visualization-url-text {
+  overflow: auto; /* Show horizontal and vertical scrollbars when needed */
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.visualization-url-text::-webkit-scrollbar {
+  /* width: 2px !important; */
+  height: 0.5em !important;
+}
+ 
+.visualization-url-text::-webkit-scrollbar-track {
+  background: linear-gradient(to right, #6A79FF, #4250FF);
+  border-radius: 5rem;
+}
+ 
+.visualization-url-text::-webkit-scrollbar-thumb {
+  background-color: #fff !important;
+  border-radius: 5rem !important;
+} 
+
+@media only screen and (max-width: 767px) {
+  .visualization-about-head,
+  .visualization-about-subhead,
+  .visualization-instruction-heading {
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .visualization-about-head {
+    font-size: 1.8rem;
+  }
+
+  .visualization-instruction-heading {
+    font-size: 1.6rem;
+  }
+}
+
+@media only screen and (max-width: 470px) {
+  .visualization-about-head {
+    font-size: 1.6rem;
+  }
+
+  .visualization-instruction-heading {
+    font-size: 1.5rem;
+  }
+}

@@ -1,0 +1,139 @@
+.computation-details-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.computation-details-container1,
+.computation-details-container2 {
+  border-radius: 2rem;
+  border: 1px solid white;
+  max-height: 20%;
+  background: linear-gradient(to left, #ffffff34, #ffffff5e);
+  position: relative;
+}
+
+.computation-details-container1-head,
+.computation-details-container2-head {
+  font-size: 1.3rem;
+  /* height: 14%;
+  display: flex;
+  align-items: center;
+  justify-content: center; */
+  color: #ffb800;
+  font-weight: 600;
+  background: linear-gradient(to right, #4250ff, #6b7aff);
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+}
+
+.computation-details-container1-content,
+.computation-details-container2-content {
+  /* background: linear-gradient(to left, #FFFFFF34, #FFFFFF5E); */
+  border-bottom-right-radius: 2rem;
+  border-bottom-left-radius: 2rem;
+}
+
+.computation-details-img1,
+.computation-details-img2 {
+  width: 80%;
+}
+
+.computation-details-lib,
+.computation-details-purpose {
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.computation-details-lib-text,
+.computation-details-purpose-text {
+  font-size: 1rem;
+  text-align: left;
+}
+.computation-details-btn1,
+.computation-details-btn2 {
+  color: white;
+  background-color: #ffb800;
+  font-weight: 600;
+  font-size: 1rem;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.computation-details-btn1:hover,
+.computation-details-btn2:hover {
+  color: #ffb800;
+  background-color: white;
+  border: 2px solid #ffb800;
+  transform: translateX(-50%) scale(1.1);
+  transition: all 0.2s ease-in-out;
+}
+
+@media only screen and (max-width: 1418px) and (min-width: 767px) {
+  .computation-details-container1-head,
+  .computation-details-container2-head {
+    height: 14%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .computation-details-container1,
+  .computation-details-container2 {
+    position: static;
+  }
+
+  .computation-details-btn1,
+  .computation-details-btn2 {
+    position: static;
+    transform: none;
+  }
+
+  .computation-details-title {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .computation-details-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media only screen and (max-width: 470px) {
+  .computation-details-title {
+    font-size: 1.4rem;
+  }
+
+  .computation-details-container1-head,
+  .computation-details-container2-head {
+    font-size: 1.2rem;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .computation-details-title {
+    font-size: 1.2rem;
+  }
+
+  .computation-details-container1-head,
+  .computation-details-container2-head {
+    font-size: 1rem;
+  }
+
+  .computation-details-btn1,
+  .computation-details-btn2 {
+    font-size: 0.8rem;
+  }
+
+  .computation-details-img1,
+  .computation-details-img2 {
+    width: 85%;
+  }
+}
