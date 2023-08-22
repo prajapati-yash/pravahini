@@ -53,6 +53,21 @@
   white-space: nowrap; /* Prevent text from wrapping */
 }
 
+.visualization-url-text::-webkit-scrollbar {
+  /* width: 2px !important; */
+  height: 0.5em !important;
+}
+ 
+.visualization-url-text::-webkit-scrollbar-track {
+  background: linear-gradient(to right, #6A79FF, #4250FF);
+  border-radius: 5rem;
+}
+ 
+.visualization-url-text::-webkit-scrollbar-thumb {
+  background-color: #fff !important;
+  border-radius: 5rem !important;
+} 
+
 @media only screen and (max-width: 767px) {
   .visualization-about-head,
   .visualization-about-subhead,
