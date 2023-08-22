@@ -1,0 +1,183 @@
+.visualization-compute-container {
+  background: linear-gradient(to right, #4452ff, #5768ff);
+  /* background: linear-gradient(to bottom, #4250FF, #6B7AFF); */
+  border-top-left-radius: 4rem;
+  border-bottom-left-radius: 4rem;
+  padding-bottom: 5rem;
+}
+
+.visualization-compute-img {
+  width: 90%;
+}
+
+.visualization-compute-details {
+  padding-left: 1.5rem;
+}
+
+.visualization-compute-head {
+  color: #ffb800;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.visualization-compute-data {
+  color: white;
+  text-align: left;
+}
+
+.visualization-compute-dataset-text,
+.visualization-compute-model-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.visualization-compute-dataset-input,
+.visualization-compute-model-input {
+  padding: 0.3rem;
+  border-radius: 0.5rem;
+  outline: none;
+  border: 0.4px solid white;
+}
+
+
+.visualization-compute-dataset-img {
+  width: 2.6rem;
+  margin-left: 1.2rem;
+}
+
+
+.visualization-compute-dataset-img:hover {
+  transform: scale(1.1);
+}
+
+.visualization-display-url-container {
+  border-radius: 0.5rem;
+  margin-right: 2rem;
+}
+
+
+.visualization-display-urls {
+  color: #000;
+  padding-left: 0.4rem;
+}
+
+
+.visualization-display-urls-btn {
+  border-radius: 0.5rem;
+  outline: none;
+}
+
+.visualization-compute-model-btn {
+  background-color: #ffb800;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-left: 1.5rem;
+}
+
+.visualization-compute-model-btn:hover {
+  color: #fff;
+  background-color: #000;
+}
+
+.visualization-compute-job-id {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.visualization-compute-cid {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.visualization-compute-cid-btn {
+  background-color: #ffb800;
+  color: #fff;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.2rem 0.8rem;
+}
+
+.visualization-compute-cid-btn:hover {
+  background-color: #000;
+  color: white;
+}
+
+@media only screen and (max-width: 992px) {
+  .visualization-compute-model-btn {
+    margin-left: 0rem;
+  }
+
+  .visualization-compute-dataset-img {
+    width: 2.8rem;
+    margin-left: 0.8rem;
+  }
+}
+
+
+@media only screen and (max-width: 992px) {
+  .visualization-compute-dataset-img {
+    width: 2.6rem;
+    margin-left: 0.8rem;
+  }
+}
+
+
+@media only screen and (max-width: 767px) {
+  .visualization-compute-container {
+    border-top-left-radius: 5rem;
+    border-top-right-radius: 5rem;
+    border-bottom-left-radius: 0rem;
+  }
+
+  .visualization-compute-img {
+    padding-top: 1rem;
+  }
+
+  .visualization-compute-dataset-input,
+  .visualization-compute-model-input {
+    width: 24rem;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .visualization-compute-container {
+    border-top-left-radius: 4rem;
+    border-top-right-radius: 4rem;
+  }
+
+  .visualization-compute-head {
+    font-size: 1.4rem;
+  }
+
+  .visualization-compute-dataset-input,
+  .visualization-compute-model-input {
+    width: 22rem;
+  }
+}
+
+@media only screen and (max-width: 470px) {
+  .visualization-compute-container {
+    border-top-left-radius: 3rem;
+    border-top-right-radius: 3rem;
+  }
+
+  .visualization-compute-dataset-input,
+  .visualization-compute-model-input {
+    width: 16rem;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .visualization-compute-head {
+    font-size: 1.3rem;
+  }
+
+  .visualization-compute-dataset-input,
+  .visualization-compute-model-input {
+    width: 14rem;
+  }
+}
