@@ -1,5 +1,9 @@
 import React from "react";
 import { useState, useRef } from "react";
+import { ethers } from "ethers";
+import { authorizationInstance } from "../Contract";
+import lighthouse from "@lighthouse-web3/sdk";
+import { useNavigate } from "react-router-dom";
 import "../../styles/registration/RegistrationPage.css";
 import upload from "../../assets/registration/upload.png";
 import name from "../../assets/registration/name.png";
@@ -9,12 +13,14 @@ import location from "../../assets/registration/location.png";
 import registerImg from "../../assets/registration/registration-bg.png";
 
 function RegistrationPage() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    userName: null,
-    userOccupation: null,
-    userOrganization: null,
-    userLocation: null,
-    userImage: null,
+    userName: "",
+    userOccupation: "",
+    userOrganization: "",
+    userLocation: "",
+    userImage: "",
   });
 
   const fileInputRef = useRef(null);
@@ -24,52 +30,69 @@ function RegistrationPage() {
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
 
     if (selectedFile) {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        const fileData = reader.result;
-        console.log("File Data:", fileData);
-        setFormData({
-          ...formData,
-          userImage: fileData,
-        });
-      };
-
-      reader.readAsDataURL(selectedFile);
-      setSelectedFileName(selectedFile.name);
+      setFormData({ ...formData, userImage: selectedFile });
+      setSelectedFileName(selectedFile.name); 
     }
   };
 
-  const registerData = [
-    {
-      thumbnail: name,
-      head: "Name*",
-      placeholder: "Enter your name",
-      value: formData.userName,
-    },
-    {
-      thumbnail: occupation,
-      head: "Occupation",
-      placeholder: "Enter your occupation",
-      value: formData.userOccupation,
-    },
-    {
-      thumbnail: organization,
-      head: "Organization",
-      placeholder: "Enter your organization",
-      value: formData.userOrganization,
-    },
-    {
-      thumbnail: location,
-      head: "Location",
-      placeholder: "Enter your location",
-      value: formData.userLocation,
-    },
-  ];
+  const progressCallback = (progressData) => {
+    let percentageDone =
+      100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
+    console.log(percentageDone);
+  };
+
+  const uploadImage = async () => {
+    try {
+      const fileInput = document.querySelector('input[type="file"]');
+      console.log("File: ", fileInput.files);
+
+      const output = await lighthouse.upload(
+        fileInput.files,
+        process.env.REACT_APP_LIGHTHOUSE_API_KEY,
+        false,
+        progressCallback
+      );
+      console.log("File Status:", output);
+      return output.data.Hash;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const createUserAccount = async () => {
+    try {
+      console.log("Form data: ", formData);
+      const cid = await uploadImage();
+      console.log("cid: ", cid);
+
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        if (!provider) {
+          console.log("Metamask is not installed, please install!");
+        }
+        const con = await authorizationInstance();
+        console.log("Hello");
+        const tx = await con.setUser(
+          formData.userName,
+          formData.userOccupation,
+          formData.userOrganization,
+          formData.userLocation,
+          cid
+        );
+
+        console.log(tx);
+        await tx.wait();
+        navigate("/user-dashboard");
+      }
+    } catch (e) {
+      console.log("Error in creating user account: ", e);
+    }
+  };
 
   return (
     <div className="register-main-container">
@@ -97,41 +120,114 @@ function RegistrationPage() {
             {selectedFileName && <p>Selected Image: {selectedFileName}</p>}
           </div>
 
+          {/* Registration Details */}
+
           <div className="">
-            {registerData.map((item, key) => (
-              <div className="d-flex flex-column flex-lg-row py-2 py-sm-2 py-md-3 register-input-component">
-                <div className="d-flex col-6 col-xl-4 register-input-text-component">
-                  <img
-                    className="col-2 register-input-img"
-                    src={item.thumbnail}
-                  />
-                  <div className="col-lg-5 col-xl-4 px-sm-4 px-3 register-input-text">
-                    {item.head}
-                  </div>
-                </div>
-                <div className="d-flex col-6 register-input-field">
-                  <input
-                    type="text"
-                    id="form-data"
-                    name="form-data"
-                    className="py-md-1 py-sm-1 input-form-data"
-                    placeholder={item.placeholder}
-                    value={item.value}
-                    onChange={(e) => {
-                      setFormData({
-                        ...formData,
-                        [item.value]: e.target.value,
-                      });
-                    }}
-                    required
-                  />
+            <div className="d-flex flex-column flex-lg-row py-2 py-sm-2 py-md-3 register-input-component">
+              <div className="d-flex col-6 col-xl-4 register-input-text-component">
+                <img className="col-2 register-input-img" src={name} />
+                <div className="col-lg-5 col-xl-4 px-sm-4 px-3 register-input-text">
+                  Name*
                 </div>
               </div>
-            ))}
+              <div className="d-flex col-6 register-input-field">
+                <input
+                  type="text"
+                  id="form-data"
+                  name="form-data"
+                  className="py-md-1 py-sm-1 input-form-data"
+                  placeholder="Enter your name"
+                  value={formData.userName}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      userName: e.target.value,
+                    });
+                  }}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="d-flex flex-column flex-lg-row py-2 py-sm-2 py-md-3 register-input-component">
+              <div className="d-flex col-6 col-xl-4 register-input-text-component">
+                <img className="col-2 register-input-img" src={occupation} />
+                <div className="col-lg-5 col-xl-4 px-sm-4 px-3 register-input-text">
+                  Occupation
+                </div>
+              </div>
+              <div className="d-flex col-6 register-input-field">
+                <input
+                  type="text"
+                  id="form-data"
+                  name="form-data"
+                  className="py-md-1 py-sm-1 input-form-data"
+                  placeholder="Enter your occupation"
+                  value={formData.userOccupation}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      userOccupation: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="d-flex flex-column flex-lg-row py-2 py-sm-2 py-md-3 register-input-component">
+              <div className="d-flex col-6 col-xl-4 register-input-text-component">
+                <img className="col-2 register-input-img" src={organization} />
+                <div className="col-lg-5 col-xl-4 px-sm-4 px-3 register-input-text">
+                  Organization
+                </div>
+              </div>
+              <div className="d-flex col-6 register-input-field">
+                <input
+                  type="text"
+                  id="form-data"
+                  name="form-data"
+                  className="py-md-1 py-sm-1 input-form-data"
+                  placeholder="Enter your occupation"
+                  value={formData.userOrganization}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      userOrganization: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="d-flex flex-column flex-lg-row py-2 py-sm-2 py-md-3 register-input-component">
+              <div className="d-flex col-6 col-xl-4 register-input-text-component">
+                <img className="col-2 register-input-img" src={location} />
+                <div className="col-lg-5 col-xl-4 px-sm-4 px-3 register-input-text">
+                  Location
+                </div>
+              </div>
+              <div className="d-flex col-6 register-input-field">
+                <input
+                  type="text"
+                  id="form-data"
+                  name="form-data"
+                  className="py-md-1 py-sm-1 input-form-data"
+                  placeholder="Enter your occupation"
+                  value={formData.userLocation}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      userLocation: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
 
             <button
               type="submit"
               className="btn rounded-pill my-2 py-sm-2 px-sm-5 px-4 register-btn"
+              onClick={createUserAccount}
             >
               Register
             </button>
