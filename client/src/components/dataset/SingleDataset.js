@@ -84,18 +84,24 @@ function SingleDataset() {
 
   const handleDownload = async () => {
     try {
-      const response = await axios.get(xlsxFile, { responseType: "blob" });
+      const response = await axios.get("https://gateway.lighthouse.storage/ipfs/Qmaa7XcGPZ163kee7QDU8uxUDTdB2aq5KwyyRyStnKCQNS", { responseType: "blob" });
       console.log(response);
 
       const blob = new Blob([response.data], {
         type: "application/octet-stream",
       });
 
+      // Get the content-type header from the response
+      const contentTypeHeader = response.headers['content-type'];
+
+      // Extract the file extension from the content-type header
+      const fileExtension = contentTypeHeader.split('/').pop();
+
       const blobURL = URL.createObjectURL(blob);
 
       const link = document.createElement("a");
       link.href = blobURL;
-      link.download = "file.xlsx";
+      link.download = `encrypted.${fileExtension}`;
       link.style.display = "none";
 
       document.body.appendChild(link);

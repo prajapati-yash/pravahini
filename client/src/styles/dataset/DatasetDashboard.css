@@ -58,8 +58,22 @@
   margin-left: 88%;
 }
 
+@keyframes rotate-filter {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  20%, 60%{
+    transform: rotate(5deg);
+  }
+  40%, 80% {
+    transform: rotate(-5deg);
+  }
+}
+
 .dataset-dropdown-container img {
   width: 2.5rem;
+  animation: rotate-filter 2s infinite;
 }
 
 .dataset-dropdown-container img:hover {

@@ -70,18 +70,18 @@ function LandingNavbar() {
             <ul className="d-lg-flex navbar-nav align-items-center mb-2 mb-lg-0 navbar-container">
               <li className="nav-item py-2 px-lg-2">
                 <a
-                  className="nav-link landing-navbar px-1 p-0 d-flex align-items-center"
+                  className="nav-link px-1 p-0 d-flex align-items-center"
                   href="/dataset-marketplace"
                 >
-                  Dataset Marketplace
+                  <span className="landing-navbar">Dataset Marketplace</span>
                 </a>
               </li>
               <li className="nav-item py-2 px-lg-2">
                 <a
-                  className="nav-link landing-navbar px-1 p-0 d-flex align-items-center"
+                  className="nav-link px-1 p-0 d-flex align-items-center"
                   href="/model-marketplace"
                 >
-                  Model Marketplace
+                  <span className="landing-navbar">Model Marketplace</span>
                 </a>
               </li>
               <li className="nav-item py-2">
