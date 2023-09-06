@@ -2,26 +2,124 @@ import React, {useState} from "react";
 import "../../styles/visualization/VisualizationCompute.css";
 import hero from "../../assets/computation/visualization2.png";
 import add from "../../assets/computation/add.png";
+import axios from "axios";
+import backendUrl from '../../config.js';
+import { useAccount } from "wagmi";
 
 function VisualizationCompute() {
-  const [urls, setUrls] = useState([]);
-  const [currentUrl, setCurrentUrl] = useState("");
+  const {address} = useAccount();
+  const [datasetUrls, setDatasetUrls] = useState([]);
+  const [datasetUrl, setDatasetUrl] = useState("");
+  const [notebookUrl, setNotebookUrl] = useState("");
+  const [jobId, setJobId] = useState("");
+  const [btnloading, setbtnloading] = useState(false);
+  const [cid, setCid] = useState("");
+  const [showButton, setShowButton] = useState(true);
 
   const handleDatasetUrlChange = (event) => {
-    setCurrentUrl(event.target.value);
+    setDatasetUrl(event.target.value);
   };
 
   const handleAddUrl = () => {
-    if (currentUrl.trim() !== "") {
-      setUrls([...urls, currentUrl]);
-      setCurrentUrl("");
+    if (datasetUrl.trim() !== "") {
+      setDatasetUrls([...datasetUrls, datasetUrl]);
+      setDatasetUrl("");
     }
   };
 
   const handleRemoveUrl = (index) => {
-    const newUrls = urls.filter((_, i) => i !== index);
-    setUrls(newUrls);
+    const newUrls = datasetUrls.filter((_, i) => i !== index);
+    setDatasetUrls(newUrls);
   };
+
+
+  const handleExecute = () => {
+    console.log("Started Execution...")
+    setbtnloading(true);
+    setJobId("");
+    setShowButton(true);
+    setCid("");
+    const apiUrl = `${backendUrl}/container2/execute`;
+    const requestData = {
+      notebookUrl: notebookUrl,
+      inputs: datasetUrls.map((url) => ({ url: url })),
+    };
+
+    const startTimeStamp = new Date();
+    axios
+      .post(apiUrl, requestData)
+      .then((response) => {
+        const { jobId } = response.data;
+
+        setJobId(jobId);
+        setCid(cid);
+
+        const saveJobUrl = `${backendUrl}/container2/save-job`;
+        const jobData = {
+          walletAddress: address, 
+          jobId: jobId,
+          cid: "",
+          timeStamp:startTimeStamp,
+          jobStatus:"InProgress"
+        };
+  
+        // Post request to save the data in the database
+        axios
+          .post(saveJobUrl, jobData)
+          .then((saveResponse) => {
+            console.log("Job details saved:", saveResponse.data);
+          })
+          .catch((saveError) => {
+            console.error("Error saving job:", saveError);
+          });
+  
+        setbtnloading(false);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        setbtnloading(false);
+      });
+  };
+
+  const handleGetCID = (jobId) =>{
+    console.log("Started Cid Getting")
+    // const index = dataList.findIndex((data) => data.jobId === jobId );
+    // if(index !== -1){
+      console.log("Getting CID of this Job Id!")
+    const apiURL = `${backendUrl}/container2/get-cid/:${jobId}`;
+    
+    axios
+    .get(apiURL)
+    .then((response) =>{
+      const { cid } = response.data;
+      setCid(cid);
+      setShowButton(false);
+      try{
+      const updateJobUrl = `${backendUrl}/container2/update-cid`;
+      const jobData = {
+        walletAddress: address, 
+        jobId: jobId,
+        cid: cid,
+      };
+
+      // Post request to save the data in the database
+
+      axios
+        .post(updateJobUrl, jobData)
+        .then((saveResponse) => {
+          console.log("Job details updated:", saveResponse.data);
+        })
+        .catch((saveError) => {
+          console.error("Error updating job:", saveError);
+        });}catch(error){
+          console.log("While Updating job", error)
+        }
+  
+    })
+    .catch((error)=>{
+      console.error("Error:",error);
+    })
+  }
 
   return (
     <div>
@@ -51,12 +149,12 @@ function VisualizationCompute() {
                   <img
                     className="visualization-compute-dataset-img"
                     src={add}
-                    onClick={handleAddUrl}
+                    onClick={() => handleAddUrl()}
                   />
                 </div>
               </div>
               <div>
-                {urls.map((url, index) => (
+                {datasetUrls.map((url, index) => (
                   <div
                     key={index}
                     className="d-flex align-items-center mb-2 bg-white visualization-display-url-container"
@@ -81,28 +179,49 @@ function VisualizationCompute() {
                 <div className="py-2">
                   <input
                     type="text"
+                    value={notebookUrl}
+                    onChange={(e) => setNotebookUrl(e.target.value)}
                     className="visualization-compute-model-input"
                     placeholder="Enter Model URL"
                   />
                 </div>
                 <div>
-                  <button className="rounded-pill visualization-compute-model-btn">
-                    Compute
+                  <button className="rounded-pill visualization-compute-model-btn" onClick={()=>handleExecute()}>
+                  {btnloading ? (
+                  <svg
+                    className="animate-spin button-spin-svg-pic"
+                    version="1.1"
+                    id="L9"
+                    xmlns="http://www.w3.org/2000/svg"
+                    x="0px"
+                    y="0px"
+                    viewBox="0 0 100 100"
+                    style={{ fill: "#fff" }}
+                  >
+                    <path d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50"></path>
+                  </svg>
+                ) : (
+                  <> Compute</>
+                )}
                   </button>
                 </div>
               </div>
             </div>
 
             <div className="py-2">
-              <div className="visualization-compute-job-id">Job id:</div>
+              <div className="visualization-compute-job-id">Job id: {jobId}</div>
             </div>
 
             <div className="d-flex py-2 align-items-center">
               <div className="visualization-compute-cid">cid:</div>
               <div className="px-3">
-                <button className="rounded-pill visualization-compute-cid-btn">
-                  Get cid
-                </button>
+              {showButton ? (
+                <button className="rounded-pill visualization-compute-cid-btn" onClick={()=>handleGetCID(jobId)}>
+                 Get CID
+                 </button>
+                ) : (
+                  cid
+                )}
               </div>
             </div>
           </div>

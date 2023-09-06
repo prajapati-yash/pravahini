@@ -1,20 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/dashboard/UserDetails.css";
-import img from "../../assets/home/link.png";
 import { useNavigate } from "react-router-dom";
 import UserDatasets from "./UserDatasets";
 import UserModels from "./UserModels";
 import SubscribedDatasets from "./SubscribedDatasets";
 import SubscribedModels from "./SubscribedModels";
+import { ethers } from "ethers";
+import { authorizationInstance } from "../Contract";
+import { useAccount } from "wagmi";
 
 function UserDetails() {
-  // const [img, setImg] = useState();
+  const [img, setImg] = useState();
   const [userName, setUserName] = useState();
   const [occupation, setOccupation] = useState();
   const [organization, setOrganization] = useState();
   const [location, setLocation] = useState();
   const [showButtons, setShowButtons] = useState(false);
   const [activeComponent, setActiveComponent] = useState("userDatasets");
+  const { address } = useAccount();
   const navigate = useNavigate();
 
   const handleDatasetClick = (e) => {
@@ -44,6 +47,36 @@ function UserDetails() {
     setActiveComponent("subscribedModels");
   };
 
+  const getUserAccountDetails = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        if (!provider) {
+          console.log("Metamask is not installed, please install!");
+        }
+        const con = await authorizationInstance();
+        const userData = await con.getUser(address);
+
+        console.log(userData);
+        setUserName(userData[0]);
+        setOccupation(userData[1]);
+        setOrganization(userData[2]);
+        setLocation(userData[3]);
+        setImg(userData[4]);
+
+        return userData;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getUserAccountDetails();
+  }, []);
+
   const renderComponent = () => {
     switch (activeComponent) {
       case "userDatasets":
@@ -61,41 +94,45 @@ function UserDetails() {
 
   return (
     <div className="dashboard-main-component">
-      <div className="d-flex flex-sm-row flex-column user-details-component py-4 px-1">
-        <div className="d-flex align-items-center justify-content-center">
-          <img src={img} className="dash-image " />
+      <div className="d-flex flex-md-row flex-column user-details-component py-4 px-1">
+        <div className="col-md-4 d-flex align-items-center justify-content-center">
+          <img
+            src={"https://gateway.lighthouse.storage/ipfs/" + img}
+            alt="image not found"
+            className="dash-image"
+          />
         </div>
-        <div className="py-4 col-md-8 col-sm-9 user-details-content">
+        <div className="py-sm-4 col-md-8 user-details-content">
           <div className="user-main-content">
-            Welcome, <span>userName</span>
+            Welcome, <span>{userName}</span>
           </div>
           <div className="platform-content">
             This Platform evaluation and sharing of datasets as well as ML
             Models.
           </div>
-          <div>
+          <div className="pt-2">
             <div className="d-flex py-1 details-content">
-              <div className="col-md-3 px-3 px-sm-0 col-sm-4 col-5 d-flex justify-content-flex-start user-details-head">
+              <div className="col-sm-3 px-3 px-sm-0 col-5 d-flex justify-content-flex-start user-details-head">
                 Occupation
               </div>
-              <div className="d-flex col-md-4 col-6 user-details-div">
-                occupation
+              <div className="d-flex col-md-4 col-sm-7 col-6 user-details-div">
+                {occupation}
               </div>
             </div>
             <div className="d-flex py-1 details-content">
-              <div className="col-md-3 px-3 px-sm-0 col-sm-4 col-5 d-flex justify-content-flex-start user-details-head">
+              <div className="col-sm-3 px-3 px-sm-0 col-5 d-flex justify-content-flex-start user-details-head">
                 Organization
               </div>
-              <div className="d-flex col-md-4 col-6 user-details-div">
-                organization
+              <div className="d-flex col-md-4 col-sm-7 col-6 user-details-div">
+                {organization}
               </div>
             </div>
             <div className="d-flex py-1 details-content">
-              <div className="col-md-3 px-3 px-sm-0 col-sm-4 col-5 d-flex justify-content-flex-start user-details-head">
+              <div className="col-sm-3 px-3 px-sm-0 col-5 d-flex justify-content-flex-start user-details-head">
                 Location
               </div>
-              <div className="d-flex col-md-4 col-6 user-details-div">
-                location
+              <div className="d-flex col-md-4 col-sm-7 col-6 user-details-div">
+                {location}
               </div>
             </div>
           </div>
