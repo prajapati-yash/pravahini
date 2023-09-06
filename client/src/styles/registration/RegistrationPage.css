@@ -1,221 +1,245 @@
-.register-main-container{
-    /* background: linear-gradient(to left, #C5DDF3, #E1EFFC) !important; */
-    background: linear-gradient(to right, rgb(233, 241, 255), rgb(181, 210, 254));
+.register-main-container {
+  /* background: linear-gradient(to left, #C5DDF3, #E1EFFC) !important; */
+  background: linear-gradient(to right, rgb(233, 241, 255), rgb(181, 210, 254));
 }
 
 /* Heading css */
-.register-heading{
-    font-size: 2.8rem;
-    font-weight: 600;
-    letter-spacing: 0.1rem;
-    color: #4250FF;
-    padding-bottom: 3rem;
+.register-heading {
+  font-size: 2.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1rem;
+  color: #4250ff;
+  padding-bottom: 3rem;
 }
 
 /* Hero Image css */
-.register-hero-img{
-    width: 600px;
+.register-hero-img {
+  width: 600px;
+}
+
+@keyframes rotate-img {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
 }
 
 /* Registration component css */
-.content-component{
-    width: 55%;
-    background-color: rgba(66, 80, 255, 0.7695);
-    padding: 2rem;
-    border-radius: 6rem;
-    border: 1px solid white;
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+.content-component {
+  width: 55%;
+  background-color: rgba(66, 80, 255, 0.7695);
+  padding: 2rem;
+  border-radius: 6rem;
+  border: 1px solid white;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 /* upload image css */
-.img-upload{
-    width: 6%;
+.img-upload {
+  width: 6%;
 }
 
-.upload-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
+.upload-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
-.upload-text{
-    color: #FFB800;
-    padding-left: 1rem;
-    font-size: 1.6rem;
-    font-weight: 500;
+.upload-text {
+  color: #ffb800;
+  padding-left: 1rem;
+  font-size: 1.6rem;
+  font-weight: 500;
 }
 
-.selected-image{
-    color: #C5DDF3;
-    font-size: 1rem;
+.upload-container:hover {
+  .img-upload {
+    animation: rotate-img 1s;
+  }
+}
 
+.selected-image {
+  color: #c5ddf3;
+  font-size: 1rem;
 }
 
 /* registration details css */
-.register-input-component{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.register-input-component {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.register-input-text-component{
-    align-items: center;
-    justify-content: flex-start;
+.register-input-text-component {
+  align-items: center;
+  justify-content: flex-start;
 }
 
-.register-input-img{
-    width: 12%;
+.register-input-component:hover {
+  .register-input-img {
+    animation: rotate-img 1s;
+  }
 }
 
-.register-input-text{
-    font-size: 1.5rem;
-    color: white;
-    text-align: left;
+.register-input-img {
+  width: 12%;
 }
 
-.input-form-data{
-    border: 1px solid white;
-    border-radius: 0.3rem;
-    background-color: rgba(217, 217, 217, 0.35);
-    text-align: left;
-    color: white;
+.register-input-text {
+  font-size: 1.5rem;
+  color: white;
+  text-align: left;
 }
 
-.input-form-data::placeholder{
-    padding-left: 0.1rem;
-    color: #4250FF;
+.input-form-data {
+  border: 1px solid white;
+  border-radius: 0.3rem;
+  background-color: rgba(217, 217, 217, 0.35);
+  text-align: left;
+  color: white;
+}
+
+.input-form-data::placeholder {
+  padding-left: 0.1rem;
+  color: #4250ff;
 }
 
 .input-form-data:focus {
-    /* Styles for the input field when focused */
-    color: white;
-    border: 2px solid white !important;
-    outline: none !important;
+  /* Styles for the input field when focused */
+  color: white;
+  border: 2px solid white !important;
+  outline: none !important;
 }
 
-.register-btn{
-    background-color: #FFB800;
-    color: white;
-    font-size: 1.2rem;
-    font-weight: 600;
-    cursor: pointer;
+.register-btn {
+  background-color: #ffb800;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.register-btn:hover{
-    box-shadow: 4px 2px 4px 2px rgba(0, 0, 0, 0.2);
-    color: white;
-    transform: scale(1.05);
+.register-btn:hover {
+  box-shadow: 4px 2px 4px 2px rgba(0, 0, 0, 0.2);
+  color: white;
+  transform: scale(1.05);
 }
 
 /* Responsive css */
 
 @media only screen and (max-width: 991px) {
-    .register-hero-img{
-        margin-top: -25%; 
-    }
+  .register-hero-img {
+    margin-top: -25%;
+  }
 
-    .register-input-field{
-        padding-top: 1rem;
-    }
-    .content-component{
-        width: 65%;
-        border-radius: 5rem;
-    } 
-    .register-heading{
-        font-size: 2.3rem;
-    }
-    .img-upload{
-        width: 8%;
-    }
-    .register-input-img{
-        width: 12%;
-    }
+  .register-input-field {
+    padding-top: 1rem;
+  }
+  .content-component {
+    width: 65%;
+    border-radius: 5rem;
+  }
+  .register-heading {
+    font-size: 2.3rem;
+  }
+  .img-upload {
+    width: 8%;
+  }
+  .register-input-img {
+    width: 12%;
+  }
 }
 
 @media only screen and (max-width: 767px) {
-    .register-heading{
-        font-size: 2rem;
-    }
+  .register-heading {
+    font-size: 2rem;
+  }
 
-    .register-input-field{
-        padding-top: 1rem;
-    }
+  .register-input-field {
+    padding-top: 1rem;
+  }
 
-    .content-component{
-        width: 75%;
-    } 
-    
-    .register-hero-img{
-        width: 550px;
-        margin-top: -30%; 
-    }
-    .register-input-text{
-        font-size: 1.3rem;
-    }
-    /*  */
+  .content-component {
+    width: 75%;
+  }
+
+  .register-hero-img {
+    width: 550px;
+    margin-top: -30%;
+  }
+  .register-input-text {
+    font-size: 1.3rem;
+  }
+  /*  */
 }
 
-@media only screen and (max-width: 576px){
-    .register-heading{
-        font-size: 1.8rem;
-        padding-bottom: 2.5rem;
-    }
-    .register-hero-img{
-        width: 465px;
-    }
+@media only screen and (max-width: 576px) {
+  .register-heading {
+    font-size: 1.8rem;
+    padding-bottom: 2.5rem;
+  }
+  .register-hero-img {
+    width: 465px;
+  }
 
-    .content-component{
-        width: 80%;
-        padding: 1rem;
-        border-radius: 4rem;
-    }
-    .register-input-text{
-        font-size: 1rem;
-    }
-    .register-input-field{
-        padding-top: 0.5rem;
-    }
-    .register-btn{
-        font-size: 1rem;
-    }
+  .content-component {
+    width: 80%;
+    padding: 1rem;
+    border-radius: 4rem;
+  }
+  .register-input-text {
+    font-size: 1rem;
+  }
+  .register-input-field {
+    padding-top: 0.5rem;
+  }
+  .register-btn {
+    font-size: 1rem;
+  }
 }
 
-@media only screen and (max-width: 470px){
-    .register-heading{
-        font-size: 1.5rem;
-        padding-bottom: 2rem;
-    }
+@media only screen and (max-width: 470px) {
+  .register-heading {
+    font-size: 1.5rem;
+    padding-bottom: 2rem;
+  }
 
-    .content-component{
-        width: 90%;
-        border-radius: 3rem;
-    }
+  .content-component {
+    width: 90%;
+    border-radius: 3rem;
+  }
 
-    .register-hero-img{
-        width: 360px;
-    }
+  .register-hero-img {
+    width: 360px;
+  }
 
-    .upload-text{
-        font-size: 1.2rem;
-    }
+  .upload-text {
+    font-size: 1.2rem;
+  }
 
-    .input-form-data{
-        width: 100%;
-        height: 70%;
-    }
+  .input-form-data {
+    width: 100%;
+    height: 70%;
+  }
 
-    .register-btn{
-        font-size: 0.8rem;
-    }
-}  
+  .register-btn {
+    font-size: 0.8rem;
+  }
+}
 
-@media only screen and (max-width: 375px){
-    .register-hero-img{
-        width: 200px;
-    }
+@media only screen and (max-width: 375px) {
+  .register-hero-img {
+    width: 200px;
+  }
 
-    .content-component{
-        border-radius: 2.5rem;
-    }
+  .content-component {
+    border-radius: 2.5rem;
+  }
 }
