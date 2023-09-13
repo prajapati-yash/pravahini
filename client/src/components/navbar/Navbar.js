@@ -17,6 +17,7 @@ import computation1 from "../../assets/sidebar/computation-black.png";
 import computation2 from "../../assets/sidebar/computation-white.png";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
+
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [activeComponent, setActiveComponent] = useState("/");

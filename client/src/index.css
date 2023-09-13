@@ -41,3 +41,22 @@ body::-webkit-scrollbar-thumb {
   }
 }
 
+svg.button-spin-svg-pic {
+  height: 80%;
+  fill: #010101;
+  width: 20%;
+}
+
+svg.animate-spin {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
