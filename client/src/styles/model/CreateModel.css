@@ -47,7 +47,7 @@
 /* Upload File */
 .upload-model,
 .model-upload-doc,
-.model-upload-licence{
+.model-upload-license{
     justify-content: flex-start;
     align-items: center;
     cursor: pointer;
@@ -55,13 +55,13 @@
 
 .upload-model-icon,
 .model-upload-doc-icon,
-.model-upload-licence-icon{
+.model-upload-license-icon{
     width: 1.8rem;
 }
 
 .upload-model-text,
 .model-doc-text,
-.model-licence-text{
+.model-license-text{
     color: white;
     padding-left: 1rem;
     padding-left: 0.5rem;
@@ -71,7 +71,7 @@
 
 .upload-model-selected-file,
 .model-doc-selected-file,
-.model-licence-selected-file{
+.model-license-selected-file{
     color: #C5DDF3;
     font-size: 1rem;
 }
@@ -111,7 +111,7 @@
 @media only screen and (max-width: 1200px){
     .upload-model-icon,
     .model-upload-doc-icon,
-    .model-upload-licence-icon{
+    .model-upload-license-icon{
         width: 1.7rem;
     }
 }
@@ -157,14 +157,14 @@
 
     .upload-model-text,
     .model-doc-text,
-    .model-licence-text{
+    .model-license-text{
         padding-left: 1rem;
         font-size: 1rem;
     }
 
     .upload-model-icon,
     .model-upload-doc-icon,
-    .model-upload-licence-icon{
+    .model-upload-license-icon{
         width: 1.6rem;
     }
 
@@ -177,7 +177,7 @@
 @media only screen and (max-width: 375px){
     .upload-model-text,
     .model-doc-text,
-    .model-licence-text{
+    .model-license-text{
         /* padding-left: 1rem; */
         font-size: 0.9rem;
     }

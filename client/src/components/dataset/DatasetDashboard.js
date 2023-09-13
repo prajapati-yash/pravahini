@@ -1,9 +1,11 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import img from "../../assets/dataset/filter.png";
 import img1 from "../../assets/home/security.png";
 import "../../styles/dataset/DatasetDashboard.css";
+import { ethers } from "ethers";
+import { datasetInstance } from "../Contract";
 
 const blocks = [
   {
@@ -40,6 +42,7 @@ function DatasetDashboard() {
   const navigate = useNavigate();
   const datasetDivRef = React.useRef(null);
   const [filterDropdown, setFilterDropdown] = useState(false);
+  const [allDatasets, setAllDatasets] = useState([]);
 
   const showFilterDropdown = () => {
     setFilterDropdown(!filterDropdown);
@@ -67,6 +70,33 @@ function DatasetDashboard() {
 
     setFilteredDatasets(filtered);
   };
+
+  const allData = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        if (!provider) {
+          console.log("Metamask is not installed, please install!");
+        }
+        const con = await datasetInstance();
+        const getDatasetDetails = await con.getAllDatasets();
+        setAllDatasets(getDatasetDetails);
+        console.log("All datasets", allDatasets);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    async function fetchDatasets() {
+      await allData();
+    }
+    console.log("hello");
+    fetchDatasets();
+  }, []);
 
   return (
     <div className="dataset-dashboard-main">
@@ -114,7 +144,6 @@ function DatasetDashboard() {
                   aria-labelledby="dropdownMenuButton"
                 >
                   <a className="dropdown-item" href="#">
-
                     All
                   </a>
                   <a className="dropdown-item" href="#">
@@ -232,29 +261,40 @@ function DatasetDashboard() {
 
         <div ref={datasetDivRef}>
           <div className="row px-0 all-datasets-main mt-4 py-3 px-sm-3 container-fluid justify-content-around">
-            {filteredDatasets.map((item, key) => (
-              <div
-                className="col-xxl-3 col-md-5 col-sm-7 col-11 mx-1 mb-5 all-datasets-component"
-                index={key}
-              >
-                <div className="all-dataset-img-div">
-                  <img src={img1} className="all-dataset-img"></img>
-                </div>
-                <div className="all-dataset-details">
-                  <div className="all-dataset-title">{item.title}</div>
-                  <div className="all-dataset-desc">{item.description}</div>
-                  <div className="all-dataset-badge">Free</div>
-                  <div
-                    className="all-dataset-btn"
-                    onClick={() =>
-                      navigate("/dataset-marketplace/single-dataset")
-                    }
-                  >
-                    View More &gt;
+            {allDatasets.length > 0 ? (
+              allDatasets.map((item, key) => (
+                <div
+                  className="col-xxl-3 col-md-5 col-sm-7 col-11 mx-1 mb-5 all-datasets-component"
+                  index={key}
+                >
+                  <div className="all-dataset-img-div">
+                    <img
+                      src={`https://gateway.lighthouse.storage/ipfs/${item.uploadImage}`}
+                      className="all-dataset-img"
+                    ></img>
+                  </div>
+                  <div className="all-dataset-details">
+                    <div className="all-dataset-title">{item.title}</div>
+                    <div className="all-dataset-desc">{item.description}</div>
+                    <div className="all-dataset-badge">
+                      {item.isPublic ? "Free" : "Paid"}
+                    </div>
+                    <div
+                      className="all-dataset-btn"
+                      onClick={() =>
+                        navigate("/dataset-marketplace/single-dataset", {
+                          state: { data: item },
+                        })
+                      }
+                    >
+                      View More &gt;
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div>No Datasets Available</div>
+            )}
           </div>
         </div>
       </div>

@@ -5,8 +5,17 @@ import csvfile from "../../dummyData/data.csv";
 import xlsxFile from "../../dummyData/excelData.xlsx";
 import jsonFile from "../../dummyData/jsonData.json";
 import * as XLSX from "xlsx";
+import { useLocation } from "react-router-dom";
+import { modelInstance } from "../Contract";
+import { ethers } from "ethers";
+import { useAccount } from 'wagmi';
 
 function SingleModel() {
+  const { address } = useAccount();
+  const location = useLocation();
+  console.log(location.state.data);
+  const model = location.state ? location.state.data : "";
+
   const handleDownload = async () => {
     try {
       const response = await axios.get(xlsxFile, { responseType: "blob" });
@@ -37,9 +46,9 @@ function SingleModel() {
     <div className="d-flex flex-md-row flex-column">
       <div className="py-3 col-md-7 col-lg-8">
         <div className="py-4 mx-3 my-2 single-model-heading-container">
-          <div className="px-5 py-1 d-flex single-model-head">Title</div>
+          <div className="px-5 py-1 d-flex single-model-head">{model[0]}</div>
           <div className="px-5 py-1 d-flex single-model-subhead">
-            Description
+            {model[1]}
           </div>
         </div>
         <div className=""></div>
@@ -58,7 +67,7 @@ function SingleModel() {
           <div className="pt-sm-4 pt-2 px-md-5 single-model-content">
             <div className="py-3">
               <div className="single-model-details-head">Category</div>
-              <div className="single-model-details-value">Value</div>
+              <div className="single-model-details-value">{model[2]}</div>
             </div>
             <div className="py-3">
               <div className="single-model-details-head">Tags/keywords</div>
@@ -76,7 +85,7 @@ function SingleModel() {
             </div>
             <div className="py-2">
               <div className="single-model-details-head">Final Cost</div>
-              <div className="single-model-details-value">Value</div>
+              <div className="single-model-details-value">{parseInt(model[3]._hex, 16)}</div>
             </div>
             <div className="py-4">
               <button

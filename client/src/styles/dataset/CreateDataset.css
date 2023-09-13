@@ -47,7 +47,7 @@
 /* Upload File */
 .upload-dataset,
 .dataset-upload-image,
-.dataset-upload-licence{
+.dataset-upload-license{
     justify-content: flex-start;
     align-items: center;
     cursor: pointer;
@@ -55,13 +55,13 @@
 
 .upload-dataset-icon,
 .dataset-upload-image-icon,
-.dataset-upload-licence-icon{
+.dataset-upload-license-icon{
     width: 1.8rem;
 }
 
 .upload-dataset-text,
 .dataset-image-text,
-.dataset-licence-text{
+.dataset-license-text{
     color: white;
     font-size: 1.2rem;
     padding-left: 0.5rem;
@@ -71,7 +71,7 @@
 
 .upload-dataset-selected-file,
 .dataset-image-selected-file,
-.dataset-licence-selected-file{
+.dataset-license-selected-file{
     color: #C5DDF3;
     font-size: 1rem;
 }
@@ -111,7 +111,7 @@
 @media only screen and (max-width: 1200px){
     .upload-dataset-icon,
     .dataset-upload-image-icon,
-    .dataset-upload-licence-icon{
+    .dataset-upload-license-icon{
         width: 1.7rem;
     }
 }
@@ -157,14 +157,14 @@
 
     .upload-dataset-text,
     .dataset-image-text,
-    .dataset-licence-text{
+    .dataset-license-text{
         padding-left: 1rem;
         font-size: 1rem;
     }
 
     .upload-dataset-icon,
     .dataset-upload-image-icon,
-    .dataset-upload-licence-icon{
+    .dataset-upload-license-icon{
         width: 1.6rem;
     }
 

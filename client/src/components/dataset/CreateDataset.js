@@ -4,14 +4,31 @@ import upload from "../../assets/registration/upload.png";
 import Navbar from "../navbar/Navbar";
 import Sidebar from "../sidebar/Sidebar";
 import Footer from "../footer/Footer";
+import { ethers } from "ethers";
+import { datasetInstance } from "../Contract";
+import lighthouse from "@lighthouse-web3/sdk";
+import { useNavigate } from "react-router-dom";
 
 function CreateDataset() {
+  const navigate = useNavigate();
+
+  const [selectedOption, setSelectedOption] = useState("free");
+
+  const handleOptionChange = (e) => {
+    setSelectedOption(e.target.value);
+  };
+
+  // Define boolean variables based on the selected option
+  const isPublic = selectedOption === "free";
+  const isPrivate = selectedOption === "private";
+  const isForSale = selectedOption === "sell";
+
   const [createDataset, setCreateDataset] = useState({
     datasetTitle: "",
     datasetDescription: "",
     datasetCategory: "",
-    datasetPrice: "",
-    datasetLicence: "",
+    datasetPrice: 0,
+    datasetLicense: "",
     datasetUpload: "",
     datasetImage: "",
   });
@@ -23,8 +40,8 @@ function CreateDataset() {
   const [selectedFileNameDatasetImg, setSelectedFileNameDatasetImg] =
     useState("");
 
-  const fileInputRefLicence = useRef(null);
-  const [selectedFileNameLicence, setSelectedFileNameLicence] = useState("");
+  const fileInputRefLicense = useRef(null);
+  const [selectedFileNameLicense, setSelectedFileNameLicense] = useState("");
 
   const handleDatasetClick = () => {
     fileInputRefDataset.current.click();
@@ -34,8 +51,8 @@ function CreateDataset() {
     fileInputRefDatasetImg.current.click();
   };
 
-  const handleLicenceClick = () => {
-    fileInputRefLicence.current.click();
+  const handleLicenseClick = () => {
+    fileInputRefLicense.current.click();
   };
 
   const handleFileChangeDataset = (event) => {
@@ -76,7 +93,7 @@ function CreateDataset() {
     }
   };
 
-  const handleLicenceFileChange = (event) => {
+  const handleLicenseFileChange = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       const reader = new FileReader();
@@ -86,12 +103,102 @@ function CreateDataset() {
         console.log("File Data:", fileData);
         setCreateDataset({
           ...createDataset,
-          datasetLicence: fileData,
+          datasetLicense: fileData,
         });
       };
 
       reader.readAsDataURL(selectedFile);
-      setSelectedFileNameLicence(selectedFile.name);
+      setSelectedFileNameLicense(selectedFile.name);
+    }
+  };
+
+  const progressCallback = (progressData) => {
+    let percentageDone =
+      100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
+    console.log(percentageDone);
+  };
+
+  const uploadData = async () => {
+    try {
+      const uploadImage = document.getElementById("dataset-image-file");
+      const uploadDataset = document.getElementById("upload-dataset-file");
+      const uploadLicense = document.getElementById("dataset-license-file");
+      // console.log("File: ", uploadImage.files);
+
+      const outputImage = await lighthouse.upload(
+        uploadImage.files,
+        process.env.REACT_APP_LIGHTHOUSE_API_KEY,
+        false,
+        progressCallback
+      );
+
+      const outputDataset = await lighthouse.upload(
+        uploadDataset.files,
+        process.env.REACT_APP_LIGHTHOUSE_API_KEY,
+        false,
+        progressCallback
+      );
+
+      const outputLicense = await lighthouse.upload(
+        uploadLicense.files,
+        process.env.REACT_APP_LIGHTHOUSE_API_KEY,
+        false,
+        progressCallback
+      );
+      // console.log("File Status:", output);
+      return {
+        image: outputImage.data.Hash,
+        dataset: outputDataset.data.Hash,
+        license: outputLicense.data.Hash,
+      };
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const createUserDataset = async () => {
+    try {
+      console.log(isPublic);
+      console.log(isPrivate);
+      console.log(isForSale);
+
+      console.log("Create Dataset data: ", createDataset);
+
+      const { image, dataset, license } = await uploadData();
+      console.log("cid image: ", image);
+      console.log("cid dataset: ", dataset);
+      console.log("cid license: ", license);
+
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        if (!provider) {
+          console.log("Metamask is not installed, please install!");
+        }
+        const con = await datasetInstance();
+        console.log("Hello");
+
+        const tx = await con.createDataset(
+          createDataset.datasetTitle,
+          createDataset.datasetDescription,
+          license,
+          dataset,
+          image,
+          createDataset.datasetPrice,
+          isPublic,
+          isPrivate,
+          isForSale
+          // {
+          //   gasLimit: 20000000,
+          // }
+        );
+
+        console.log(tx);
+        await tx.wait();
+        navigate("/user-dashboard");
+      }
+    } catch (e) {
+      console.log("Error in creating a dataset: ", e);
     }
   };
 
@@ -224,6 +331,7 @@ function CreateDataset() {
                 <div className="upload-dataset-text">Upload Dataset *</div>
                 <input
                   type="file"
+                  id="upload-dataset-file"
                   ref={fileInputRefDataset}
                   style={{ display: "none" }}
                   onChange={handleFileChangeDataset}
@@ -255,6 +363,7 @@ function CreateDataset() {
                 <div className="dataset-image-text">Upload Dataset Image *</div>
                 <input
                   type="file"
+                  id="dataset-image-file"
                   ref={fileInputRefDatasetImg}
                   style={{ display: "none" }}
                   onChange={handleFileChangeDatasetImg}
@@ -273,30 +382,31 @@ function CreateDataset() {
 
             <div
               className="d-flex py-2 flex-column"
-              onClick={handleLicenceClick}
+              onClick={handleLicenseClick}
             >
-              <div className="d-flex dataset-upload-licence">
+              <div className="d-flex dataset-upload-license">
                 <div className="col-1">
                   <img
-                    className="dataset-upload-licence-icon"
+                    className="dataset-upload-license-icon"
                     src={upload}
-                    id="dataset-upload-licence"
+                    id="dataset-upload-license"
                   ></img>
                 </div>
-                <div className="dataset-licence-text">Upload Licence *</div>
+                <div className="dataset-license-text">Upload License *</div>
                 <input
                   type="file"
-                  ref={fileInputRefLicence}
+                  id="dataset-license-file"
+                  ref={fileInputRefLicense}
                   style={{ display: "none" }}
-                  onChange={handleLicenceFileChange}
+                  onChange={handleLicenseFileChange}
                   required
                 ></input>
               </div>
-              <div className="d-flex dataset-licence-selected-file">
+              <div className="d-flex dataset-license-selected-file">
                 <div className="col-1"></div>
-                {selectedFileNameLicence && (
+                {selectedFileNameLicense && (
                   <div className="dataset-selected-file-text">
-                    File: {selectedFileNameLicence}
+                    File: {selectedFileNameLicense}
                   </div>
                 )}
               </div>
@@ -309,6 +419,8 @@ function CreateDataset() {
                   type="radio"
                   name="dataset-btn"
                   value="free"
+                  checked={isPublic}
+                  onChange={handleOptionChange}
                   required
                 />
                 <label className="px-1 dataset-btn-text">Public(free)</label>
@@ -319,6 +431,8 @@ function CreateDataset() {
                   type="radio"
                   name="dataset-btn"
                   value="private"
+                  checked={isPrivate}
+                  onChange={handleOptionChange}
                   required
                 />
                 <label className="px-1 dataset-btn-text">Private</label>
@@ -329,6 +443,8 @@ function CreateDataset() {
                   type="radio"
                   name="dataset-btn"
                   value="sell"
+                  checked={isForSale}
+                  onChange={handleOptionChange}
                   required
                 />
                 <label className="px-1 dataset-btn-text">Sell</label>
@@ -339,6 +455,7 @@ function CreateDataset() {
               <button
                 type="submit"
                 className="btn rounded-pill my-2 py-sm-2 px-sm-5 px-4 create-dataset-btn"
+                onClick={createUserDataset}
               >
                 Create
               </button>

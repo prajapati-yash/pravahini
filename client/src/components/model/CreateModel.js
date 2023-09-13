@@ -4,8 +4,25 @@ import "../../styles/model/CreateModel.css";
 import Navbar from "../navbar/Navbar";
 import Sidebar from "../sidebar/Sidebar";
 import Footer from "../footer/Footer";
+import { ethers } from "ethers";
+import { modelInstance } from "../Contract";
+import lighthouse from "@lighthouse-web3/sdk";
+import { useNavigate } from "react-router-dom";
 
 function CreateModel() {
+  const navigate = useNavigate();
+
+  const [selectedOption, setSelectedOption] = useState("free");
+
+  const handleOptionChange = (e) => {
+    setSelectedOption(e.target.value);
+  };
+
+  // Define boolean variables based on the selected option
+  const isPublic = selectedOption === "free";
+  const isPrivate = selectedOption === "private";
+  const isForSale = selectedOption === "sell";
+
   const [createModel, setCreateModel] = useState({
     modelTitle: "",
     modelDescription: "",
@@ -13,15 +30,15 @@ function CreateModel() {
     modelPrice: "",
     modelTags: "",
     modelUpload: "",
-    modelLicence: "",
+    modelLicense: "",
     modelDocumentation: "",
   });
 
   const fileInputRefModel = useRef(null);
   const [selectedFileNameModel, setSelectedFileNameModel] = useState("");
 
-  const fileInputRefLicence = useRef(null);
-  const [selectedFileNameLicence, setSelectedFileNameLicence] = useState("");
+  const fileInputRefLicense = useRef(null);
+  const [selectedFileNameLicense, setSelectedFileNameLicense] = useState("");
 
   const fileInputRefModelDoc = useRef(null);
   const [selectedFileNameModelDoc, setSelectedFileNameModelDoc] = useState("");
@@ -30,8 +47,8 @@ function CreateModel() {
     fileInputRefModel.current.click();
   };
 
-  const handleLicenceClick = () => {
-    fileInputRefLicence.current.click();
+  const handleLicenseClick = () => {
+    fileInputRefLicense.current.click();
   };
 
   const handleModelDocClick = () => {
@@ -57,7 +74,7 @@ function CreateModel() {
     }
   };
 
-  const handleFileChangeLicence = (event) => {
+  const handleFileChangeLicense = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       const reader = new FileReader();
@@ -67,12 +84,12 @@ function CreateModel() {
         console.log("File Data:", fileData);
         setCreateModel({
           ...createModel,
-          modelLicence: fileData,
+          modelLicense: fileData,
         });
       };
 
       reader.readAsDataURL(selectedFile);
-      setSelectedFileNameLicence(selectedFile.name);
+      setSelectedFileNameLicense(selectedFile.name);
     }
   };
 
@@ -92,6 +109,94 @@ function CreateModel() {
 
       reader.readAsDataURL(selectedFile);
       setSelectedFileNameModelDoc(selectedFile.name);
+    }
+  };
+
+  const progressCallback = (progressData) => {
+    let percentageDone =
+      100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
+    console.log(percentageDone);
+  };
+
+  const uploadData = async () => {
+    try {
+      const uploadModel = document.getElementById("upload-model-file");
+      const uploadLicense = document.getElementById("model-license-file");
+      const uploadDocument = document.getElementById("model-doc-file");
+      // console.log("File: ", uploadImage.files);
+
+      const outputModel = await lighthouse.upload(
+        uploadModel.files,
+        process.env.REACT_APP_LIGHTHOUSE_API_KEY,
+        false,
+        progressCallback
+      );
+
+      const outputLicense = await lighthouse.upload(
+        uploadLicense.files,
+        process.env.REACT_APP_LIGHTHOUSE_API_KEY,
+        false,
+        progressCallback
+      );
+
+      const outputDocument = await lighthouse.upload(
+        uploadDocument.files,
+        process.env.REACT_APP_LIGHTHOUSE_API_KEY,
+        false,
+        progressCallback
+      );
+      // console.log("File Status:", output);
+      return {
+        model: outputModel.data.Hash,
+        license: outputLicense.data.Hash,
+        document: outputDocument.data.Hash,
+      };
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const createUserModel = async () => {
+    try {
+      console.log(isPublic);
+      console.log(isPrivate);
+      console.log(isForSale);
+
+      console.log("Create Dataset data: ", createModel);
+
+      const { model, license, document } = await uploadData();
+      console.log("cid model: ", model);
+      console.log("cid license: ", license);
+      console.log("cid document: ", document);
+
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        if (!provider) {
+          console.log("Metamask is not installed, please install!");
+        }
+        const con = await modelInstance();
+        console.log("Hello");
+
+        const tx = await con.createModel(
+          createModel.modelTitle,
+          createModel.modelDescription,
+          createModel.modelCategory,
+          license,
+          model,
+          document,
+          createModel.modelPrice,
+          isPublic,
+          isPrivate,
+          isForSale
+        );
+
+        console.log(tx);
+        await tx.wait();
+        navigate("/user-dashboard");
+      }
+    } catch (e) {
+      console.log("Error in creating a dataset: ", e);
     }
   };
 
@@ -244,6 +349,7 @@ function CreateModel() {
                 <div className="upload-model-text">Upload Model *</div>
                 <input
                   type="file"
+                  id="upload-model-file"
                   ref={fileInputRefModel}
                   style={{ display: "none" }}
                   onChange={handleFileChangeModel}
@@ -262,30 +368,31 @@ function CreateModel() {
 
             <div
               className="d-flex py-2 flex-column "
-              onClick={handleLicenceClick}
+              onClick={handleLicenseClick}
             >
-              <div className="d-flex model-upload-licence">
+              <div className="d-flex model-upload-license">
                 <div className="col-1">
                   <img
-                    className="model-upload-licence-icon"
+                    className="model-upload-license-icon"
                     src={upload}
-                    id="model-upload-licence"
+                    id="model-upload-license"
                   ></img>
                 </div>
-                <div className="model-licence-text">Upload Model Licence *</div>
+                <div className="model-license-text">Upload Model License *</div>
                 <input
                   type="file"
-                  ref={fileInputRefLicence}
+                  id="model-license-file"
+                  ref={fileInputRefLicense}
                   style={{ display: "none" }}
-                  onChange={handleFileChangeLicence}
+                  onChange={handleFileChangeLicense}
                   required
                 ></input>
               </div>
-              <div className="d-flex model-licence-selected-file">
+              <div className="d-flex model-license-selected-file">
                 <div className="col-1"></div>
-                {selectedFileNameLicence && (
+                {selectedFileNameLicense && (
                   <div className="model-selected-file-text">
-                    File: {selectedFileNameLicence}
+                    File: {selectedFileNameLicense}
                   </div>
                 )}
               </div>
@@ -308,6 +415,7 @@ function CreateModel() {
                 </div>
                 <input
                   type="file"
+                  id="model-doc-file"
                   ref={fileInputRefModelDoc}
                   style={{ display: "none" }}
                   onChange={handleFileChangeModelDoc}
@@ -331,6 +439,8 @@ function CreateModel() {
                   type="radio"
                   name="model-btn"
                   value="free"
+                  checked={isPublic}
+                  onChange={handleOptionChange}
                   required
                 />
                 <label className="px-1 model-btn-text">Public(free)</label>
@@ -341,6 +451,8 @@ function CreateModel() {
                   type="radio"
                   name="model-btn"
                   value="private"
+                  checked={isPrivate}
+                  onChange={handleOptionChange}
                   required
                 />
                 <label className="px-1 model-btn-text">Private</label>
@@ -351,6 +463,8 @@ function CreateModel() {
                   type="radio"
                   name="model-btn"
                   value="sell"
+                  checked={isForSale}
+                  onChange={handleOptionChange}
                   required
                 />
                 <label className="px-1 model-btn-text">Sell</label>
@@ -361,6 +475,7 @@ function CreateModel() {
               <button
                 type="submit"
                 className="btn rounded-pill my-2 py-sm-2 px-sm-5 px-4 create-model-btn"
+                onClick={createUserModel}
               >
                 Create
               </button>
