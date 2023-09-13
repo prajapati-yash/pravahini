@@ -71,7 +71,7 @@ function Sidebar() {
                 className="create-dropdown p-3 text-center"
                 onClick={showCreateDropDown}
               >
-                <div className={`d-flex py-1`}>
+                <div className={`d-flex py-1 submenu-div`}>
 
                   <a
                     href="/dataset-marketplace/create-dataset"
@@ -81,7 +81,7 @@ function Sidebar() {
                     Create Dataset
                   </a>
                 </div>
-                <div className={`d-flex py-1`}>
+                <div className={`d-flex py-1 submenu-div`}>
 
                   <a
                     href="/model-marketplace/create-model"
@@ -154,7 +154,7 @@ function Sidebar() {
               Model Marketplace
             </NavLink>
           </li>
-          <li className="nav-item py-2">
+          {/* <li className="nav-item py-2">
             <NavLink
               className={`nav-link sidebar-content align-items-center`}
               to="/user-dashboard"
@@ -173,7 +173,7 @@ function Sidebar() {
               />
               Code
             </NavLink>
-          </li>
+          </li> */}
           <li className="nav-item py-2">
             <NavLink
               className={`nav-link sidebar-content align-items-center`}

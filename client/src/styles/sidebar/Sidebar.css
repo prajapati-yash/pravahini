@@ -81,6 +81,15 @@
   padding: 0.2rem 0.5rem;
 }
 
+/* .submenu-div:hover {
+  background-color: #4250ff;
+  border-radius: 0.5rem;
+
+  a {
+    color: white !important;
+  }
+} */
+
 .link-style:hover {
   background-color: #4250ff;
   color: white !important;
@@ -98,7 +107,6 @@
     font-size: 0.9rem;
   }
 }
-
 
 @media only screen and (max-width: 991px) {
   .sidebar-container {

@@ -4,9 +4,9 @@ import datasetMarketplaceABI from "../contracts/artifacts/DatasetMarketplaceABI.
 import modelMarketplaceABI from "../contracts/artifacts/ModelMarketplaceABI.json";
 
 export const AUTHORIZATION_ADDRESS =
-  "0x6569B7276567075B67DC3bFcc87A0412f174A8c1";
-export const DATASET_ADDRESS = "0x4e6D168cF8A5B8D2402faA8F5b4b377413462D95";
-export const MODEL_ADDRESS = "0x784adC4c1760343b7a726DFD37D61185A9B1A6dd";
+  "0x582c310C795BbDa7409fb2437DD7518f87C924b2";
+export const DATASET_ADDRESS = "0x917215A1081C1F5Dd3C4d6dC562F287587b6dC46";
+export const MODEL_ADDRESS = "0xf303DeF329ffA6ab7321636D24805ddF3378Cc12";
 
 export const authorizationInstance = async () => {
   const { ethereum } = window;
@@ -37,7 +37,7 @@ export const datasetInstance = async () => {
       console.log("Metamask is not installed, please install!");
     }
     const con = new ethers.Contract(
-      datasetInstance,
+      DATASET_ADDRESS,
       datasetMarketplaceABI,
       signer
     );
@@ -56,7 +56,7 @@ export const modelInstance = async () => {
     if (!provider) {
       console.log("Metamask is not installed, please install!");
     }
-    const con = new ethers.Contract(modelInstance, modelMarketplaceABI, signer);
+    const con = new ethers.Contract(MODEL_ADDRESS, modelMarketplaceABI, signer);
     // console.log(con);
     return con;
   } else {

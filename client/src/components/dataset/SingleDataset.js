@@ -5,16 +5,25 @@ import csvfile from "../../dummyData/data.csv";
 import xlsxFile from "../../dummyData/excelData.xlsx";
 import jsonFile from "../../dummyData/jsonData.json";
 import * as XLSX from "xlsx";
+import { useLocation } from "react-router-dom";
+import { datasetInstance } from "../Contract";
+import { ethers } from "ethers";
+import { useAccount } from 'wagmi';
 
 function SingleDataset() {
   // const [csvData, setCSVData] = useState([]);
   const [tableHeaders, setTableHeaders] = useState([]);
   const [tableRows, setTableRows] = useState([]);
+  const { address } = useAccount();
+  const location = useLocation();
+  console.log(location.state.data);
+  const dataset = location.state ? location.state.data : "";
 
   useEffect(() => {
     // fetchCSVData();
     // fetchXLSXData();
     fetchJSONData();
+    // console.log("Datasets: ", datasets);
   }, []);
 
   const fetchCSVData = async () => {
@@ -118,8 +127,8 @@ function SingleDataset() {
     <div className="d-flex flex-md-row flex-column">
       <div className="py-3 col-md-7 col-lg-8">
         <div className="py-3">
-          <div className="single-dataset-head">Title</div>
-          <div className="single-dataset-subhead">Description</div>
+          <div className="single-dataset-head">{dataset[0]}</div>
+          <div className="single-dataset-subhead">{dataset[1]}</div>
         </div>
         <div className="py-4">
           {tableRows.length > 0 && (
@@ -178,7 +187,7 @@ function SingleDataset() {
             </div>
             <div className="py-3">
               <div className="single-dataset-details-head">Price Per Data</div>
-              <div className="single-dataset-details-value">Value</div>
+              <div className="single-dataset-details-value">{parseInt(dataset[2]._hex, 16)}</div>
             </div>
             <div className="py-3">
               <div className="single-dataset-details-head">

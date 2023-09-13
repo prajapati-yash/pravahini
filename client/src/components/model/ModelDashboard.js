@@ -1,9 +1,11 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import img from "../../assets/dataset/filter.png";
 import img1 from "../../assets/home/security.png";
 import "../../styles/model/ModelDashboard.css";
+import { ethers } from "ethers";
+import { modelInstance } from "../Contract";
 
 const blocks = [
   {
@@ -40,6 +42,7 @@ function ModelDashboard() {
   const navigate = useNavigate();
   const modelDivRef = React.useRef(null);
   const [filterDropdown, setFilterDropdown] = useState(false);
+  const [allModels, setAllModels] = useState([]);
 
   const showFilterDropdown = () => {
     setFilterDropdown(!filterDropdown);
@@ -67,6 +70,33 @@ function ModelDashboard() {
 
     setFilteredModels(filtered);
   };
+
+  const allModelData = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        if (!provider) {
+          console.log("Metamask is not installed, please install!");
+        }
+        const con = await modelInstance();
+        const getModelDetails = await con.getAllModels();
+        setAllModels(getModelDetails);
+        console.log(allModels);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    async function fetchModels() {
+      await allModelData();
+    }
+    console.log("hello");
+    fetchModels();
+  }, []);
 
   return (
     <div className="model-dashboard-main">
@@ -114,11 +144,9 @@ function ModelDashboard() {
                   aria-labelledby="dropdownMenuButton"
                 >
                   <a className="dropdown-item" href="#">
-
                     All
                   </a>
                   <a className="dropdown-item" href="#">
-
                     Paid
                   </a>
                   <a className="dropdown-item" href="#">
@@ -232,27 +260,37 @@ function ModelDashboard() {
 
         <div ref={modelDivRef}>
           <div className="row px-0 all-model-main mt-4 py-3 px-sm-3 container-fluid justify-content-around">
-            {filteredModels.map((item, key) => (
-              <div
-                className="col-xxl-3 col-md-5 col-sm-7 col-11 mx-1 mb-5 all-model-component"
-                index={key}
-              >
-                <div className="all-model-img-div">
-                  <img src={img1} className="all-model-img"></img>
-                </div>
-                <div className="all-model-details">
-                  <div className="all-model-title">{item.title}</div>
-                  <div className="all-model-desc">{item.description}</div>
-                  <div className="all-model-badge">Free</div>
-                  <div
-                    className="all-model-btn"
-                    onClick={() => navigate("/model-marketplace/single-model")}
-                  >
-                    View More &gt;
+            {allModels.length > 0 ? (
+              allModels.map((item, key) => (
+                <div
+                  className="col-xxl-3 col-md-5 col-sm-7 col-11 mx-1 mb-5 all-model-component"
+                  index={key}
+                >
+                  {/* <div className="all-model-img-div">
+                    <img src={img1} className="all-model-img"></img>
+                  </div> */}
+                  <div className="all-model-details">
+                    <div className="all-model-title">{item.title}</div>
+                    <div className="all-model-desc">{item.description}</div>
+                    <div className="all-model-badge">
+                      {item.isPublic ? "Free" : "Paid"}
+                    </div>
+                    <div
+                      className="all-model-btn"
+                      onClick={() =>
+                        navigate("/model-marketplace/single-model", {
+                          state: { data: item },
+                        })
+                      }
+                    >
+                      View More &gt;
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div>No Datasets Available</div>
+            )}
           </div>
         </div>
       </div>
