@@ -1,28 +1,24 @@
 .sticky-top {
-  background: "transparent";
-  /* position: sticky; */
-  /* top: 0; */
+    background: 'transparent';
+    /* position: sticky; */
+    /* top: 0; */
 }
 
 .navbar.scrolled {
-  background: linear-gradient(
-    to right,
-    rgb(233, 241, 255),
-    rgb(181, 210, 254)
-  ); /* Change the background color when scrolling */
+    background: linear-gradient(to right, rgb(233, 241, 255), rgb(181, 210, 254)); /* Change the background color when scrolling */
 }
 
-.navbar-container {
-  display: block;
-  justify-content: center;
-  align-items: center;
+.navbar-container{
+    display: block;
+    justify-content: center;
+    align-items: center;
 }
 
-.navbar-toggler {
-  width: 20px;
-  height: 20px;
-  position: relative;
-  transition: 0.5s ease-in-out;
+ .navbar-toggler {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    transition: .5s ease-in-out;
 }
 
 .navbar-toggler,
