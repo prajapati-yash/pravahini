@@ -70,7 +70,7 @@ const { accessSync } = require('fs');
 app.use('/container1', container1Router);
 app.use('/container2', container2Router);
 app.get('/', (req, res) => {
-  res.send('Welcome to our Node.js application!');
+  res.send('Welcome to our Pravahini DAPP!');
 });
 
 
