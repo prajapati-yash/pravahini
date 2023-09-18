@@ -8,6 +8,7 @@ import SubscribedModels from "./SubscribedModels";
 import { ethers } from "ethers";
 import { authorizationInstance } from "../Contract";
 import { useAccount } from "wagmi";
+import { ClipLoader } from "react-spinners";
 
 function UserDetails() {
   const [img, setImg] = useState();
@@ -19,6 +20,7 @@ function UserDetails() {
   const [activeComponent, setActiveComponent] = useState("userDatasets");
   const { address } = useAccount();
   const navigate = useNavigate();
+  const [isPageLoading, setIsPageLoading] = useState(true);
 
   const handleDatasetClick = (e) => {
     setShowButtons(false);
@@ -75,6 +77,7 @@ function UserDetails() {
 
   useEffect(() => {
     getUserAccountDetails();
+    setIsPageLoading(false);
   }, []);
 
   const renderComponent = () => {
@@ -98,7 +101,7 @@ function UserDetails() {
         <div className="col-md-4 d-flex align-items-center justify-content-center">
           <img
             src={"https://gateway.lighthouse.storage/ipfs/" + img}
-            alt="image not found"
+            alt= "logo"
             className="dash-image"
           />
         </div>

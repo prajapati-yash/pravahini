@@ -8,14 +8,25 @@ import { ethers } from "ethers";
 import { datasetInstance } from "../Contract";
 import lighthouse from "@lighthouse-web3/sdk";
 import { useNavigate } from "react-router-dom";
+import { PulseLoader } from "react-spinners";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { DATASET_ADDRESS } from "../Contract";
 
 function CreateDataset() {
   const navigate = useNavigate();
+  const [btnloading, setbtnloading] = useState(false);
 
   const [selectedOption, setSelectedOption] = useState("free");
 
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
+    if (e.target.value === "free" || e.target.value === "private") {
+      setCreateDataset({
+        ...createDataset,
+        datasetPrice: 0,
+      });
+    }
   };
 
   // Define boolean variables based on the selected option
@@ -30,11 +41,15 @@ function CreateDataset() {
     datasetPrice: 0,
     datasetLicense: "",
     datasetUpload: "",
+    demoDatasetUpload: "",
     datasetImage: "",
   });
 
   const fileInputRefDataset = useRef(null);
   const [selectedFileNameDataset, setSelectedFileNameDataset] = useState("");
+
+  const fileInputRefDemoDataset = useRef(null);
+  const [selectedDemoDataset, setSelectedDemoDataset] = useState("");
 
   const fileInputRefDatasetImg = useRef(null);
   const [selectedFileNameDatasetImg, setSelectedFileNameDatasetImg] =
@@ -45,6 +60,10 @@ function CreateDataset() {
 
   const handleDatasetClick = () => {
     fileInputRefDataset.current.click();
+  };
+
+  const handleDemoDatasetClick = () => {
+    fileInputRefDemoDataset.current.click();
   };
 
   const handleDatasetImgClick = () => {
@@ -62,7 +81,6 @@ function CreateDataset() {
 
       reader.onloadend = () => {
         const fileData = reader.result;
-        console.log("File Data:", fileData);
         setCreateDataset({
           ...createDataset,
           datasetUpload: fileData,
@@ -74,6 +92,24 @@ function CreateDataset() {
     }
   };
 
+  const handleFileChangeDemoDataset = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        const fileData = reader.result;
+        setCreateDataset({
+          ...createDataset,
+          demoDatasetUpload: fileData,
+        });
+      };
+
+      reader.readAsDataURL(selectedFile);
+      setSelectedDemoDataset(selectedFile.name);
+    }
+  };
+
   const handleFileChangeDatasetImg = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
@@ -81,7 +117,6 @@ function CreateDataset() {
 
       reader.onloadend = () => {
         const fileData = reader.result;
-        console.log("File Data:", fileData);
         setCreateDataset({
           ...createDataset,
           datasetImage: fileData,
@@ -100,7 +135,6 @@ function CreateDataset() {
 
       reader.onloadend = () => {
         const fileData = reader.result;
-        console.log("File Data:", fileData);
         setCreateDataset({
           ...createDataset,
           datasetLicense: fileData,
@@ -110,6 +144,19 @@ function CreateDataset() {
       reader.readAsDataURL(selectedFile);
       setSelectedFileNameLicense(selectedFile.name);
     }
+  };
+
+  const encryptionSignature = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    const messageRequested = (await lighthouse.getAuthMessage(address)).data
+      .message;
+    const signedMessage = await signer.signMessage(messageRequested);
+    return {
+      signedMessage: signedMessage,
+      publicKey: address,
+    };
   };
 
   const progressCallback = (progressData) => {
@@ -122,8 +169,70 @@ function CreateDataset() {
     try {
       const uploadImage = document.getElementById("dataset-image-file");
       const uploadDataset = document.getElementById("upload-dataset-file");
+      const uploadDemoDataset = document.getElementById(
+        "upload-demo-dataset-file"
+      );
       const uploadLicense = document.getElementById("dataset-license-file");
       // console.log("File: ", uploadImage.files);
+
+      console.log(isForSale);
+      let datasetCid = "";
+
+      if (isForSale) {
+        console.log("Paid Dataset....");
+
+        const sig = await encryptionSignature();
+        const outputDataset = await lighthouse.uploadEncrypted(
+          uploadDataset.files,
+          process.env.REACT_APP_LIGHTHOUSE_API_KEY,
+          sig.publicKey,
+          sig.signedMessage,
+          null,
+          progressCallback
+        );
+
+        datasetCid = outputDataset.data[0].Hash;
+
+        // Conditions to add
+        const conditions = [
+          {
+            id: 1,
+            chain: "BTTC_Testnet",
+            method: "getPurchaseStatus",
+            standardContractType: "Custom",
+            contractAddress: DATASET_ADDRESS,
+            returnValueTest: {
+              comparator: "==",
+              value: "1",
+            },
+            parameters: [":datasetId"],
+            inputArrayType: ["uint256"],
+            outputType: "uint256",
+          },
+        ];
+
+        const aggregator = "([1])";
+        const { publicKey, signedMessage } = await encryptionSignature();
+        const responseCondition = await lighthouse.applyAccessCondition(
+          publicKey,
+          datasetCid,
+          signedMessage,
+          conditions,
+          aggregator
+        );
+
+        console.log(responseCondition);
+      } else {
+        console.log("Public Dataset....");
+
+        const outputDataset = await lighthouse.upload(
+          uploadDataset.files,
+          process.env.REACT_APP_LIGHTHOUSE_API_KEY,
+          false,
+          progressCallback
+        );
+        datasetCid = outputDataset.data.Hash;
+      }
 
       const outputImage = await lighthouse.upload(
         uploadImage.files,
@@ -132,8 +241,8 @@ function CreateDataset() {
         progressCallback
       );
 
-      const outputDataset = await lighthouse.upload(
-        uploadDataset.files,
+      const outputDemoDataset = await lighthouse.upload(
+        uploadDemoDataset.files,
         process.env.REACT_APP_LIGHTHOUSE_API_KEY,
         false,
         progressCallback
@@ -146,27 +255,44 @@ function CreateDataset() {
         progressCallback
       );
       // console.log("File Status:", output);
+
+      console.log("Dataset CID: ", datasetCid);
+
       return {
         image: outputImage.data.Hash,
-        dataset: outputDataset.data.Hash,
+        dataset: datasetCid,
+        demoDataset: outputDemoDataset.data.Hash,
         license: outputLicense.data.Hash,
       };
     } catch (e) {
+      setbtnloading(false);
       console.log(e);
     }
   };
 
   const createUserDataset = async () => {
     try {
+      toast.info("Process is in Progress", {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setbtnloading(true);
+
       console.log(isPublic);
       console.log(isPrivate);
       console.log(isForSale);
 
       console.log("Create Dataset data: ", createDataset);
 
-      const { image, dataset, license } = await uploadData();
+      const { image,dataset, demoDataset, license } = await uploadData();
       console.log("cid image: ", image);
-      console.log("cid dataset: ", dataset);
+      console.log("cid dataset: ", demoDataset);
       console.log("cid license: ", license);
 
       const { ethereum } = window;
@@ -181,10 +307,12 @@ function CreateDataset() {
         const tx = await con.createDataset(
           createDataset.datasetTitle,
           createDataset.datasetDescription,
+          createDataset.datasetPrice,
           license,
           dataset,
+          demoDataset,
           image,
-          createDataset.datasetPrice,
+          createDataset.datasetCategory,
           isPublic,
           isPrivate,
           isForSale
@@ -195,9 +323,11 @@ function CreateDataset() {
 
         console.log(tx);
         await tx.wait();
+        setbtnloading(false);
         navigate("/user-dashboard");
       }
     } catch (e) {
+      setbtnloading(false);
       console.log("Error in creating a dataset: ", e);
     }
   };
@@ -238,7 +368,7 @@ function CreateDataset() {
                 Description *
               </div>
               <div className="">
-                <input
+                {/* <input
                   type="text"
                   id="datasetDescription"
                   name="datasetDescription"
@@ -252,7 +382,22 @@ function CreateDataset() {
                     });
                   }}
                   required
-                />
+                /> */}
+                 <textarea
+                  type="text"
+                  id="datasetDescription"
+                  name="datasetDescription"
+                  className="py-md-1 py-sm-1 dataset-input-form-data"
+                  placeholder="Enter Dataset Description"
+                  // value={createDataset.datasetDescription}
+                  onChange={(e) => {
+                    setCreateDataset({
+                      ...createDataset,
+                      datasetDescription: e.target.value,
+                    });
+                  }}
+                  required
+                >{createDataset.datasetDescription}</textarea>
               </div>
             </div>
 
@@ -277,16 +422,22 @@ function CreateDataset() {
                   <option value="" disabled selected>
                     Select Category
                   </option>
-                  <option value="1" className="dataset-dropdown">
+                  <option
+                    value="Drugs and Medicine"
+                    className="dataset-dropdown"
+                  >
                     Drugs and Medicine
                   </option>
-                  <option value="2" className="dataset-dropdown">
+                  <option value="Education" className="dataset-dropdown">
                     Education
                   </option>
-                  <option value="3" className="dataset-dropdown">
+                  <option value="Earth and Nature" className="dataset-dropdown">
                     Earth and Nature
                   </option>
-                  <option value="4" className="dataset-dropdown">
+                  <option
+                    value="Science and Technology"
+                    className="dataset-dropdown"
+                  >
                     Science and Technology
                   </option>
                 </select>
@@ -295,7 +446,7 @@ function CreateDataset() {
 
             <div className="py-3">
               <div className="d-flex justify-content-flex-start create-dataset-head">
-                Price Per Data *
+                Price of Dataset *
               </div>
               <div className="">
                 <input
@@ -304,13 +455,15 @@ function CreateDataset() {
                   name="datasetPrice"
                   className="py-md-1 py-sm-1 dataset-input-form-data"
                   placeholder="Enter Dataset Price"
-                  value={createDataset.datasetPrice}
+                  min={0}
+                  value={isForSale ? createDataset.datasetPrice : 0}
                   onChange={(e) => {
                     setCreateDataset({
                       ...createDataset,
                       datasetPrice: e.target.value,
                     });
                   }}
+                  disabled={!isForSale}
                   required
                 />
               </div>
@@ -343,6 +496,40 @@ function CreateDataset() {
                 {selectedFileNameDataset && (
                   <div className="dataset-selected-file-text">
                     File: {selectedFileNameDataset}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div
+              className="d-flex py-2 flex-column"
+              onClick={handleDemoDatasetClick}
+            >
+              <div className="d-flex upload-demo-dataset">
+                <div className="col-1 ">
+                  <img
+                    className="upload-demo-dataset-icon"
+                    src={upload}
+                    id="upload-demo-dataset"
+                  ></img>
+                </div>
+                <div className="upload-demo-dataset-text">
+                  Upload Demo Dataset *
+                </div>
+                <input
+                  type="file"
+                  id="upload-demo-dataset-file"
+                  ref={fileInputRefDemoDataset}
+                  style={{ display: "none" }}
+                  onChange={handleFileChangeDemoDataset}
+                  required
+                ></input>
+              </div>
+              <div className="d-flex upload-demo-dataset-selected-file">
+                <div className="col-1"></div>
+                {selectedDemoDataset && (
+                  <div className="dataset-selected-file-text">
+                    File: {selectedDemoDataset}
                   </div>
                 )}
               </div>
@@ -457,9 +644,16 @@ function CreateDataset() {
                 className="btn rounded-pill my-2 py-sm-2 px-sm-5 px-4 create-dataset-btn"
                 onClick={createUserDataset}
               >
-                Create
+                {btnloading ? (
+                  <>
+                    <PulseLoader color="#fff" size={12} />
+                  </>
+                ) : (
+                  <>Create</>
+                )}
               </button>
             </div>
+            <ToastContainer />
           </div>
         </div>
       </div>

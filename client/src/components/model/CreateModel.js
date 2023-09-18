@@ -8,14 +8,24 @@ import { ethers } from "ethers";
 import { modelInstance } from "../Contract";
 import lighthouse from "@lighthouse-web3/sdk";
 import { useNavigate } from "react-router-dom";
+import { PulseLoader } from "react-spinners";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function CreateModel() {
   const navigate = useNavigate();
+  const [btnloading, setbtnloading] = useState(false);
 
   const [selectedOption, setSelectedOption] = useState("free");
 
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
+    if (e.target.value === "free" || e.target.value === "private") {
+      setCreateModel({
+        ...createModel,
+        modelPrice: 0,
+      });
+    }
   };
 
   // Define boolean variables based on the selected option
@@ -27,7 +37,7 @@ function CreateModel() {
     modelTitle: "",
     modelDescription: "",
     modelCategory: "",
-    modelPrice: "",
+    modelPrice: 0,
     modelTags: "",
     modelUpload: "",
     modelLicense: "",
@@ -62,7 +72,6 @@ function CreateModel() {
 
       reader.onloadend = () => {
         const fileData = reader.result;
-        console.log("File Data:", fileData);
         setCreateModel({
           ...createModel,
           modelUpload: fileData,
@@ -81,7 +90,6 @@ function CreateModel() {
 
       reader.onloadend = () => {
         const fileData = reader.result;
-        console.log("File Data:", fileData);
         setCreateModel({
           ...createModel,
           modelLicense: fileData,
@@ -100,7 +108,6 @@ function CreateModel() {
 
       reader.onloadend = () => {
         const fileData = reader.result;
-        console.log("File Data:", fileData);
         setCreateModel({
           ...createModel,
           modelDocumentation: fileData,
@@ -158,6 +165,18 @@ function CreateModel() {
 
   const createUserModel = async () => {
     try {
+      toast.info("Process is in Progress", {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setbtnloading(true);
+
       console.log(isPublic);
       console.log(isPrivate);
       console.log(isForSale);
@@ -193,6 +212,7 @@ function CreateModel() {
 
         console.log(tx);
         await tx.wait();
+        setbtnloading(false);
         navigate("/user-dashboard");
       }
     } catch (e) {
@@ -234,13 +254,13 @@ function CreateModel() {
                 Description *
               </div>
               <div className="">
-                <input
+                <textarea
                   type="text"
                   id="modelDescription"
                   name="modelDescription"
                   className="py-md-1 py-sm-1 model-input-form-data"
                   placeholder="Enter Model Description"
-                  value={createModel.modelDescription}
+                  // value={createModel.modelDescription}
                   onChange={(e) => {
                     setCreateModel({
                       ...createModel,
@@ -248,7 +268,9 @@ function CreateModel() {
                     });
                   }}
                   required
-                />
+                >
+                  {createModel.modelDescription}
+                </textarea>
               </div>
             </div>
 
@@ -322,16 +344,18 @@ function CreateModel() {
                 <input
                   type="number"
                   id="modelPrice"
+                  min={0}
                   name="modelPrice"
                   className="py-md-1 py-sm-1 model-input-form-data"
                   placeholder="Enter Model Price"
-                  value={createModel.modelPrice}
+                  value={isForSale ? createModel.modelPrice : 0}
                   onChange={(e) => {
                     setCreateModel({
                       ...createModel,
                       modelPrice: e.target.value,
                     });
                   }}
+                  disabled={!isForSale}
                   required
                 />
               </div>
@@ -477,9 +501,16 @@ function CreateModel() {
                 className="btn rounded-pill my-2 py-sm-2 px-sm-5 px-4 create-model-btn"
                 onClick={createUserModel}
               >
-                Create
+                {btnloading ? (
+                  <>
+                    <PulseLoader color="#fff" size={12} />
+                  </>
+                ) : (
+                  <>Create</>
+                )}
               </button>
             </div>
+            <ToastContainer />
           </div>
         </div>
       </div>

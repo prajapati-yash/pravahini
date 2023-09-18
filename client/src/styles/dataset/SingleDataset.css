@@ -1,11 +1,15 @@
 .single-dataset-head{
   font-size: 2rem;
   font-weight: 600;
+  text-align: left;
+  padding-left: 1rem;
 }
 
 .single-dataset-subhead{
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  text-align: left;
   font-weight: 400;
+  padding-left: 1rem;
 }
 
 .single-dataset-table{
@@ -75,7 +79,16 @@
 
 @media only screen and (max-width: 991px){
   .single-dataset-table{
-    padding: 0rem 3rem;
+    padding: 0rem 3rem 0rem 2rem;
+  }
+
+  .single-dataset-head{
+    padding-left: 2rem;
+    padding-right: 1rem;
+  }
+
+  .single-dataset-subhead{
+    padding-left: 2rem;
   }
 }
 
@@ -88,6 +101,20 @@
   .single-dataset-content{
     padding-left: 8rem;
     padding-right: 8rem;
+  }
+
+  .single-dataset-table{
+    padding: 0rem 2.5rem;
+  }
+
+  .single-dataset-head{
+    text-align: center;
+    padding: 0rem;
+  }
+
+  .single-dataset-subhead{
+    text-align: center;
+    padding: 0rem;
   }
 }
 
