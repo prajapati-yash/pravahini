@@ -16,7 +16,8 @@ function HomeHero() {
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
-  const [isShaking, setShaking] = useState(false);
+  const [isShaking, setShaking] = useState(false);;
+
   useEffect(() => {
     const interval = setInterval(() => {
       setShaking(!isShaking);

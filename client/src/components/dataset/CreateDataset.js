@@ -302,7 +302,6 @@ function CreateDataset() {
           console.log("Metamask is not installed, please install!");
         }
         const con = await datasetInstance();
-        console.log("Hello");
 
         const tx = await con.createDataset(
           createDataset.datasetTitle,
@@ -324,7 +323,7 @@ function CreateDataset() {
         console.log(tx);
         await tx.wait();
         setbtnloading(false);
-        navigate("/user-dashboard");
+        navigate("/dataset-marketplace");
       }
     } catch (e) {
       setbtnloading(false);

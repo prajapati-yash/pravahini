@@ -5,6 +5,7 @@ import "../../styles/efficiency/EfficientCompute.css";
 import axios from "axios";
 import backendUrl from '../../config.js';
 import { useAccount } from "wagmi";
+import Cookies from "js-cookie";
 
 function EfficientCompute() {
   const {address} = useAccount();
@@ -15,6 +16,13 @@ function EfficientCompute() {
   const [btnloading, setbtnloading] = useState(false);
   const [cid, setCid] = useState("");
   const [showButton, setShowButton] = useState(true);
+  const token = Cookies.get('jwtToken');
+  const tokenHeaders = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+ 
 
   const handleDatasetUrlChange = (event) => {
     setDatasetUrl(event.target.value);
@@ -34,27 +42,29 @@ function EfficientCompute() {
 
   
   const handleExecute = () => {
+    if(!address){
+      console.log("Wallet Address is required!")
+    }else{
     console.log("Started Execution...")
     setbtnloading(true);
     setJobId("");
     setShowButton(true);
     setCid("");
-    const apiUrl = `${backendUrl}/container1/execute`;
+    const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/container1/execute`;
     const requestData = {
       notebookUrl: notebookUrl,
       inputs: datasetUrls.map((url) => ({ url: url })),
     };
-
+    
     const startTimeStamp = new Date();
     axios
-      .post(apiUrl, requestData)
+      .post(apiUrl, requestData, tokenHeaders)
       .then((response) => {
         const { jobId } = response.data;
 
         setJobId(jobId);
         setCid(cid);
-
-        const saveJobUrl = `${backendUrl}/container1/save-job`;
+        const saveJobUrl = `${process.env.REACT_APP_BACKEND_URL}/container1/save-job`;
         const jobData = {
           walletAddress: address, 
           jobId: jobId,
@@ -65,7 +75,7 @@ function EfficientCompute() {
   
         // Post request to save the data in the database
         axios
-          .post(saveJobUrl, jobData)
+          .post(saveJobUrl, jobData, tokenHeaders)
           .then((saveResponse) => {
             console.log("Job details saved:");
           })
@@ -78,7 +88,7 @@ function EfficientCompute() {
       .catch((error) => {
         console.error("Error:", error);
         setbtnloading(false);
-      });
+      });}
   };
 
   const handleGetCID = (jobId) =>{
@@ -86,28 +96,26 @@ function EfficientCompute() {
     // const index = dataList.findIndex((data) => data.jobId === jobId );
     // if(index !== -1){
       console.log("Getting CID of this Job Id!")
-    const apiURL = `${backendUrl}/container1/get-cid/:${jobId}`;
+    const apiURL = `${process.env.REACT_APP_BACKEND_URL}/container1/get-cid/:${jobId}`;
     console.log(jobId)
 
     axios
-    .get(apiURL)
+    .get(apiURL, tokenHeaders)
     .then((response) =>{
       const { cid } = response.data;
       setCid(cid);
       console.log(`CID for current ${jobId} is `, cid);
       setShowButton(false);
       try{
-      const updateJobUrl = `${backendUrl}/container1/update-cid`;
+      const updateJobUrl = `${process.env.REACT_APP_BACKEND_URL}/container1/update-cid`;
       const jobData = {
         walletAddress: address, 
         jobId: jobId,
         cid: cid,
       };
-
       // Post request to save the data in the database
-
       axios
-        .post(updateJobUrl, jobData)
+        .post(updateJobUrl, jobData, tokenHeaders)
         .then((saveResponse) => {
           console.log("Job details updated:");
         })

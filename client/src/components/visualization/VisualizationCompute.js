@@ -5,6 +5,7 @@ import add from "../../assets/computation/add.png";
 import axios from "axios";
 import backendUrl from '../../config.js';
 import { useAccount } from "wagmi";
+import Cookies from "js-cookie";
 
 function VisualizationCompute() {
   const {address} = useAccount();
@@ -15,6 +16,12 @@ function VisualizationCompute() {
   const [btnloading, setbtnloading] = useState(false);
   const [cid, setCid] = useState("");
   const [showButton, setShowButton] = useState(true);
+  const token = Cookies.get('jwtToken');
+  const tokenHeaders = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
   const handleDatasetUrlChange = (event) => {
     setDatasetUrl(event.target.value);
@@ -34,12 +41,15 @@ function VisualizationCompute() {
 
 
   const handleExecute = () => {
+    if(!address){
+      console.log("Wallet Address is required!")
+    }else{
     console.log("Started Execution...")
     setbtnloading(true);
     setJobId("");
     setShowButton(true);
     setCid("");
-    const apiUrl = `${backendUrl}/container2/execute`;
+    const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/container2/execute`;
     const requestData = {
       notebookUrl: notebookUrl,
       inputs: datasetUrls.map((url) => ({ url: url })),
@@ -47,14 +57,14 @@ function VisualizationCompute() {
 
     const startTimeStamp = new Date();
     axios
-      .post(apiUrl, requestData)
+      .post(apiUrl, requestData, tokenHeaders)
       .then((response) => {
         const { jobId } = response.data;
 
         setJobId(jobId);
         setCid(cid);
 
-        const saveJobUrl = `${backendUrl}/container2/save-job`;
+        const saveJobUrl = `${process.env.REACT_APP_BACKEND_URL}/container2/save-job`;
         const jobData = {
           walletAddress: address, 
           jobId: jobId,
@@ -65,7 +75,7 @@ function VisualizationCompute() {
   
         // Post request to save the data in the database
         axios
-          .post(saveJobUrl, jobData)
+          .post(saveJobUrl, jobData, tokenHeaders)
           .then((saveResponse) => {
             console.log("Job details saved:", saveResponse.data);
           })
@@ -78,7 +88,7 @@ function VisualizationCompute() {
       .catch((error) => {
         console.error("Error:", error);
         setbtnloading(false);
-      });
+      });}
   };
 
   const handleGetCID = (jobId) =>{
@@ -86,16 +96,16 @@ function VisualizationCompute() {
     // const index = dataList.findIndex((data) => data.jobId === jobId );
     // if(index !== -1){
       console.log("Getting CID of this Job Id!")
-    const apiURL = `${backendUrl}/container2/get-cid/:${jobId}`;
+    const apiURL = `${process.env.REACT_APP_BACKEND_URL}/container2/get-cid/:${jobId}`;
     
     axios
-    .get(apiURL)
+    .get(apiURL, tokenHeaders)
     .then((response) =>{
       const { cid } = response.data;
       setCid(cid);
       setShowButton(false);
       try{
-      const updateJobUrl = `${backendUrl}/container2/update-cid`;
+      const updateJobUrl = `${process.env.REACT_APP_BACKEND_URL}/container2/update-cid`;
       const jobData = {
         walletAddress: address, 
         jobId: jobId,
@@ -105,7 +115,7 @@ function VisualizationCompute() {
       // Post request to save the data in the database
 
       axios
-        .post(updateJobUrl, jobData)
+        .post(updateJobUrl, jobData, tokenHeaders)
         .then((saveResponse) => {
           console.log("Job details updated:", saveResponse.data);
         })

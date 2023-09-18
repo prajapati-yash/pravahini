@@ -195,7 +195,6 @@ function CreateModel() {
           console.log("Metamask is not installed, please install!");
         }
         const con = await modelInstance();
-        console.log("Hello");
 
         const tx = await con.createModel(
           createModel.modelTitle,
@@ -213,7 +212,7 @@ function CreateModel() {
         console.log(tx);
         await tx.wait();
         setbtnloading(false);
-        navigate("/user-dashboard");
+        navigate("/model-marketplace");
       }
     } catch (e) {
       console.log("Error in creating a dataset: ", e);

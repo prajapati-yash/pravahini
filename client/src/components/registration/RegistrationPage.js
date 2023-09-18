@@ -51,6 +51,7 @@ function RegistrationPage() {
 
   const uploadImage = async () => {
     try {
+      console.log("API Key",process.env.REACT_APP_LIGHTHOUSE_API_KEY)
       const fileInput = document.querySelector('input[type="file"]');
       console.log("File: ", fileInput.files);
 
@@ -60,6 +61,7 @@ function RegistrationPage() {
         false,
         progressCallback
       );
+      
       console.log("File Status:", output);
       return output.data.Hash;
     } catch (e) {
