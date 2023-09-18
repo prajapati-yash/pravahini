@@ -5,33 +5,7 @@ import img from "../../assets/home/security.png";
 import { useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
 import { datasetInstance } from "../Contract";
-
-const blocks = [
-  {
-    title: "Dataset1",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-  {
-    title: "Dataset2",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-  {
-    title: "Dataset3",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-  {
-    title: "Dataset4",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-  {
-    title: "Dataset5",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-  {
-    title: "Dataset6",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-];
+import { ClipLoader } from "react-spinners";
 
 function SubscribedDatasets() {
   //   const [img, setImg] = useState();
@@ -41,6 +15,7 @@ function SubscribedDatasets() {
   const datasetDivRef = React.useRef(null);
   const [filterDropdown, setFilterDropdown] = useState(false);
   const [allSubscribedDatasets, setAllSubscribedDatasets] = useState([]);
+  const [isPageLoading, setIsPageLoading] = useState(true);
 
   const allSubscribedData = async () => {
     try {
@@ -64,6 +39,7 @@ function SubscribedDatasets() {
   useEffect(() => {
     async function fetchSubscribedDatasets() {
       await allSubscribedData();
+      setIsPageLoading(false);
     }
     console.log("hello");
     fetchSubscribedDatasets();
@@ -71,19 +47,28 @@ function SubscribedDatasets() {
 
   return (
     <div className="row mt-4 subscribed-dataset-main py-3 px-sm-3 container-fluid justify-content-around ">
-      {allSubscribedDatasets.length > 0 ? (
+      {isPageLoading ? (
+        <div className="d-flex justify-content-center">
+          <ClipLoader color="#4250ff" />
+        </div>
+      ) : allSubscribedDatasets.length > 0 ? (
         allSubscribedDatasets.map((item, key) => (
           <div
             className="col-xxl-3 col-md-5 col-sm-7 col-11 mx-1 mb-5 subscribed-dataset-component"
             index={key}
           >
             <div className="subscribed-dataset-img-div">
-              <img src={img} className="subscribed-dataset-img"></img>
+              <img
+                src={`https://gateway.lighthouse.storage/ipfs/${item.uploadImage}`}
+                className="subscribed-dataset-img"
+              ></img>
             </div>
             <div className="subscribed-dataset-details">
               <div className="subscribed-dataset-title">{item.title}</div>
               <div className="subscribed-dataset-desc">{item.description}</div>
-              <div className="subscribed-dataset-badge">Free</div>
+              <div className="subscribed-dataset-badge">
+                {item.isPublic ? "Free" : item.isForSale ? "Paid" : "Private"}
+              </div>
               <div className="subscribed-dataset-btn">View More &gt;</div>
             </div>
           </div>

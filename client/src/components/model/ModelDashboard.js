@@ -6,65 +6,89 @@ import img1 from "../../assets/home/security.png";
 import "../../styles/model/ModelDashboard.css";
 import { ethers } from "ethers";
 import { modelInstance } from "../Contract";
-
-const blocks = [
-  {
-    title: "Model1",
-    description:
-      "Description of model 1 involves analysing quality data Description of dataset 1 involves analysing quality data",
-  },
-  {
-    title: "Model 2",
-    description: "Description of model 2 involves analysing quality data",
-  },
-  {
-    title: "Model 3",
-    description: "Description of model 3 involves analysing quality data",
-  },
-  {
-    title: "Model4",
-    description: "Description of model 4 involves analysing quality data",
-  },
-  {
-    title: "Model5",
-    description: "Description of model 5 involves analysing quality data",
-  },
-  {
-    title: "Model 6",
-    description: "Description of model 6 involves analysing quality data",
-  },
-];
+import { ClipLoader } from "react-spinners";
 
 function ModelDashboard() {
   const [activeComponent, setActiveComponent] = useState("allModels");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredModels, setFilteredModels] = useState(blocks);
+  const [filteredModels, setFilteredModels] = useState([]);
   const navigate = useNavigate();
   const modelDivRef = React.useRef(null);
-  const [filterDropdown, setFilterDropdown] = useState(false);
   const [allModels, setAllModels] = useState([]);
-
-  const showFilterDropdown = () => {
-    setFilterDropdown(!filterDropdown);
-  };
+  const [isPageLoading, setIsPageLoading] = useState(true);
 
   const handleAllModelClick = (e) => {
     e.preventDefault();
     setActiveComponent("allModels");
-    setFilteredModels(blocks);
+    setFilteredModels(allModels);
+  };
 
-    if (modelDivRef.current) {
-      modelDivRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
+  const handlePaidModelClick = (e) => {
+    e.preventDefault();
+    setActiveComponent("allModels");
+
+    const filtered = allModels.filter((model) => {
+      return model.isForSale;
+    });
+
+    setFilteredModels(filtered);
+  };
+
+  const handlePublicModelClick = (e) => {
+    e.preventDefault();
+    setActiveComponent("allModels");
+
+    const filtered = allModels.filter((model) => {
+      return model.isPublic;
+    });
+
+    setFilteredModels(filtered);
+  };
+
+  const handleMedicineModels = (e) => {
+    e.preventDefault();
+    setActiveComponent("drugs&med");
+
+    const filtered = allModels.filter((model) => {
+      return model.category === "Drugs and Medicine";
+    });
+    setFilteredModels(filtered);
+  };
+
+  const handleEducationModels = (e) => {
+    e.preventDefault();
+    setActiveComponent("education");
+
+    const filtered = allModels.filter((model) => {
+      return model.category === "Education";
+    });
+    setFilteredModels(filtered);
+  };
+
+  const handleNatureModels = (e) => {
+    e.preventDefault();
+    setActiveComponent("earth&nature");
+
+    const filtered = allModels.filter((model) => {
+      return model.category === "Earth and Nature";
+    });
+    setFilteredModels(filtered);
+  };
+
+  const handleTechModels = (e) => {
+    e.preventDefault();
+    setActiveComponent("sci&tech");
+
+    const filtered = allModels.filter((model) => {
+      return model.category === "Science and Technology";
+    });
+    setFilteredModels(filtered);
   };
 
   const handleSearchChange = (query) => {
     setSearchQuery(query);
 
-    const filtered = blocks.filter((item) =>
+    const filtered = allModels.filter((item) =>
       item.title.toLowerCase().includes(query.toLowerCase())
     );
 
@@ -82,7 +106,13 @@ function ModelDashboard() {
         }
         const con = await modelInstance();
         const getModelDetails = await con.getAllModels();
-        setAllModels(getModelDetails);
+
+        const filteredModels = getModelDetails.filter((model) => {
+          return model.isPublic || model.isForSale;
+        });
+        console.log("Filter: ", filteredModels);
+        setAllModels(filteredModels);
+
         console.log(allModels);
       }
     } catch (error) {
@@ -92,11 +122,17 @@ function ModelDashboard() {
 
   useEffect(() => {
     async function fetchModels() {
+      setActiveComponent("allModels");
       await allModelData();
+      setIsPageLoading(false);
     }
     console.log("hello");
     fetchModels();
   }, []);
+
+  useEffect(() => {
+    setFilteredModels(allModels);
+  }, [allModels]);
 
   return (
     <div className="model-dashboard-main">
@@ -143,13 +179,13 @@ function ModelDashboard() {
                   className="dropdown-menu"
                   aria-labelledby="dropdownMenuButton"
                 >
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" onClick={handleAllModelClick}>
                     All
                   </a>
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" onClick={handlePaidModelClick}>
                     Paid
                   </a>
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" onClick={handlePublicModelClick}>
                     Free
                   </a>
                 </div>
@@ -176,7 +212,7 @@ function ModelDashboard() {
             className={`mx-sm-3 mx-2 med-model-dash-btn ${
               activeComponent === "drugs&med" ? "active-button" : ""
             }`}
-            // onClick={handleModelClick}
+            onClick={handleMedicineModels}
           >
             Drugs and Medicine
           </button>
@@ -185,7 +221,7 @@ function ModelDashboard() {
             className={`mx-sm-3 mx-2 edu-model-dash-btn ${
               activeComponent === "education" ? "active-button" : ""
             }`}
-            // onClick={handleSubscribedDatasets}
+            onClick={handleEducationModels}
           >
             Education
           </button>
@@ -194,7 +230,7 @@ function ModelDashboard() {
             className={`mx-sm-3 mx-2 ear-model-dash-btn ${
               activeComponent === "earth&nature" ? "active-button" : ""
             }`}
-            // onClick={handleSubscribedDatasets}
+            onClick={handleNatureModels}
           >
             Earth & Nature
           </button>
@@ -203,7 +239,7 @@ function ModelDashboard() {
             className={`mx-sm-3 mx-2 sci-model-dash-btn ${
               activeComponent === "sci&tech" ? "active-button" : ""
             }`}
-            // onClick={handleSubscribedDatasets}
+            onClick={handleTechModels}
           >
             Science & Technology
           </button>
@@ -227,28 +263,47 @@ function ModelDashboard() {
                   className={`dropdown-item ${
                     activeComponent === "allModels" ? "active-button" : ""
                   }`}
-                  href="#"
+                  onClick={handleAllModelClick}
                 >
                   All Models
                 </a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                <a
+                  className={`dropdown-item ${
+                    activeComponent === "drugs&med" ? "active-button" : ""
+                  }`}
+                >
                   Drugs and Medicines
                 </a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                <a
+                  className={`dropdown-item ${
+                    activeComponent === "education" ? "active-button" : ""
+                  }`}
+                  onClick={handleEducationModels}
+                >
                   Education
                 </a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                <a
+                  className={`dropdown-item ${
+                    activeComponent === "earth&nature" ? "active-button" : ""
+                  }`}
+                  onClick={handleNatureModels}
+                >
                   Earth and Nature
                 </a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                <a
+                  className={`dropdown-item ${
+                    activeComponent === "sci&tech" ? "active-button" : ""
+                  }`}
+                  onClick={handleTechModels}
+                >
                   Science and Technology
                 </a>
               </li>
@@ -260,8 +315,12 @@ function ModelDashboard() {
 
         <div ref={modelDivRef}>
           <div className="row px-0 all-model-main mt-4 py-3 px-sm-3 container-fluid justify-content-around">
-            {allModels.length > 0 ? (
-              allModels.map((item, key) => (
+            {isPageLoading ? (
+              <div className="d-flex justify-content-center">
+                <ClipLoader color="#4250ff" />
+              </div>
+            ) : filteredModels.length > 0 ? (
+              filteredModels.map((item, key) => (
                 <div
                   className="col-xxl-3 col-md-5 col-sm-7 col-11 mx-1 mb-5 all-model-component"
                   index={key}
@@ -273,7 +332,11 @@ function ModelDashboard() {
                     <div className="all-model-title">{item.title}</div>
                     <div className="all-model-desc">{item.description}</div>
                     <div className="all-model-badge">
-                      {item.isPublic ? "Free" : "Paid"}
+                      {item.isPublic
+                        ? "Free"
+                        : item.isForSale
+                        ? "Paid"
+                        : "Private"}
                     </div>
                     <div
                       className="all-model-btn"
@@ -289,7 +352,7 @@ function ModelDashboard() {
                 </div>
               ))
             ) : (
-              <div>No Datasets Available</div>
+              <div>No Models Available</div>
             )}
           </div>
         </div>

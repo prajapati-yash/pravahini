@@ -1,67 +1,22 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { authorizationInstance } from "../Contract";
+import { useAccount } from "wagmi";
+import { ethers } from "ethers";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 import "../../styles/home/HomeHero.css";
 import arrow from "../../assets/home/arrow.png";
 import union from "../../assets/home/union-2.png";
-import union1 from "../../assets/home/union-1.png";
 import heroimg from "../../assets/home/heroImage.png";
-import search from "../../assets/home/search.png";
 import security from "../../assets/home/security.png";
-import link from "../../assets/home/link.png";
 import unioncopy from "../../assets/home/union-copy.png";
-import { useAccount } from 'wagmi';
-import { useNavigate } from 'react-router-dom';
-import { authorizationInstance } from '../Contract';
-import { ethers } from 'ethers';
-import {
-    useConnectModal,
-    useAccountModal,
-    useChainModal,
-} from '@rainbow-me/rainbowkit';
+
 function HomeHero() {
   const navigate = useNavigate();
-  const [isShaking, setShaking] = useState(false);
-
   const { address } = useAccount();
-    const { openConnectModal } = useConnectModal();
+  const { openConnectModal } = useConnectModal();
 
-    const verifyUserAccount = async () => {
-        try {
-            const { ethereum } = window;
-            if (ethereum) {
-                const provider = new ethers.providers.Web3Provider(ethereum);
-                const signer = provider.getSigner();
-                if (!provider) {
-                    console.log("Metamask is not installed, please install!");
-                }
-                const con = await authorizationInstance();
-                const verifyTx = await con.isCompaniesAddMapping(address)
-                // result = verifyTx
-                console.log(verifyTx)
-                // console.log(con);
-                return verifyTx;
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-
-    const SignupWithWallet = async () => {
-        if (address) {
-            const test = await verifyUserAccount();
-            console.log(test)
-            if (test) {
-                navigate("/user-dashboard")
-                window.location.reload();
-            }
-            else {
-                navigate("/register")
-            }
-        }
-        else {
-            openConnectModal();
-        }
-    };
+  const [isShaking, setShaking] = useState(false);;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -73,11 +28,46 @@ function HomeHero() {
     };
   }, [isShaking]);
 
-
   const startBtnStyle = {
     animation: isShaking ? "shake 1.5s ease-in-out" : "none",
     transformOrigin: "center",
     boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.3)",
+  };
+
+  const verifyUserAccount = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        if (!provider) {
+          console.log("Metamask is not installed, please install!");
+        }
+        const con = await authorizationInstance();
+        const verifyTx = await con.isRegistered(address);
+        // result = verifyTx
+        console.log(verifyTx);
+        // console.log(con);
+        return verifyTx;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const connectWallet = async () => {
+    if (address) {
+      const test = await verifyUserAccount();
+      console.log(test);
+      if (test) {
+        navigate("/user-dashboard");
+        window.location.reload();
+      } else {
+        navigate("/register");
+      }
+    } else {
+      openConnectModal();
+    }
   };
 
   return (
@@ -93,11 +83,10 @@ function HomeHero() {
           </p>
         </div>
 
-
         <div className="get-started-container justify-content-center">
           <div
             className="hero-button ps-3 d-flex align-items-center "
-            onClick={() => SignupWithWallet()}
+            onClick={() => connectWallet()}
             style={startBtnStyle}
           >
             <span className="py-3 hero-button-text ">Get Started</span>

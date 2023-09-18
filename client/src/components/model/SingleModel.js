@@ -8,13 +8,14 @@ import * as XLSX from "xlsx";
 import { useLocation } from "react-router-dom";
 import { modelInstance } from "../Contract";
 import { ethers } from "ethers";
-import { useAccount } from 'wagmi';
+import { useAccount } from "wagmi";
 
 function SingleModel() {
   const { address } = useAccount();
   const location = useLocation();
   console.log(location.state.data);
   const model = location.state ? location.state.data : "";
+  const [documentData, setDocumentData] = useState(null);
 
   const handleDownload = async () => {
     try {
@@ -42,6 +43,27 @@ function SingleModel() {
     }
   };
 
+  // useEffect(() => {
+  //   // Replace with the actual URL of your Word document
+  //   const documentUrl = `https://gateway.lighthouse.storage/ipfs/${model.uploadUsageDocumentation}`;
+
+  //   axios
+  //     .get(documentUrl, {
+  //       responseType: "arraybuffer", // Make sure to request the data as an array buffer
+  //     })
+  //     .then((response) => {
+  //       const data = new Blob([response.data], {
+  //         type: "application/octet-stream",
+  //       });
+  //       // console.log("Document data:--- ",data);
+  //       const url = URL.createObjectURL(data);
+  //       setDocumentData(url);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching Word document:", error);
+  //     });
+  // }, []);
+
   return (
     <div className="d-flex flex-md-row flex-column">
       <div className="py-3 col-md-7 col-lg-8">
@@ -51,7 +73,14 @@ function SingleModel() {
             {model[1]}
           </div>
         </div>
-        <div className=""></div>
+        <div className="">
+          {/* <iframe
+            src={`https://gateway.lighthouse.storage/ipfs/${model.uploadUsageDocumentation}`}
+            style={{ width: "100%", height: "500px" }}
+            frameBorder="0"
+            scrolling="no"
+          /> */}
+        </div>
       </div>
       <div className="col-md-5 col-lg-4">
         <div className="py-5 single-model-details">
@@ -85,7 +114,9 @@ function SingleModel() {
             </div>
             <div className="py-2">
               <div className="single-model-details-head">Final Cost</div>
-              <div className="single-model-details-value">{parseInt(model[3]._hex, 16)}</div>
+              <div className="single-model-details-value">
+                {parseInt(model[3]._hex, 16)}
+              </div>
             </div>
             <div className="py-4">
               <button

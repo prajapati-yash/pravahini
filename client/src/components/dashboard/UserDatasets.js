@@ -5,33 +5,7 @@ import img from "../../assets/home/security.png";
 import { useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
 import { datasetInstance } from "../Contract";
-
-const blocks = [
-  {
-    title: "Dataset1",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-  {
-    title: "Dataset2",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-  {
-    title: "Dataset3",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-  {
-    title: "Dataset4",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-  {
-    title: "Dataset5",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-  {
-    title: "Dataset6",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-];
+import { ClipLoader } from "react-spinners";
 
 function UserDatasets() {
   //   const [img, setImg] = useState();
@@ -39,6 +13,7 @@ function UserDatasets() {
   const [occupation, setOccupation] = useState();
   const navigate = useNavigate();
   const [allUserDatasets, setAllUserDatasets] = useState([]);
+  const [isPageLoading, setIsPageLoading] = useState(true);
 
   const allData = async () => {
     try {
@@ -62,6 +37,7 @@ function UserDatasets() {
   useEffect(() => {
     async function fetchUserDatasets() {
       await allData();
+      setIsPageLoading(false);
     }
     console.log("hello");
     fetchUserDatasets();
@@ -69,7 +45,11 @@ function UserDatasets() {
 
   return (
     <div className="row px-0 user-dataset-main mt-4 py-3 px-sm-3 container-fluid justify-content-around">
-      {allUserDatasets.length > 0 ? (
+      {isPageLoading ? (
+        <div className="d-flex justify-content-center">
+          <ClipLoader color="#4250ff" />
+        </div>
+      ) : allUserDatasets.length > 0 ? (
         allUserDatasets.map((item, key) => (
           <div
             className="col-xxl-3 col-md-5 col-sm-7 col-11 mx-1 mb-5 user-dataset-component"
@@ -85,7 +65,7 @@ function UserDatasets() {
               <div className="user-dataset-title">{item.title}</div>
               <div className="user-dataset-desc">{item.description}</div>
               <div className="user-dataset-badge">
-                {item.isPublic ? "Free" : "Paid"}
+                {item.isPublic ? "Free" : item.isForSale ? "Paid" : "Private"}
               </div>
               <div
                 className="user-dataset-btn"

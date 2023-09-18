@@ -6,52 +6,21 @@ import img1 from "../../assets/home/security.png";
 import "../../styles/dataset/DatasetDashboard.css";
 import { ethers } from "ethers";
 import { datasetInstance } from "../Contract";
-
-const blocks = [
-  {
-    title: "Dataset1",
-    description:
-      "Description of dataset 1 involves analysing quality data Description of dataset 1 involves analysing quality data",
-  },
-  {
-    title: "Data set2",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-  {
-    title: "Dataset3",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-  {
-    title: "Data set4",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-  {
-    title: "Dataset5",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-  {
-    title: "Data set6",
-    description: "Description of dataset 1 involves analysing quality data",
-  },
-];
+import {ClipLoader} from "react-spinners";
 
 function DatasetDashboard() {
   const [activeComponent, setActiveComponent] = useState("allDatasets");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredDatasets, setFilteredDatasets] = useState(blocks);
+  const [filteredDatasets, setFilteredDatasets] = useState([]);
   const navigate = useNavigate();
   const datasetDivRef = React.useRef(null);
-  const [filterDropdown, setFilterDropdown] = useState(false);
   const [allDatasets, setAllDatasets] = useState([]);
-
-  const showFilterDropdown = () => {
-    setFilterDropdown(!filterDropdown);
-  };
+  const [isPageLoading, setIsPageLoading] = useState(true);
 
   const handleAllDatasetClick = (e) => {
     e.preventDefault();
     setActiveComponent("allDatasets");
-    setFilteredDatasets(blocks);
+    setFilteredDatasets(allDatasets);
 
     if (datasetDivRef.current) {
       datasetDivRef.current.scrollIntoView({
@@ -61,13 +30,90 @@ function DatasetDashboard() {
     }
   };
 
+  const handlePaidDatasetClick = (e) => {
+    e.preventDefault();
+    setActiveComponent("allDatasets");
+
+    const filtered = allDatasets.filter((dataset) => {
+      return dataset.isForSale;
+    });
+
+    setFilteredDatasets(filtered);
+
+    if (datasetDivRef.current) {
+      datasetDivRef.current.scrollIntoView({
+        behavior: "smooth", // You can change this to "auto" if you prefer instant scrolling
+        block: "start", // Scroll to the start of the section
+      });
+    }
+  };
+
+  const handlePublicDatasetClick = (e) => {
+    e.preventDefault();
+    setActiveComponent("allDatasets");
+
+    const filtered = allDatasets.filter((dataset) => {
+      return dataset.isPublic;
+    });
+
+    setFilteredDatasets(filtered);
+
+    if (datasetDivRef.current) {
+      datasetDivRef.current.scrollIntoView({
+        behavior: "smooth", // You can change this to "auto" if you prefer instant scrolling
+        block: "start", // Scroll to the start of the section
+      });
+    }
+  };
+
+  const handleMedicineDatasets = (e) => {
+    e.preventDefault();
+    setActiveComponent("drugs&med");
+
+    const filtered = allDatasets.filter((dataset) => {
+      return dataset.category === "Drugs and Medicine";
+    });
+    setFilteredDatasets(filtered);
+  };
+
+  const handleEducationDatasets = (e) => {
+    e.preventDefault();
+    setActiveComponent("education");
+
+    const filtered = allDatasets.filter((dataset) => {
+      return dataset.category === "Education";
+    });
+    setFilteredDatasets(filtered);
+  };
+
+  const handleNatureDatasets = (e) => {
+    e.preventDefault();
+    setActiveComponent("earth&nature");
+
+    const filtered = allDatasets.filter((dataset) => {
+      return dataset.category === "Earth and Nature";
+    });
+    setFilteredDatasets(filtered);
+  };
+
+  const handleTechDatasets = (e) => {
+    e.preventDefault();
+    setActiveComponent("sci&tech");
+
+    const filtered = allDatasets.filter((dataset) => {
+      return dataset.category === "Science and Technology";
+    });
+    setFilteredDatasets(filtered);
+  };
+
   const handleSearchChange = (query) => {
     setSearchQuery(query);
 
-    const filtered = blocks.filter((item) =>
+    const filtered = allDatasets.filter((item) =>
       item.title.toLowerCase().includes(query.toLowerCase())
     );
 
+    // console.log("Filtered items: ",filtered);
     setFilteredDatasets(filtered);
   };
 
@@ -82,7 +128,13 @@ function DatasetDashboard() {
         }
         const con = await datasetInstance();
         const getDatasetDetails = await con.getAllDatasets();
-        setAllDatasets(getDatasetDetails);
+
+        const filteredDatasets = getDatasetDetails.filter((dataset) => {
+          return dataset.isPublic || dataset.isForSale;
+        });
+        console.log("Filter: ", filteredDatasets);
+        setAllDatasets(filteredDatasets);
+
         console.log("All datasets", allDatasets);
       }
     } catch (error) {
@@ -92,11 +144,17 @@ function DatasetDashboard() {
 
   useEffect(() => {
     async function fetchDatasets() {
+      setActiveComponent("allDatasets");
       await allData();
+      setIsPageLoading(false);
     }
     console.log("hello");
     fetchDatasets();
   }, []);
+
+  useEffect(() => {
+    setFilteredDatasets(allDatasets);
+  }, [allDatasets]);
 
   return (
     <div className="dataset-dashboard-main">
@@ -143,13 +201,16 @@ function DatasetDashboard() {
                   className="dropdown-menu"
                   aria-labelledby="dropdownMenuButton"
                 >
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" onClick={handleAllDatasetClick}>
                     All
                   </a>
-                  <a className="dropdown-item" href="#">
+                  <a className="dropdown-item" onClick={handlePaidDatasetClick}>
                     Paid
                   </a>
-                  <a className="dropdown-item" href="#">
+                  <a
+                    className="dropdown-item"
+                    onClick={handlePublicDatasetClick}
+                  >
                     Free
                   </a>
                 </div>
@@ -177,7 +238,7 @@ function DatasetDashboard() {
             className={`mx-sm-3 mx-2 med-dataset-dash-btn ${
               activeComponent === "drugs&med" ? "active-button" : ""
             }`}
-            // onClick={handleModelClick}
+            onClick={handleMedicineDatasets}
           >
             Drugs and Medicine
           </button>
@@ -186,7 +247,7 @@ function DatasetDashboard() {
             className={`mx-sm-3 mx-2 edu-dataset-dash-btn ${
               activeComponent === "education" ? "active-button" : ""
             }`}
-            // onClick={handleSubscribedDatasets}
+            onClick={handleEducationDatasets}
           >
             Education
           </button>
@@ -195,7 +256,7 @@ function DatasetDashboard() {
             className={`mx-sm-3 mx-2 ear-dataset-dash-btn ${
               activeComponent === "earth&nature" ? "active-button" : ""
             }`}
-            // onClick={handleSubscribedDatasets}
+            onClick={handleNatureDatasets}
           >
             Earth & Nature
           </button>
@@ -204,7 +265,7 @@ function DatasetDashboard() {
             className={`mx-sm-3 mx-2 sci-dataset-dash-btn ${
               activeComponent === "sci&tech" ? "active-button" : ""
             }`}
-            // onClick={handleSubscribedDatasets}
+            onClick={handleTechDatasets}
           >
             Science & Technology
           </button>
@@ -228,28 +289,48 @@ function DatasetDashboard() {
                   className={`dropdown-item ${
                     activeComponent === "allDatasets" ? "active-button" : ""
                   }`}
-                  href="#"
+                  onClick={handleAllDatasetClick}
                 >
                   All Datasets
                 </a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                <a
+                  className={`dropdown-item ${
+                    activeComponent === "drugs&med" ? "active-button" : ""
+                  }`}
+                  onClick={handleMedicineDatasets}
+                >
                   Drugs and Medicines
                 </a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                <a
+                  className={`dropdown-item  ${
+                    activeComponent === "education" ? "active-button" : ""
+                  }`}
+                  onClick={handleEducationDatasets}
+                >
                   Education
                 </a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                <a
+                  className={`dropdown-item ${
+                    activeComponent === "earth&nature" ? "active-button" : ""
+                  }`}
+                  onClick={handleNatureDatasets}
+                >
                   Earth and Nature
                 </a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                <a
+                  className={`dropdown-item ${
+                    activeComponent === "sci&tech" ? "active-button" : ""
+                  }`}
+                  onClick={handleTechDatasets}
+                >
                   Science and Technology
                 </a>
               </li>
@@ -261,8 +342,10 @@ function DatasetDashboard() {
 
         <div ref={datasetDivRef}>
           <div className="row px-0 all-datasets-main mt-4 py-3 px-sm-3 container-fluid justify-content-around">
-            {allDatasets.length > 0 ? (
-              allDatasets.map((item, key) => (
+            {isPageLoading ? (
+              <div className="d-flex justify-content-center"><ClipLoader color="#4250ff"/></div>
+            ) : filteredDatasets.length > 0 ? (
+              filteredDatasets.map((item, key) => (
                 <div
                   className="col-xxl-3 col-md-5 col-sm-7 col-11 mx-1 mb-5 all-datasets-component"
                   index={key}
@@ -277,7 +360,11 @@ function DatasetDashboard() {
                     <div className="all-dataset-title">{item.title}</div>
                     <div className="all-dataset-desc">{item.description}</div>
                     <div className="all-dataset-badge">
-                      {item.isPublic ? "Free" : "Paid"}
+                      {item.isPublic
+                        ? "Free"
+                        : item.isForSale
+                        ? "Paid"
+                        : "Private"}
                     </div>
                     <div
                       className="all-dataset-btn"

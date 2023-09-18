@@ -5,10 +5,14 @@ import csvfile from "../../dummyData/data.csv";
 import xlsxFile from "../../dummyData/excelData.xlsx";
 import jsonFile from "../../dummyData/jsonData.json";
 import * as XLSX from "xlsx";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { datasetInstance } from "../Contract";
 import { ethers } from "ethers";
-import { useAccount } from 'wagmi';
+import lighthouse from "@lighthouse-web3/sdk";
+import { useAccount } from "wagmi";
+import { PulseLoader } from "react-spinners";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function SingleDataset() {
   // const [csvData, setCSVData] = useState([]);
@@ -18,17 +22,21 @@ function SingleDataset() {
   const location = useLocation();
   console.log(location.state.data);
   const dataset = location.state ? location.state.data : "";
+  const [btnloading, setbtnloading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // fetchCSVData();
+    fetchCSVData();
     // fetchXLSXData();
-    fetchJSONData();
+    // fetchJSONData();
     // console.log("Datasets: ", datasets);
   }, []);
 
   const fetchCSVData = async () => {
     try {
-      const response = await axios.get(csvfile);
+      const response = await axios.get(
+        `https://gateway.lighthouse.storage/ipfs/${dataset.uploadDemoDataset}`
+      );
       const csvData = response.data;
 
       const rows = csvData.split("\n");
@@ -93,7 +101,10 @@ function SingleDataset() {
 
   const handleDownload = async () => {
     try {
-      const response = await axios.get("https://gateway.lighthouse.storage/ipfs/Qmaa7XcGPZ163kee7QDU8uxUDTdB2aq5KwyyRyStnKCQNS", { responseType: "blob" });
+      const response = await axios.get(
+        `https://gateway.lighthouse.storage/ipfs/${dataset.uploadDataset}`,
+        { responseType: "blob" }
+      );
       console.log(response);
 
       const blob = new Blob([response.data], {
@@ -101,10 +112,10 @@ function SingleDataset() {
       });
 
       // Get the content-type header from the response
-      const contentTypeHeader = response.headers['content-type'];
+      const contentTypeHeader = response.headers["content-type"];
 
       // Extract the file extension from the content-type header
-      const fileExtension = contentTypeHeader.split('/').pop();
+      const fileExtension = contentTypeHeader.split("/").pop();
 
       const blobURL = URL.createObjectURL(blob);
 
@@ -122,6 +133,108 @@ function SingleDataset() {
       console.error("Error downloading file:", error);
     }
   };
+
+  const handleBuyDataset = async () => {
+    try {
+      toast.info("Process is in Progress", {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setbtnloading(true);
+
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        if (!provider) {
+          console.log("Metamask is not installed, please install!");
+        }
+        const con = await datasetInstance();
+        console.log("Hello");
+        console.log("Dataset Id: ", parseInt(dataset[11]._hex, 16));
+        console.log("Price of Dataset: ", parseInt(dataset[2]._hex, 16));
+        const price = parseInt(dataset[2]._hex, 16);
+        console.log("Ether value: ", ethers.utils.parseEther(price.toString()));
+        // console.log("Hi");
+        const tx = await con.purchaseDataset(parseInt(dataset[11]._hex, 16), {
+          value: ethers.utils.parseEther(price.toString()),
+        });
+
+        console.log(tx);
+        await tx.wait();
+        setbtnloading(false);
+
+        const status = await con.getPurchaseStatus(
+          parseInt(dataset[11]._hex, 16)
+        );
+        console.log("Purchase status: ", status);
+        console.log(`https://files.lighthouse.storage/viewFile/${dataset[4]}`);
+        // navigate("/user-dashboard");
+      }
+    } catch (e) {
+      console.log("Error in buying dataset: ", e);
+    }
+  };
+
+  const encryptionSignature = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    const messageRequested = (await lighthouse.getAuthMessage(address)).data
+      .message;
+    const signedMessage = await signer.signMessage(messageRequested);
+    return {
+      signedMessage: signedMessage,
+      publicKey: address,
+    };
+  };
+
+  const decryptDataset = async () => {
+    const cid = "QmZuLfSuSVW5BhqgjeXENyGn49Qwj5NsXiJ1zWRSjhY2ga"; //replace with your IPFS CID
+    const { publicKey, signedMessage } = await encryptionSignature();
+    /*
+      fetchEncryptionKey(cid, publicKey, signedMessage)
+        Parameters:
+          CID: CID of the file to decrypt
+          publicKey: public key of the user who has access to file or owner
+          signedMessage: message signed by the owner of publicKey
+    */
+    const keyObject = await lighthouse.fetchEncryptionKey(
+      cid,
+      publicKey,
+      signedMessage
+    );
+
+    // Decrypt file
+    /*
+      decryptFile(cid, key, mimeType)
+        Parameters:
+          CID: CID of the file to decrypt
+          key: the key to decrypt the file
+          mimeType: default null, mime type of file
+    */
+
+    const fileType = "image/csv";
+    const decrypted = await lighthouse.decryptFile(
+      cid,
+      keyObject.data.key,
+      fileType
+    );
+    console.log("Decryption: ",decrypted);
+  };
+
+  // useEffect(async() => {
+  //     const cid = "QmZuLfSuSVW5BhqgjeXENyGn49Qwj5NsXiJ1zWRSjhY2ga"; // Replace with your file's CID
+  //     const response = await lighthouse.getAccessConditions(cid);
+
+  //     // Print the access conditions
+  //     console.log("File Access conditions: ",response);
+  // })
 
   return (
     <div className="d-flex flex-md-row flex-column">
@@ -172,6 +285,7 @@ function SingleDataset() {
               type="submit"
               className="py-2 px-5 btn single-dataset-download"
               onClick={handleDownload}
+              disabled={dataset[10]}
             >
               Download
             </button>
@@ -179,15 +293,19 @@ function SingleDataset() {
           <div className="pt-sm-4 pt-2 px-md-5 single-dataset-content">
             <div className="py-3">
               <div className="single-dataset-details-head">Category</div>
-              <div className="single-dataset-details-value">Value</div>
+              <div className="single-dataset-details-value">{dataset[7]}</div>
             </div>
-            <div className="py-3">
+            {/* <div className="py-3">
               <div className="single-dataset-details-head">Attributes</div>
               <div className="single-dataset-details-value">Value</div>
-            </div>
+            </div> */}
             <div className="py-3">
-              <div className="single-dataset-details-head">Price Per Data</div>
-              <div className="single-dataset-details-value">{parseInt(dataset[2]._hex, 16)}</div>
+              <div className="single-dataset-details-head">
+                Price Of Dataset
+              </div>
+              <div className="single-dataset-details-value">
+                {parseInt(dataset[2]._hex, 16)}
+              </div>
             </div>
             <div className="py-3">
               <div className="single-dataset-details-head">
@@ -203,10 +321,22 @@ function SingleDataset() {
               <button
                 type="submit"
                 className="btn rounded-pill my-2 py-sm-3 px-sm-5 dataset-buy-btn"
+                disabled={!dataset[10]}
+                onClick={handleBuyDataset}
               >
-                Buy Now
+                {btnloading ? (
+                  <>
+                    <PulseLoader color="#fff" size={12} />
+                  </>
+                ) : (
+                  <>Buy Now</>
+                )}
               </button>
             </div>
+            {/* <div>
+              <button onClick={decryptDataset}>Decrypt Dataset</button>
+            </div> */}
+            <ToastContainer />
           </div>
         </div>
       </div>

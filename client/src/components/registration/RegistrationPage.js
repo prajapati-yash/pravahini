@@ -11,9 +11,13 @@ import occupation from "../../assets/registration/occupation.png";
 import organization from "../../assets/registration/organization.png";
 import location from "../../assets/registration/location.png";
 import registerImg from "../../assets/registration/registration-bg.png";
+import { PulseLoader } from "react-spinners";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function RegistrationPage() {
   const navigate = useNavigate();
+  const [btnloading, setbtnloading] = useState(false);
 
   const [formData, setFormData] = useState({
     userName: "",
@@ -35,7 +39,7 @@ function RegistrationPage() {
 
     if (selectedFile) {
       setFormData({ ...formData, userImage: selectedFile });
-      setSelectedFileName(selectedFile.name); 
+      setSelectedFileName(selectedFile.name);
     }
   };
 
@@ -67,6 +71,18 @@ function RegistrationPage() {
 
   const createUserAccount = async () => {
     try {
+      toast.info("Process is in Progress", {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setbtnloading(true);
+
       console.log("Form data: ", formData);
       const cid = await uploadImage();
       console.log("cid: ", cid);
@@ -89,6 +105,7 @@ function RegistrationPage() {
 
         console.log(tx);
         await tx.wait();
+        setbtnloading(false);
         navigate("/user-dashboard");
       }
     } catch (e) {
@@ -231,9 +248,16 @@ function RegistrationPage() {
               className="btn rounded-pill my-2 py-sm-2 px-sm-5 px-4 register-btn"
               onClick={createUserAccount}
             >
-              Register
+              {btnloading ? (
+                <>
+                  <PulseLoader color="#fff" size={12} />
+                </>
+              ) : (
+                <>Register</>
+              )}
             </button>
           </div>
+          <ToastContainer />
         </div>
       </div>
     </div>
