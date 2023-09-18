@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAccount } from "wagmi";
 import backendUrl from '../../config.js';
+import Cookies from "js-cookie";
 
 function VisualizationComputationDetails() {
   const { address } = useAccount();
@@ -11,6 +12,12 @@ function VisualizationComputationDetails() {
   const [showButton, setShowButton] = useState(true);
   const [btnloadingArray, setBtnLoadingArray] = useState(Array(userJobs.length).fill(false));
   const [cidbtnloadingArray, setCidBtnLoadingArray] = useState(Array(userJobs.length).fill(false));
+  const token = Cookies.get('jwtToken');
+  const tokenHeaders = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   
 
   const handleCheckJobStatus = (jobId, index) => {
@@ -18,16 +25,16 @@ function VisualizationComputationDetails() {
     const newBtnLoadingArray = [...btnloadingArray];
     newBtnLoadingArray[index] = true;
     setBtnLoadingArray(newBtnLoadingArray);
-    const apiURL = `${backendUrl}/container2/get-job-status/${jobId}`;
+    const apiURL = `${process.env.REACT_APP_BACKEND_URL}/container2/get-job-status/${jobId}`;
 
     axios
-      .get(apiURL)
+      .get(apiURL, tokenHeaders)
       .then((response) => {
         const { state } = response.data;
         setJobStatus(state);
 
         // Update the job status in the database
-        const updateJobStatusUrl = `${backendUrl}/container2/update-job-status`;
+        const updateJobStatusUrl = `${process.env.REACT_APP_BACKEND_URL}/container2/update-job-status`;
         const jobData = {
           walletAddress: address,
           jobId: jobId,
@@ -35,7 +42,7 @@ function VisualizationComputationDetails() {
         };
 
         axios
-          .post(updateJobStatusUrl, jobData)
+          .post(updateJobStatusUrl, jobData, tokenHeaders)
           .then((updateResponse) => {
             console.log(
               "Job status updated in the database:"
@@ -63,16 +70,16 @@ function VisualizationComputationDetails() {
       newCidBtnLoadingArray[index] = true;
       setCidBtnLoadingArray(newCidBtnLoadingArray);
       console.log("Getting CID of this Job Id!")
-    const apiURL = `${backendUrl}/container2/get-cid/:${jobId}`;
+    const apiURL = `${process.env.REACT_APP_BACKEND_URL}/container2/get-cid/:${jobId}`;
 
     axios
-    .get(apiURL)
+    .get(apiURL, tokenHeaders)
     .then((response) =>{
       const { cid } = response.data;
       setCid(cid);
       setShowButton(false);
       try{
-      const updateJobUrl = `${backendUrl}/container2/update-cid`;
+      const updateJobUrl = `${process.env.REACT_APP_BACKEND_URL}/container2/update-cid`;
       const jobData = {
         walletAddress: address, 
         jobId: jobId,
@@ -82,7 +89,7 @@ function VisualizationComputationDetails() {
       // Post request to save the data in the database
 
       axios
-        .post(updateJobUrl, jobData)
+        .post(updateJobUrl, jobData, tokenHeaders)
         .then((saveResponse) => {
           console.log("Job details updated:");
         })
@@ -102,7 +109,7 @@ function VisualizationComputationDetails() {
 
   const handleDeleteJob = (jobId) => {
     axios
-      .delete(`${backendUrl}/container2/delete-job/${jobId}`)
+      .delete(`${process.env.REACT_APP_BACKEND_URL}/container2/delete-job/${jobId}`, tokenHeaders)
       .then((response) => {
         console.log("Deletion Started");
         // Remove the deleted job from the userJobs array
@@ -118,7 +125,7 @@ function VisualizationComputationDetails() {
   useEffect(() => {
     if (address) {
       axios
-        .get(`${backendUrl}/container2/user-jobs?walletAddress=${address}`)
+        .get(`${process.env.REACT_APP_BACKEND_URL}/container2/user-jobs?walletAddress=${address}`, tokenHeaders)
         .then((response) => {
           const userJobs = response.data;
           setUserJobs(userJobs);
@@ -132,7 +139,7 @@ function VisualizationComputationDetails() {
   const fetchUserJobs = async () => {
     try {
       const response = await axios.get(
-        `${backendUrl}/container2/user-jobs?walletAddress=${address}`
+        `${process.env.REACT_APP_BACKEND_URL}/container2/user-jobs?walletAddress=${address}`
       );
       const userJobs = response.data;
       setUserJobs(userJobs);

@@ -16,6 +16,7 @@ import {
 } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+// import SignMessage from "./components/efficiency/SignMessage";
 
 const BTTChain = {
   id: 1029,

@@ -8,11 +8,61 @@ import search from "../../assets/home/search.png";
 import security from "../../assets/home/security.png";
 import link from "../../assets/home/link.png";
 import unioncopy from "../../assets/home/union-copy.png";
-import { Navigate, useNavigate } from "react-router-dom";
-
+import { useAccount } from 'wagmi';
+import { useNavigate } from 'react-router-dom';
+import { authorizationInstance } from '../Contract';
+import { ethers } from 'ethers';
+import {
+    useConnectModal,
+    useAccountModal,
+    useChainModal,
+} from '@rainbow-me/rainbowkit';
 function HomeHero() {
   const navigate = useNavigate();
   const [isShaking, setShaking] = useState(false);
+
+  const { address } = useAccount();
+    const { openConnectModal } = useConnectModal();
+
+    const verifyUserAccount = async () => {
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                if (!provider) {
+                    console.log("Metamask is not installed, please install!");
+                }
+                const con = await authorizationInstance();
+                const verifyTx = await con.isCompaniesAddMapping(address)
+                // result = verifyTx
+                console.log(verifyTx)
+                // console.log(con);
+                return verifyTx;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+    const SignupWithWallet = async () => {
+        if (address) {
+            const test = await verifyUserAccount();
+            console.log(test)
+            if (test) {
+                navigate("/user-dashboard")
+                window.location.reload();
+            }
+            else {
+                navigate("/register")
+            }
+        }
+        else {
+            openConnectModal();
+        }
+    };
+
   useEffect(() => {
     const interval = setInterval(() => {
       setShaking(!isShaking);
@@ -47,7 +97,7 @@ function HomeHero() {
         <div className="get-started-container justify-content-center">
           <div
             className="hero-button ps-3 d-flex align-items-center "
-            onClick={() => navigate("/user-dashboard")}
+            onClick={() => SignupWithWallet()}
             style={startBtnStyle}
           >
             <span className="py-3 hero-button-text ">Get Started</span>
