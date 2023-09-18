@@ -124,26 +124,26 @@ function EfficientComputationDetails() {
   };
 
   
-  useEffect(() => {
+  // useEffect(() => {
    
-    if (address) {
-      axios
-        .get(`${process.env.REACT_APP_BACKEND_URL}/container1/user-jobs?walletAddress=${address}`, tokenHeaders)
-        .then((response) => {
-          const userJobs = response.data;
-          setUserJobs(userJobs);
+  //   if (address) {
+  //     axios
+  //       .get(`${process.env.REACT_APP_BACKEND_URL}/container1/user-jobs?walletAddress=${address}`)
+  //       .then((response) => {
+  //         const userJobs = response.data;
+  //         setUserJobs(userJobs);
 
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  }, [address]);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //       });
+  //   }
+  // }, [address]);
 
   const fetchUserJobs = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/container1/user-jobs?walletAddress=${address}`
+        `${process.env.REACT_APP_BACKEND_URL}/container1/user-jobs?walletAddress=${address}`, tokenHeaders
       );
       const userJobs = response.data;
       setUserJobs(userJobs);

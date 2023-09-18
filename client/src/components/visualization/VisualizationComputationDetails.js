@@ -122,24 +122,10 @@ function VisualizationComputationDetails() {
       });
   };
 
-  useEffect(() => {
-    if (address) {
-      axios
-        .get(`${process.env.REACT_APP_BACKEND_URL}/container2/user-jobs?walletAddress=${address}`, tokenHeaders)
-        .then((response) => {
-          const userJobs = response.data;
-          setUserJobs(userJobs);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  }, [address]);
-
   const fetchUserJobs = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/container2/user-jobs?walletAddress=${address}`
+        `${process.env.REACT_APP_BACKEND_URL}/container2/user-jobs?walletAddress=${address}`, tokenHeaders
       );
       const userJobs = response.data;
       setUserJobs(userJobs);
@@ -155,7 +141,7 @@ function VisualizationComputationDetails() {
   const pollForUpdates = async () => {
     while (true) {
       await fetchUserJobs();
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
   };
 
