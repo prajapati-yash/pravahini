@@ -29,12 +29,13 @@ app.use(
   expressJwt({
     secret: JWT_SECRET_KEY,
     algorithms: ["HS256"],
-  }).unless({ path: ["/de-computation"] })
+  }).unless({ path: ["/", "/de-computation"] })
 );
 
 app.post("/de-computation", async (req, res) => {
   try{
   const { address, signature } = req.body;
+  console.log("Signature ", signature);
   const recoveredAddress = await ethers.utils.verifyMessage(MSG_TO_SIGN, signature);
   if (recoveredAddress == address) {
     const payload = {
@@ -50,8 +51,6 @@ app.post("/de-computation", async (req, res) => {
   }
 });
 
-
-
 // Error handling middleware for invalid tokens
 app.use((err, req, res, next) => {
   if (err.name === "UnauthorizedError") {
@@ -64,13 +63,16 @@ app.use((err, req, res, next) => {
 
 const container1Router = require("./routes/container1Routes");
 const container2Router = require("./routes/container2Routes");
-const { accessSync } = require('fs');
+
 
 
 app.use('/container1', container1Router);
 app.use('/container2', container2Router);
+// app.use('/',(req,res)=>{
+//   res.send('Welcome to our Pravahini DAPP!')
+// })
 app.get('/', (req, res) => {
-  res.send('Welcome to our Node.js application!');
+  res.send('Welcome to our Pravahini DAPP!');
 });
 
 
@@ -78,5 +80,5 @@ app.listen(5500, () => {
     console.log(`Server is running on 5500`);
   }).on('error', (error) => {
     console.error('Error starting the server:', error);
-  });
+});
   
