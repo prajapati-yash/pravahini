@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import ComputationAbout from "../components/computation/ComputationAbout";
 import ComputationDetails from "../components/computation/ComputationDetails";
 import Navbar from "../components/navbar/Navbar";
@@ -13,8 +14,9 @@ import "../styles/computation/ComputationPopup.css";
 function Computation() {
   const { address } = useAccount();
   const [signature, setSignature] = useState("");
-  const [isPopupVisible, setPopupVisible] = useState(true);
+  const [isPopupVisible, setPopupVisible] = useState(false); // Initialize to true to always show initially
   const popupRef = useRef(null);
+  const location = useLocation();
 
   const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_URL,
@@ -38,6 +40,7 @@ function Computation() {
         });
         const token = res.data.jwtToken;
         Cookies.set("jwtToken", token, { expires: 1 });
+        setPopupVisible(false)
       } else {
         console.error("No Ethereum wallet detected");
       }
@@ -45,6 +48,7 @@ function Computation() {
       console.error("Error signing the message:", error);
     }
   };
+
   useEffect(() => {
     const prevAddress = Cookies.get("prevAddress");
     if (!prevAddress) {
@@ -71,6 +75,17 @@ function Computation() {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [isPopupVisible]);
+
+  useEffect(() => {
+    if (location.pathname === "/de-computation") {
+      const jwtToken = Cookies.get('jwtToken');
+      if (!jwtToken) {
+        setPopupVisible(true);
+      }
+    } else {
+      setPopupVisible(false);
+    }
+  }, [location]);
 
   const hidePopup = () => {
     setPopupVisible(false);
@@ -112,14 +127,13 @@ function Computation() {
                 <hr />
                 <button
                   className="popup-btn"
-                  // style={{ border: "2px solid black" }}
                   onClick={() => signMessage()}
                 >
                   Click ME to sign in for performing the computation
                 </button>
               </div>
             </div>
-          )}
+          )} 
         </div>
       </div>
       <Footer />
