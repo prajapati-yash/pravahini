@@ -205,8 +205,8 @@ function CreateDataset() {
               comparator: "==",
               value: "1",
             },
-            parameters: [":datasetId"],
-            inputArrayType: ["uint256"],
+            parameters: [":datasetId", ":userAddress"],
+            inputArrayType: ["uint256", "address"],
             outputType: "uint256",
           },
         ];
@@ -327,6 +327,16 @@ function CreateDataset() {
       }
     } catch (e) {
       setbtnloading(false);
+      toast.info(e.reason, {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       console.log("Error in creating a dataset: ", e);
     }
   };

@@ -200,10 +200,10 @@ function CreateModel() {
           createModel.modelTitle,
           createModel.modelDescription,
           createModel.modelCategory,
+          createModel.modelPrice,
           license,
           model,
           document,
-          createModel.modelPrice,
           isPublic,
           isPrivate,
           isForSale
@@ -215,6 +215,17 @@ function CreateModel() {
         navigate("/model-marketplace");
       }
     } catch (e) {
+      setbtnloading(false);
+      toast.info(e.reason, {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       console.log("Error in creating a dataset: ", e);
     }
   };
@@ -296,16 +307,19 @@ function CreateModel() {
                   <option value="" disabled>
                     Select Category
                   </option>
-                  <option value="1" className="model-dropdown">
+                  <option value="Drugs and Medicine" className="model-dropdown">
                     Drugs and Medicine
                   </option>
-                  <option value="2" className="model-dropdown">
+                  <option value="Education" className="model-dropdown">
                     Education
                   </option>
-                  <option value="3" className="model-dropdown">
+                  <option value="Earth and Nature" className="model-dropdown">
                     Earth and Nature
                   </option>
-                  <option value="4" className="model-dropdown">
+                  <option
+                    value="Science and Technology"
+                    className="model-dropdown"
+                  >
                     Science and Technology
                   </option>
                 </select>

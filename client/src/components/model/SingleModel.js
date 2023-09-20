@@ -9,6 +9,9 @@ import { useLocation } from "react-router-dom";
 import { modelInstance } from "../Contract";
 import { ethers } from "ethers";
 import { useAccount } from "wagmi";
+import { PulseLoader } from "react-spinners";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function SingleModel() {
   const { address } = useAccount();
@@ -16,6 +19,7 @@ function SingleModel() {
   console.log(location.state.data);
   const model = location.state ? location.state.data : "";
   const [documentData, setDocumentData] = useState(null);
+  const [btnloading, setbtnloading] = useState(false);
 
   const handleDownload = async () => {
     try {
@@ -64,6 +68,81 @@ function SingleModel() {
   //     });
   // }, []);
 
+  const handleBuyModel = async () => {
+    try {
+      toast.info("Process is in Progress", {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setbtnloading(true);
+
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        if (!provider) {
+          console.log("Metamask is not installed, please install!");
+        }
+        const con = await modelInstance();
+        console.log("Hello");
+        console.log("model Id: ", parseInt(model[11]._hex, 16));
+        console.log("Price of model: ", parseInt(model[2]._hex, 16));
+        const price = parseInt(model[2]._hex, 16);
+        console.log("Ether value: ", ethers.utils.parseEther(price.toString()));
+        console.log("Hi");
+        const tx = await con.purchaseModel(parseInt(model[11]._hex, 16), {
+          value: ethers.utils.parseEther(price.toString()),
+        });
+
+        console.log(tx);
+        await tx.wait();
+        setbtnloading(false);
+
+        const status = await con.getPurchaseStatus(
+          parseInt(model[11]._hex, 16)
+        );
+        console.log("Purchase status: ", status);
+        // const cid = dataset[4];
+
+        // const { publicKey, signedMessage } = await encryptionSignature();
+        // const keyObject = await lighthouse.fetchEncryptionKey(
+        //   cid,
+        //   publicKey,
+        //   signedMessage
+        // );
+
+        // const fileType = "text/csv";
+        // const decrypted = await lighthouse.decryptFile(
+        //   cid,
+        //   keyObject.data.key,
+        //   fileType
+        // );
+        // console.log("Decryption: ", decrypted);
+
+        // console.log(`https://files.lighthouse.storage/viewFile/${dataset[4]}`);
+        // navigate("/user-dashboard");
+      }
+    } catch (e) {
+      setbtnloading(false);
+      toast.info(e.reason, {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      console.log("Error in buying dataset: ", e.reason);
+    }
+  };
+
   return (
     <div className="d-flex flex-md-row flex-column">
       <div className="py-3 col-md-7 col-lg-8">
@@ -89,6 +168,7 @@ function SingleModel() {
               type="submit"
               className="py-2 px-5 btn single-model-download"
               onClick={handleDownload}
+              disabled={model[10]}
             >
               Download
             </button>
@@ -113,7 +193,7 @@ function SingleModel() {
               <div className="single-model-details-value">Value</div>
             </div>
             <div className="py-2">
-              <div className="single-model-details-head">Final Cost</div>
+              <div className="single-model-details-head">Price of Model</div>
               <div className="single-model-details-value">
                 {parseInt(model[3]._hex, 16)}
               </div>
@@ -122,10 +202,19 @@ function SingleModel() {
               <button
                 type="submit"
                 className="btn rounded-pill my-2 py-sm-3 px-sm-5 model-buy-btn"
+                disabled={!model[10]}
+                onClick={handleBuyModel}
               >
-                Buy Now
+                {btnloading ? (
+                  <>
+                    <PulseLoader color="#fff" size={12} />
+                  </>
+                ) : (
+                  <>Buy Now</>
+                )}
               </button>
             </div>
+            <ToastContainer />
           </div>
         </div>
       </div>

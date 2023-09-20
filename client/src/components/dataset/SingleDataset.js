@@ -13,6 +13,7 @@ import { useAccount } from "wagmi";
 import { PulseLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { recoverShards, recoverKey } from "@lighthouse-web3/kavach";
 
 function SingleDataset() {
   // const [csvData, setCSVData] = useState([]);
@@ -134,6 +135,19 @@ function SingleDataset() {
     }
   };
 
+  const encryptionSignature = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    const messageRequested = (await lighthouse.getAuthMessage(address)).data
+      .message;
+    const signedMessage = await signer.signMessage(messageRequested);
+    return {
+      signedMessage: signedMessage,
+      publicKey: address,
+    };
+  };
+
   const handleBuyDataset = async () => {
     try {
       toast.info("Process is in Progress", {
@@ -160,7 +174,7 @@ function SingleDataset() {
         console.log("Price of Dataset: ", parseInt(dataset[2]._hex, 16));
         const price = parseInt(dataset[2]._hex, 16);
         console.log("Ether value: ", ethers.utils.parseEther(price.toString()));
-        // console.log("Hi");
+        console.log("Hi");
         const tx = await con.purchaseDataset(parseInt(dataset[11]._hex, 16), {
           value: ethers.utils.parseEther(price.toString()),
         });
@@ -170,71 +184,64 @@ function SingleDataset() {
         setbtnloading(false);
 
         const status = await con.getPurchaseStatus(
-          parseInt(dataset[11]._hex, 16)
+          parseInt(dataset[11]._hex, 16),
+          address
         );
         console.log("Purchase status: ", status);
-        console.log(`https://files.lighthouse.storage/viewFile/${dataset[4]}`);
+        const cid = dataset[4];
+
+        const { publicKey, signedMessage } = await encryptionSignature();
+        // const keyObject = await lighthouse.fetchEncryptionKey(
+        //   cid,
+        //   publicKey,
+        //   signedMessage
+        // );
+        const { error, shards } = await recoverShards(
+          publicKey,
+          cid,
+          signedMessage,
+          3,
+          { "1.datasetId": parseInt(dataset[11]._hex, 16).toString() }
+        );
+
+        const { masterKey: recoveredKey } = await recoverKey(shards);
+
+        const fileType = "text/csv";
+        const dataset_file = await lighthouse.decryptFile(
+          cid,
+          recoveredKey,
+          fileType
+        );
+
+        console.log("Decrypted file", dataset_file);
+
+        const url = window.URL.createObjectURL(dataset_file);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "downloaded_file";
+        a.click();
+        window.URL.revokeObjectURL(url);
+
+        console.log("Decryption: ", dataset_file);
+
+        // console.log(`https://files.lighthouse.storage/viewFile/${dataset[4]}`);
         // navigate("/user-dashboard");
       }
     } catch (e) {
-      console.log("Error in buying dataset: ", e);
+      setbtnloading(false);
+      toast.info(e.reason, {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      console.log("Error in buying dataset: ", e.reason);
     }
   };
-
-  const encryptionSignature = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const address = await signer.getAddress();
-    const messageRequested = (await lighthouse.getAuthMessage(address)).data
-      .message;
-    const signedMessage = await signer.signMessage(messageRequested);
-    return {
-      signedMessage: signedMessage,
-      publicKey: address,
-    };
-  };
-
-  const decryptDataset = async () => {
-    const cid = "QmZuLfSuSVW5BhqgjeXENyGn49Qwj5NsXiJ1zWRSjhY2ga"; //replace with your IPFS CID
-    const { publicKey, signedMessage } = await encryptionSignature();
-    /*
-      fetchEncryptionKey(cid, publicKey, signedMessage)
-        Parameters:
-          CID: CID of the file to decrypt
-          publicKey: public key of the user who has access to file or owner
-          signedMessage: message signed by the owner of publicKey
-    */
-    const keyObject = await lighthouse.fetchEncryptionKey(
-      cid,
-      publicKey,
-      signedMessage
-    );
-
-    // Decrypt file
-    /*
-      decryptFile(cid, key, mimeType)
-        Parameters:
-          CID: CID of the file to decrypt
-          key: the key to decrypt the file
-          mimeType: default null, mime type of file
-    */
-
-    const fileType = "image/csv";
-    const decrypted = await lighthouse.decryptFile(
-      cid,
-      keyObject.data.key,
-      fileType
-    );
-    console.log("Decryption: ",decrypted);
-  };
-
-  // useEffect(async() => {
-  //     const cid = "QmZuLfSuSVW5BhqgjeXENyGn49Qwj5NsXiJ1zWRSjhY2ga"; // Replace with your file's CID
-  //     const response = await lighthouse.getAccessConditions(cid);
-
-  //     // Print the access conditions
-  //     console.log("File Access conditions: ",response);
-  // })
 
   return (
     <div className="d-flex flex-md-row flex-column">
@@ -333,9 +340,6 @@ function SingleDataset() {
                 )}
               </button>
             </div>
-            {/* <div>
-              <button onClick={decryptDataset}>Decrypt Dataset</button>
-            </div> */}
             <ToastContainer />
           </div>
         </div>
