@@ -7,6 +7,7 @@ const dockerImage = process.env.CONTAINER_1_DOCKER_IMAGE;
 const timeout = process.env.TIMEOUT;
 const waitTimeout = process.env.WAIT_TIMEOUT_SECS;
 
+
 router.post("/save-job", async (req, res) => {
     const { walletAddress, jobId, cid, timeStamp, jobStatus } = req.body;
   
@@ -146,6 +147,7 @@ router.delete('/delete-job/:jobId', async(req, res) =>{
   })
 
   router.post('/execute', (req, res) => {
+    try{
     const { notebookUrl, inputs } = req.body;
     const notebookFileName = getFileNameFromUrl(notebookUrl);
     const outputFileName = generateOutputFileName(notebookUrl);  
@@ -153,7 +155,11 @@ router.delete('/delete-job/:jobId', async(req, res) =>{
     const jobCommand = `bacalhau docker run --wait=false --id-only --timeout ${timeout} --wait-timeout-secs ${waitTimeout} -w /inputs -i src=${notebookUrl},dst=/inputs/notebook/ ${inputArgs} ${dockerImage} -- jupyter nbconvert --execute --to notebook --output /outputs/${outputFileName} /inputs/notebook/${notebookFileName}`;
     const jobExecution = spawnSync('bash', ['-c', jobCommand]);
     const jobId = jobExecution.stdout.toString().trim();    
-    res.json({jobId})
+    res.status(200).json({jobId})
+    }catch(error){
+      res.status(400).json({error: error.message})
+      console.log(error)
+    }
   });
   
   function getFileNameFromUrl(url) {

@@ -127,12 +127,12 @@ function Navbar() {
                     onClick={showCreateDropDown}
                   >
                     <div className={`d-flex py-1`}>
-                      <a href="/dataset/create-dataset" className="link-style">
+                      <a href="/dataset-marketplace/create-dataset" className="link-style">
                         Create Dataset
                       </a>
                     </div>
                     <div className={`d-flex py-1`}>
-                      <a href="/model/create-model" className="link-style">
+                      <a href="/model-marketplace/create-model" className="link-style">
                         Create Model
                       </a>
                     </div>
@@ -199,7 +199,7 @@ function Navbar() {
                   Model Marketplace
                 </NavLink>
               </li>
-              <li className="nav-item py-2 d-lg-none">
+              {/* <li className="nav-item py-2 d-lg-none">
                 <NavLink
                   className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
                   to="/user-dashboard"
@@ -218,7 +218,7 @@ function Navbar() {
                   />
                   Code
                 </NavLink>
-              </li>
+              </li> */}
               <li className="nav-item py-2 d-lg-none">
                 <NavLink
                   className="nav-link navbar-content px-1 p-0 d-flex align-items-center"

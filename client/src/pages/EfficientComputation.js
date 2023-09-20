@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import EfficientAbout from "../components/efficiency/EfficientAbout";
 import EfficientCompute from "../components/efficiency/EfficientCompute";
 import EfficientComputationDetails from "../components/efficiency/EfficientComputationDetails";
@@ -7,6 +7,7 @@ import Sidebar from "../components/sidebar/Sidebar";
 import Footer from "../components/footer/Footer";
 
 function EfficientComputation() {
+ 
   return (
     <div style={{ background: "linear-gradient(to right, #E9F1FF, #B5D2FE)" }}>
       <Navbar />

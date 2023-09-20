@@ -1,5 +1,16 @@
 [
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_authorizationAddress",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -31,6 +42,19 @@
     "type": "event"
   },
   {
+    "inputs": [],
+    "name": "auth",
+    "outputs": [
+      {
+        "internalType": "contract UserAuthorization",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "string",
@@ -48,6 +72,11 @@
         "type": "string"
       },
       {
+        "internalType": "uint256",
+        "name": "_modelPrice",
+        "type": "uint256"
+      },
+      {
         "internalType": "string",
         "name": "_uploadLicense",
         "type": "string"
@@ -61,11 +90,6 @@
         "internalType": "string",
         "name": "_uploadUsageDocumentation",
         "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_modelPrice",
-        "type": "uint256"
       },
       {
         "internalType": "bool",
@@ -143,6 +167,11 @@
             "internalType": "bool",
             "name": "isForSale",
             "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "modelId",
+            "type": "uint256"
           }
         ],
         "internalType": "struct ModelMarketplace.Model[]",
@@ -208,6 +237,11 @@
             "internalType": "bool",
             "name": "isForSale",
             "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "modelId",
+            "type": "uint256"
           }
         ],
         "internalType": "struct ModelMarketplace.Model[]",
@@ -273,6 +307,11 @@
             "internalType": "bool",
             "name": "isForSale",
             "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "modelId",
+            "type": "uint256"
           }
         ],
         "internalType": "struct ModelMarketplace.Model[]",
@@ -286,63 +325,17 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_address",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "modelId",
+        "type": "uint256"
       }
     ],
-    "name": "getUser",
+    "name": "getPurchaseStatus",
     "outputs": [
       {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "name",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "occupation",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "organization",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "location",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "image",
-            "type": "string"
-          }
-        ],
-        "internalType": "struct UserRegisteration.User",
+        "internalType": "uint256",
         "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "isRegistered",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -401,39 +394,6 @@
       }
     ],
     "name": "setModelPublic",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "_name",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_occupation",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_organization",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_location",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_image",
-        "type": "string"
-      }
-    ],
-    "name": "setUser",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

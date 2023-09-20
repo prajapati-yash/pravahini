@@ -37,7 +37,7 @@
             "type": "string"
           }
         ],
-        "internalType": "struct UserRegisteration.User",
+        "internalType": "struct UserAuthorization.User",
         "name": "",
         "type": "tuple"
       }

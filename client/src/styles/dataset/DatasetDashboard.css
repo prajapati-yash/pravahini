@@ -63,10 +63,12 @@
   100% {
     transform: rotate(0deg);
   }
-  20%, 60%{
+  20%,
+  60% {
     transform: rotate(5deg);
   }
-  40%, 80% {
+  40%,
+  80% {
     transform: rotate(-5deg);
   }
 }
@@ -77,8 +79,8 @@
 }
 
 .dataset-dropdown-container img:hover {
-    cursor: pointer;
-  }
+  cursor: pointer;
+}
 
 .dataset-search-bar {
   width: 100%;
@@ -141,15 +143,14 @@
   color: #4250ff;
 }
 
-.dropdown-menu{
+.dropdown-menu {
   border: 1px solid #4250ff !important;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.dropdown-item:hover{
+.dropdown-item:hover {
   background-color: #6a79ff !important;
   color: white;
-
 }
 
 /* Dataset Component css */
@@ -175,6 +176,7 @@
 
 .all-dataset-img {
   width: 60%;
+  padding-top: 1rem;
 }
 
 .all-dataset-details {
@@ -191,6 +193,10 @@
   font-size: 1.1rem;
   font-weight: 400;
   color: #535353;
+  overflow: hidden;
+  display: -webkit-box; 
+  -webkit-line-clamp: 3; 
+  -webkit-box-orient: vertical;
 }
 
 .all-dataset-badge {
@@ -211,13 +217,11 @@
     width: 70%;
   }
 
-
   .dataset-dropdown-container {
     margin-left: 88%;
   }
 
-
-  .dropdown-menu.show{
+  .dropdown-menu.show {
     max-height: 200px;
   }
 }
@@ -249,7 +253,6 @@
     font-size: 1.9rem;
   }
 
-
   .dash-create-dataset-btn {
     font-size: 1.1rem;
   }
@@ -266,7 +269,7 @@
     width: 2.3rem;
   }
 
-  .dataset-dropdown-container{
+  .dataset-dropdown-container {
     margin-left: 83%;
   }
 }
@@ -292,7 +295,7 @@
     margin-left: 80%;
   }
 
-  .dataset-dropdown-container img{
+  .dataset-dropdown-container img {
     width: 2.1rem;
   }
 
@@ -330,7 +333,7 @@
     width: 100%;
   }
 
-  .dataset-dropdown-container{
+  .dataset-dropdown-container {
     margin-left: 75%;
   }
 
@@ -357,7 +360,6 @@
   .all-dataset-desc {
     font-size: 0.8rem;
   }
-
 
   .all-dataset-badge {
     font-size: 0.8rem;

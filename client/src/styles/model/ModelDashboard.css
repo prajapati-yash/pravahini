@@ -180,6 +180,10 @@
   font-size: 1.1rem;
   font-weight: 400;
   color: #535353;
+  overflow: hidden;
+  display: -webkit-box; 
+  -webkit-line-clamp: 5; 
+  -webkit-box-orient: vertical;
 }
 
 .all-model-badge {
