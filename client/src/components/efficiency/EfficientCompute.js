@@ -3,7 +3,6 @@ import hero from "../../assets/computation/efficient2.png";
 import add from "../../assets/computation/add.png";
 import "../../styles/efficiency/EfficientCompute.css";
 import axios from "axios";
-import backendUrl from '../../config.js';
 import { useAccount } from "wagmi";
 import Cookies from "js-cookie";
 
