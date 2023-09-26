@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAccount } from "wagmi";
-import backendUrl from '../../config.js';
 import Cookies from "js-cookie";
 
 function VisualizationComputationDetails() {
