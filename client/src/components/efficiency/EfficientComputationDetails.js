@@ -1,5 +1,4 @@
 import React,{useState, useEffect} from "react";
-import backendUrl from "../../config";
 import axios from "axios";
 import { useAccount } from "wagmi";
 import Cookies from "js-cookie";

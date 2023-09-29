@@ -3,7 +3,6 @@ import "../../styles/visualization/VisualizationCompute.css";
 import hero from "../../assets/computation/visualization2.png";
 import add from "../../assets/computation/add.png";
 import axios from "axios";
-import backendUrl from '../../config.js';
 import { useAccount } from "wagmi";
 import Cookies from "js-cookie";
 
