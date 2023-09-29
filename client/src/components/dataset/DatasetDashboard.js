@@ -6,7 +6,7 @@ import img1 from "../../assets/home/security.png";
 import "../../styles/dataset/DatasetDashboard.css";
 import { ethers } from "ethers";
 import { datasetInstance } from "../Contract";
-import {ClipLoader} from "react-spinners";
+import { ClipLoader } from "react-spinners";
 
 function DatasetDashboard() {
   const [activeComponent, setActiveComponent] = useState("allDatasets");
@@ -32,7 +32,7 @@ function DatasetDashboard() {
 
   const handlePaidDatasetClick = (e) => {
     e.preventDefault();
-    setActiveComponent("allDatasets");
+    setActiveComponent("paidDatasets");
 
     const filtered = allDatasets.filter((dataset) => {
       return dataset.isForSale;
@@ -50,7 +50,7 @@ function DatasetDashboard() {
 
   const handlePublicDatasetClick = (e) => {
     e.preventDefault();
-    setActiveComponent("allDatasets");
+    setActiveComponent("publicDatasets");
 
     const filtered = allDatasets.filter((dataset) => {
       return dataset.isPublic;
@@ -201,14 +201,26 @@ function DatasetDashboard() {
                   className="dropdown-menu"
                   aria-labelledby="dropdownMenuButton"
                 >
-                  <a className="dropdown-item" onClick={handleAllDatasetClick}>
+                  <a
+                    className={`dropdown-item ${
+                      activeComponent === "allDatasets" ? "active-button" : ""
+                    }`}
+                    onClick={handleAllDatasetClick}
+                  >
                     All
                   </a>
-                  <a className="dropdown-item" onClick={handlePaidDatasetClick}>
+                  <a
+                    className={`dropdown-item ${
+                      activeComponent === "paidDatasets" ? "active-button" : ""
+                    }`}
+                    onClick={handlePaidDatasetClick}
+                  >
                     Paid
                   </a>
                   <a
-                    className="dropdown-item"
+                    className={`dropdown-item ${
+                      activeComponent === "publicDatasets" ? "active-button" : ""
+                    }`}
                     onClick={handlePublicDatasetClick}
                   >
                     Free
@@ -343,7 +355,9 @@ function DatasetDashboard() {
         <div ref={datasetDivRef}>
           <div className="row px-0 all-datasets-main mt-4 py-3 px-sm-3 container-fluid justify-content-around">
             {isPageLoading ? (
-              <div className="d-flex justify-content-center"><ClipLoader color="#4250ff"/></div>
+              <div className="d-flex justify-content-center">
+                <ClipLoader color="#4250ff" />
+              </div>
             ) : filteredDatasets.length > 0 ? (
               filteredDatasets.map((item, key) => (
                 <div

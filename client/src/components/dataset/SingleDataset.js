@@ -135,6 +135,41 @@ function SingleDataset() {
     }
   };
 
+  const handleLicenseDownload = async () => {
+    try {
+      const response = await axios.get(
+        `https://gateway.lighthouse.storage/ipfs/${dataset.uploadLicense}`,
+        { responseType: "blob" }
+      );
+      console.log(response);
+
+      const blob = new Blob([response.data], {
+        type: "application/octet-stream",
+      });
+
+      // Get the content-type header from the response
+      const contentTypeHeader = response.headers["content-type"];
+
+      // Extract the file extension from the content-type header
+      const fileExtension = contentTypeHeader.split("/").pop();
+
+      const blobURL = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = blobURL;
+      link.download = `encrypted.${fileExtension}`;
+      link.style.display = "none";
+
+      document.body.appendChild(link);
+      link.click();
+
+      URL.revokeObjectURL(blobURL);
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
+
   const encryptionSignature = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
@@ -191,11 +226,7 @@ function SingleDataset() {
         const cid = dataset[4];
 
         const { publicKey, signedMessage } = await encryptionSignature();
-        // const keyObject = await lighthouse.fetchEncryptionKey(
-        //   cid,
-        //   publicKey,
-        //   signedMessage
-        // );
+
         const { error, shards } = await recoverShards(
           publicKey,
           cid,
@@ -287,16 +318,21 @@ function SingleDataset() {
       </div>
       <div className="col-md-5 col-lg-4">
         <div className="py-5 single-dataset-details">
-          <div className="py-sm-5 py-4">
-            <button
-              type="submit"
-              className="py-2 px-5 btn single-dataset-download"
-              onClick={handleDownload}
-              disabled={dataset[10]}
-            >
-              Download
-            </button>
-          </div>
+          {dataset.isPublic || dataset.isPrivate ? (
+            <div className="py-sm-5 py-4">
+              <button
+                type="submit"
+                className="py-2 px-5 btn single-dataset-download"
+                onClick={handleDownload}
+                disabled={dataset[10]}
+              >
+                Download
+              </button>
+            </div>
+          ) : (
+            ""
+          )}
+
           <div className="pt-sm-4 pt-2 px-md-5 single-dataset-content">
             <div className="py-3">
               <div className="single-dataset-details-head">Category</div>
@@ -314,32 +350,37 @@ function SingleDataset() {
                 {parseInt(dataset[2]._hex, 16)}
               </div>
             </div>
+
             <div className="py-3">
-              <div className="single-dataset-details-head">
-                No.of Data Records
-              </div>
-              <div className="single-dataset-details-value">Value</div>
-            </div>
-            <div className="py-2">
-              <div className="single-dataset-details-head">Final Cost</div>
-              <div className="single-dataset-details-value">Value</div>
-            </div>
-            <div className="py-4">
               <button
                 type="submit"
-                className="btn rounded-pill my-2 py-sm-3 px-sm-5 dataset-buy-btn"
-                disabled={!dataset[10]}
-                onClick={handleBuyDataset}
+                className="px-5 btn single-dataset-license"
+                onClick={handleLicenseDownload}
               >
-                {btnloading ? (
-                  <>
-                    <PulseLoader color="#fff" size={12} />
-                  </>
-                ) : (
-                  <>Buy Now</>
-                )}
+                License
               </button>
             </div>
+            {dataset.isForSale ? (
+              <div className="py-4">
+                <button
+                  type="submit"
+                  className="btn rounded-pill my-2 py-sm-3 px-sm-5 dataset-buy-btn"
+                  disabled={!dataset[10]}
+                  onClick={handleBuyDataset}
+                >
+                  {btnloading ? (
+                    <>
+                      <PulseLoader color="#fff" size={12} />
+                    </>
+                  ) : (
+                    <>Buy Now</>
+                  )}
+                </button>
+              </div>
+            ) : (
+              ""
+            )}
+
             <ToastContainer />
           </div>
         </div>

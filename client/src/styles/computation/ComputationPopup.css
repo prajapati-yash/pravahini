@@ -1,11 +1,12 @@
 .computation-popup-div {
   position: absolute;
   top: 200px;
-  /* left: 40%; */
+  left: 40%;
   background-color: white;
   padding: 2rem;
   border-radius: 2.5rem;
   filter: blur(0px);
+  border: 1px solid black;
 }
 
 .popup-btn {
@@ -22,26 +23,26 @@
 }
 
 @media only screen and (max-width: 1200px) {
-    .computation-popup-div{
-        left: 35%;
-    }
+  .computation-popup-div {
+    left: 35%;
+  }
 }
 
 @media only screen and (max-width: 992px) {
-    .computation-popup-div{
-        left: 22%;
-    }
+  .computation-popup-div {
+    left: 22%;
+  }
 }
 
 @media only screen and (max-width: 768px) {
-    .computation-popup-div{
-        left: 14%;
-    }
+  .computation-popup-div {
+    left: 14%;
+  }
 }
 
 @media only screen and (max-width: 576px) {
-    .computation-popup-div{
-        left: 10%;
-        width: 80%;
-    }
+  .computation-popup-div {
+    left: 10%;
+    width: 80%;
+  }
 }

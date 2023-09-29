@@ -1,66 +1,84 @@
-.single-model-heading-container{
-  background-color: #FFFFFF87;
+.single-model-heading-container {
+  background-color: #ffffff87;
   border-radius: 1.2rem;
   border: 2px solid white;
 }
 
-.single-model-head{
+.single-model-head {
   font-size: 2rem;
   font-weight: 600;
-  color: #4250FF;
+  color: #4250ff;
 }
 
-.single-model-subhead{
+.single-model-subhead {
   font-size: 1.2rem;
   font-weight: 400;
   text-align: left;
 }
 
-.single-model-table{
+.single-model-table {
   padding: 2rem 4rem;
 }
 
-.model-table-head{
-  background-color: #4250FF;
+.model-table-head {
+  background-color: #4250ff;
   color: white;
   border-radius: 1rem;
 }
 
-.model-table-body{
+.model-table-body {
   background-color: white;
   color: #000000;
 }
 
-.single-model-details{
-  background: linear-gradient(to right, #6A79FF, #4250FF);
+.single-model-details {
+  background: linear-gradient(to right, #6a79ff, #4250ff);
   border-top-left-radius: 6rem;
   border-bottom-left-radius: 6rem;
 }
 
-.single-model-download{
+.single-model-download {
   background-color: white;
-  color: #4250FF;
+  color: #4250ff;
   font-size: 1.3rem;
   font-weight: 600;
   border-radius: 0.5rem;
 }
 
-.single-model-download:hover{
-  color: #4250FF;
+.single-model-download:hover {
+  color: #4250ff;
   box-shadow: -4px 4px 8px 4px rgba(58, 57, 57, 0.4);
 }
 
-.single-model-details-head{
+.single-model-documents {
+  display: flex;
+  font-size: 1.2rem;
+  padding-bottom: 0.8rem;
+}
+
+.single-model-document-btn {
+  background-color: #4250ff;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+}
+
+.single-model-document-btn:hover {
+  color: #fff;
+  transform: scale(1);
+}
+
+.single-model-details-head {
   padding-bottom: 0.3rem;
   color: white;
   font-size: 1.2rem;
   font-weight: 400;
-
 }
 
-.single-model-details-value{
+.single-model-details-value {
   /* width: 90%; */
-  background: linear-gradient(to right, #FFFFFF48, #FFFFFF78);
+  background: linear-gradient(to right, #ffffff48, #ffffff78);
   border-radius: 0.4rem;
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
@@ -68,73 +86,72 @@
   font-size: 1rem;
 }
 
-.model-buy-btn{
+.model-buy-btn {
   background-color: #000000;
-  color: #FFB800;
+  color: #ffb800;
   font-size: 1.2rem;
   font-weight: 600;
   cursor: pointer;
 }
 
-.model-buy-btn:hover{
+.model-buy-btn:hover {
   color: white;
   box-shadow: 4px 2px 4px 2px rgba(0, 0, 0, 0.2);
 }
 
-@media only screen and (max-width: 767px){
-  .single-model-details{
+@media only screen and (max-width: 767px) {
+  .single-model-details {
     border-top-right-radius: 6rem;
     border-bottom-left-radius: 0rem;
   }
 
-  .single-model-content{
+  .single-model-content {
     padding-left: 8rem;
     padding-right: 8rem;
   }
 }
 
-@media only screen and (max-width: 576px){
-  .single-model-table{
+@media only screen and (max-width: 576px) {
+  .single-model-table {
     padding: 2rem 3rem;
   }
 
-  .single-model-content{
+  .single-model-content {
     padding-left: 6rem;
     padding-right: 6rem;
   }
-  .model-buy-btn{
+  .model-buy-btn {
     padding: 0.8rem 2rem;
   }
 }
 
-@media only screen and (max-width: 470px){
-  .single-model-details{
+@media only screen and (max-width: 470px) {
+  .single-model-details {
     border-top-right-radius: 5rem;
     border-top-left-radius: 5rem;
   }
-  .single-model-content{
+  .single-model-content {
     padding-left: 4rem;
     padding-right: 4rem;
   }
 }
 
-@media only screen and (max-width: 375px){
-  .single-model-table{
+@media only screen and (max-width: 375px) {
+  .single-model-table {
     padding: 0.5rem 1.5rem;
   }
-  
-  .single-model-details{
+
+  .single-model-details {
     border-top-right-radius: 4rem;
     border-top-left-radius: 4rem;
-  }  
+  }
 
-  .single-model-download{
+  .single-model-download {
     font-size: 1.2rem;
   }
 
-  .single-model-content{
+  .single-model-content {
     padding-left: 2rem;
     padding-right: 2rem;
   }
-
 }

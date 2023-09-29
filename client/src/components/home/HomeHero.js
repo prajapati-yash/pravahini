@@ -76,10 +76,7 @@ function HomeHero() {
         <div>
           <p className="hero-text">Welcome to Pravahini (प्रवाहिनी)</p>
           <p className="hero-sub-text ">
-            Here you can find the datasets for your ML Models, buy the ML
-            Models, you can sell your datasets and ML Models, you can write code
-            on our platform and create a ML Model and perform the Decentralized
-            Computation of your ML Models.
+          Discover and access datasets for your machine learning models, purchase pre-trained ML models, list your own datasets and ML models for sale, and harness decentralized computing for your machine learning tasks.
           </p>
         </div>
 

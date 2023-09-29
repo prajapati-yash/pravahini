@@ -1,14 +1,14 @@
 //SPDX-License-Identifier:MIT
 pragma solidity ^0.8.0;
-
 import "./UserAuthorization.sol";
 
-contract ModelMarketplace is UserAuthorization{
+contract ModelMarketplace{
 
     struct Model{
         string title;
         string description;
         string category;
+        string keywords;
         uint256 modelPrice;
         string uploadLicense;
         string uploadModel;
@@ -16,7 +16,17 @@ contract ModelMarketplace is UserAuthorization{
         bool isPublic;
         bool isPrivate;
         bool isForSale;
+        uint256 modelId;
+    }
 
+    UserAuthorization public auth;
+    constructor(address _authorizationAddress){
+        auth = UserAuthorization(_authorizationAddress);
+    } 
+
+    modifier onlyAuthorized() {
+        require(auth.isRegistered(msg.sender), "User is not Registered!");
+        _;
     }
 
     // Function to create Model
@@ -33,32 +43,37 @@ contract ModelMarketplace is UserAuthorization{
     // Mapping of Address with the datasetId 
     mapping(address => uint256[]) private userModelSubscriptions;
 
+    // Mapping of purchased model with specific model Id and user address 
+    mapping (address => mapping(uint256 => bool)) private purchaseMapping;
 
     function createModel(
         string memory _title,
         string memory _description,
         string memory _category,
+        string memory _keywords,
+        uint256 _modelPrice,
         string memory _uploadLicense,
         string memory _uploadModel,
         string memory _uploadUsageDocumentation,
-        uint256 _modelPrice,
         bool _isPublic,
         bool _isPrivate,
         bool _isForSale 
-    ) public onlyAuthorized{
+    ) public onlyAuthorized(){
         uint256 modelId = nextModelId;
 
         models[modelId] = Model(
             _title,
             _description,
             _category,
+            _keywords,
             _modelPrice,
             _uploadLicense,
             _uploadModel,
             _uploadUsageDocumentation,
             _isPublic,
             _isPrivate,
-            _isForSale
+            _isForSale,
+            modelId
         );
 
         // Set the modelOwner as the creator of the Model
@@ -112,18 +127,35 @@ contract ModelMarketplace is UserAuthorization{
 
     function  purchaseModel(uint256 modelId) public payable onlyAuthorized{
         Model storage model = models[modelId];
-        require(model.isForSale,"Model is not for Sale");
-        require(msg.value  >= model.modelPrice, "Insufficient Amount");
+        require(model.isForSale,"Model is not for Sale");   
+        
 
          // Transfer payment to the Model owner
         address ownerAddress = modelOwners[modelId];
         require(ownerAddress != msg.sender,"You are the owner of this Model, so you can't buy this model.");
+        require(msg.value  >= model.modelPrice, "Insufficient Amount");
+
+         // Check if the user has already bought this dataset
+        uint256[] storage userSubscribedModels = userModelSubscriptions[msg.sender];
+        for (uint256 i = 0; i < userSubscribedModels.length; i++) {
+            require(userSubscribedModels[i] != modelId, "You have already bought this dataset.");
+        }
+        
         payable(ownerAddress).transfer(msg.value);
+        purchaseMapping[msg.sender][modelId]=true;
 
         userModelSubscriptions[msg.sender].push(modelId);
 
         // Emit an event to indicate the dataset purchase
         emit ModelPurchased(modelId, msg.sender, ownerAddress, msg.value);
+    }
+
+    function getPurchaseStatus(uint256 modelId, address userAddress) public view returns (uint256) {
+        if(purchaseMapping[userAddress][modelId]){
+            return 1;
+        } else{
+            return 0;
+        }
     }
 
     function getAllModels() public view returns(Model[] memory){
@@ -141,7 +173,6 @@ contract ModelMarketplace is UserAuthorization{
             allModels[i] =  models[userModels[i]];
         }
         return allModels;
-
     }
 
     function getAllModelsSubscriptionOfUser() public view returns(Model[] memory){
@@ -150,10 +181,6 @@ contract ModelMarketplace is UserAuthorization{
         for(uint256 i = 0;i<userSubscriptionModels.length; i++){
             allModels[i] = models[userSubscriptionModels[i]]; 
         }
-
         return allModels;
-
     }
-
-
 }
