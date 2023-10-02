@@ -122,22 +122,6 @@ function EfficientComputationDetails() {
       });
   };
 
-  
-  // useEffect(() => {
-   
-  //   if (address) {
-  //     axios
-  //       .get(`${process.env.REACT_APP_BACKEND_URL}/container1/user-jobs?walletAddress=${address}`)
-  //       .then((response) => {
-  //         const userJobs = response.data;
-  //         setUserJobs(userJobs);
-
-  //       })
-  //       .catch((error) => {
-  //         console.error(error);
-  //       });
-  //   }
-  // }, [address]);
 
   const fetchUserJobs = async () => {
     try {
