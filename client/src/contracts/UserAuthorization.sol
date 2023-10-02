@@ -1,3 +1,4 @@
+
 //SPDX-License-Identifier:MIT
 pragma solidity ^0.8.0;
 
@@ -43,11 +44,5 @@ contract UserAuthorization{
     // Function to retrieve user information based on the given address
     function getUser(address _address) public view returns (User memory) {
         return registeredUserMapping[_address];
-    }
-
-    // Modifier to check whether user is Authorized or not
-    modifier onlyAuthorized() {
-        require(isRegistered[msg.sender], "User is not Registered!");
-        _;
     }
 }

@@ -11,8 +11,6 @@ import dataset1 from "../../assets/sidebar/dataset-black.png";
 import dataset2 from "../../assets/sidebar/dataset-white.png";
 import model1 from "../../assets/sidebar/model-black.png";
 import model2 from "../../assets/sidebar/model-white.png";
-import code1 from "../../assets/sidebar/code-black.png";
-import code2 from "../../assets/sidebar/code-white.png";
 import computation1 from "../../assets/sidebar/computation-black.png";
 import computation2 from "../../assets/sidebar/computation-white.png";
 import { ConnectButton } from "@rainbow-me/rainbowkit";

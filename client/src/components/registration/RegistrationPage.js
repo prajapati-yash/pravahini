@@ -51,7 +51,7 @@ function RegistrationPage() {
 
   const uploadImage = async () => {
     try {
-      console.log("API Key",process.env.REACT_APP_LIGHTHOUSE_API_KEY)
+      console.log("API Key", process.env.REACT_APP_LIGHTHOUSE_API_KEY);
       const fileInput = document.querySelector('input[type="file"]');
       console.log("File: ", fileInput.files);
 
@@ -61,7 +61,7 @@ function RegistrationPage() {
         false,
         progressCallback
       );
-      
+
       console.log("File Status:", output);
       return output.data.Hash;
     } catch (e) {
@@ -146,7 +146,10 @@ function RegistrationPage() {
               <div className="d-flex col-6 col-xl-4 register-input-text-component">
                 <img className="col-2 register-input-img" src={name} />
                 <div className="col-lg-5 col-xl-4 px-sm-4 px-3 register-input-text">
-                  Name*
+                  Name
+                  <span style={{ color: "#FFB800", fontSize: "1.2rem" }}>
+                    *
+                  </span>
                 </div>
               </div>
               <div className="d-flex col-6 register-input-field">
@@ -173,6 +176,9 @@ function RegistrationPage() {
                 <img className="col-2 register-input-img" src={occupation} />
                 <div className="col-lg-5 col-xl-4 px-sm-4 px-3 register-input-text">
                   Occupation
+                  <span style={{ color: "#FFB800", fontSize: "1.2rem" }}>
+                    *
+                  </span>
                 </div>
               </div>
               <div className="d-flex col-6 register-input-field">
@@ -198,6 +204,9 @@ function RegistrationPage() {
                 <img className="col-2 register-input-img" src={organization} />
                 <div className="col-lg-5 col-xl-4 px-sm-4 px-3 register-input-text">
                   Organization
+                  <span style={{ color: "#FFB800", fontSize: "1.2rem" }}>
+                    *
+                  </span>
                 </div>
               </div>
               <div className="d-flex col-6 register-input-field">
@@ -223,6 +232,9 @@ function RegistrationPage() {
                 <img className="col-2 register-input-img" src={location} />
                 <div className="col-lg-5 col-xl-4 px-sm-4 px-3 register-input-text">
                   Location
+                  <span style={{ color: "#FFB800", fontSize: "1.2rem" }}>
+                    *
+                  </span>
                 </div>
               </div>
               <div className="d-flex col-6 register-input-field">

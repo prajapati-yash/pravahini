@@ -101,7 +101,7 @@ function UserDetails() {
         <div className="col-md-4 d-flex align-items-center justify-content-center">
           <img
             src={"https://gateway.lighthouse.storage/ipfs/" + img}
-            alt= "logo"
+            alt="logo"
             className="dash-image"
           />
         </div>
@@ -110,8 +110,8 @@ function UserDetails() {
             Welcome, <span>{userName}</span>
           </div>
           <div className="platform-content">
-            This Platform evaluation and sharing of datasets as well as ML
-            Models.
+            Pravahini facilitates the assessment and sharing of datasets and ML
+            models while also enabling decentralized computing capabilities.
           </div>
           <div className="pt-2">
             <div className="d-flex py-1 details-content">

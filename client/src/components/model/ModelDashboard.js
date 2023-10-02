@@ -25,7 +25,7 @@ function ModelDashboard() {
 
   const handlePaidModelClick = (e) => {
     e.preventDefault();
-    setActiveComponent("allModels");
+    setActiveComponent("paidModels");
 
     const filtered = allModels.filter((model) => {
       return model.isForSale;
@@ -36,7 +36,7 @@ function ModelDashboard() {
 
   const handlePublicModelClick = (e) => {
     e.preventDefault();
-    setActiveComponent("allModels");
+    setActiveComponent("publicModels");
 
     const filtered = allModels.filter((model) => {
       return model.isPublic;
@@ -179,13 +179,28 @@ function ModelDashboard() {
                   className="dropdown-menu"
                   aria-labelledby="dropdownMenuButton"
                 >
-                  <a className="dropdown-item" onClick={handleAllModelClick}>
+                  <a
+                    className={`dropdown-item ${
+                      activeComponent === "allModels" ? "active-button" : ""
+                    }`}
+                    onClick={handleAllModelClick}
+                  >
                     All
                   </a>
-                  <a className="dropdown-item" onClick={handlePaidModelClick}>
+                  <a
+                    className={`dropdown-item ${
+                      activeComponent === "paidModels" ? "active-button" : ""
+                    }`}
+                    onClick={handlePaidModelClick}
+                  >
                     Paid
                   </a>
-                  <a className="dropdown-item" onClick={handlePublicModelClick}>
+                  <a
+                    className={`dropdown-item ${
+                      activeComponent === "publicModels" ? "active-button" : ""
+                    }`}
+                    onClick={handlePublicModelClick}
+                  >
                     Free
                   </a>
                 </div>

@@ -5,7 +5,7 @@ import Navbar from "../navbar/Navbar";
 import Sidebar from "../sidebar/Sidebar";
 import Footer from "../footer/Footer";
 import { ethers } from "ethers";
-import { modelInstance } from "../Contract";
+import { MODEL_ADDRESS, modelInstance } from "../Contract";
 import lighthouse from "@lighthouse-web3/sdk";
 import { useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
@@ -119,6 +119,19 @@ function CreateModel() {
     }
   };
 
+  const encryptionSignature = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    const messageRequested = (await lighthouse.getAuthMessage(address)).data
+      .message;
+    const signedMessage = await signer.signMessage(messageRequested);
+    return {
+      signedMessage: signedMessage,
+      publicKey: address,
+    };
+  };
+
   const progressCallback = (progressData) => {
     let percentageDone =
       100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
@@ -132,12 +145,64 @@ function CreateModel() {
       const uploadDocument = document.getElementById("model-doc-file");
       // console.log("File: ", uploadImage.files);
 
-      const outputModel = await lighthouse.upload(
-        uploadModel.files,
-        process.env.REACT_APP_LIGHTHOUSE_API_KEY,
-        false,
-        progressCallback
-      );
+      console.log(isForSale);
+      let modelCid = "";
+
+      if (isForSale) {
+        console.log("Paid Dataset....");
+
+        const sig = await encryptionSignature();
+        const outputModel = await lighthouse.uploadEncrypted(
+          uploadModel.files,
+          process.env.REACT_APP_LIGHTHOUSE_API_KEY,
+          sig.publicKey,
+          sig.signedMessage,
+          null,
+          progressCallback
+        );
+
+        modelCid = outputModel.data[0].Hash;
+
+        // Conditions to add
+        const conditions = [
+          {
+            id: 1,
+            chain: "BTTC_Testnet",
+            method: "getPurchaseStatus",
+            standardContractType: "Custom",
+            contractAddress: MODEL_ADDRESS,
+            returnValueTest: {
+              comparator: "==",
+              value: "1",
+            },
+            parameters: [":modelId", ":userAddress"],
+            inputArrayType: ["uint256", "address"],
+            outputType: "uint256",
+          },
+        ];
+
+        const aggregator = "([1])";
+        const { publicKey, signedMessage } = await encryptionSignature();
+        const responseCondition = await lighthouse.applyAccessCondition(
+          publicKey,
+          modelCid,
+          signedMessage,
+          conditions,
+          aggregator
+        );
+
+        console.log(responseCondition);
+      } else {
+        console.log("Public Dataset....");
+
+        const outputModel = await lighthouse.upload(
+          uploadModel.files,
+          process.env.REACT_APP_LIGHTHOUSE_API_KEY,
+          false,
+          progressCallback
+        );
+        modelCid = outputModel.data.Hash;
+      }     
 
       const outputLicense = await lighthouse.upload(
         uploadLicense.files,
@@ -154,7 +219,7 @@ function CreateModel() {
       );
       // console.log("File Status:", output);
       return {
-        model: outputModel.data.Hash,
+        model: modelCid,
         license: outputLicense.data.Hash,
         document: outputDocument.data.Hash,
       };
@@ -200,6 +265,7 @@ function CreateModel() {
           createModel.modelTitle,
           createModel.modelDescription,
           createModel.modelCategory,
+          createModel.modelTags,
           createModel.modelPrice,
           license,
           model,

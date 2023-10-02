@@ -8,10 +8,12 @@ import * as XLSX from "xlsx";
 import { useLocation } from "react-router-dom";
 import { modelInstance } from "../Contract";
 import { ethers } from "ethers";
+import lighthouse from "@lighthouse-web3/sdk";
 import { useAccount } from "wagmi";
 import { PulseLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { recoverShards, recoverKey } from "@lighthouse-web3/kavach";
 
 function SingleModel() {
   const { address } = useAccount();
@@ -23,18 +25,27 @@ function SingleModel() {
 
   const handleDownload = async () => {
     try {
-      const response = await axios.get(xlsxFile, { responseType: "blob" });
+      const response = await axios.get(
+        `https://gateway.lighthouse.storage/ipfs/${model.uploadModel}`,
+        { responseType: "blob" }
+      );
       console.log(response);
 
       const blob = new Blob([response.data], {
         type: "application/octet-stream",
       });
 
+      // Get the content-type header from the response
+      const contentTypeHeader = response.headers["content-type"];
+
+      // Extract the file extension from the content-type header
+      const fileExtension = contentTypeHeader.split("/").pop();
+
       const blobURL = URL.createObjectURL(blob);
 
       const link = document.createElement("a");
       link.href = blobURL;
-      link.download = "file.xlsx";
+      link.download = `modelArchive.${fileExtension}`;
       link.style.display = "none";
 
       document.body.appendChild(link);
@@ -47,26 +58,88 @@ function SingleModel() {
     }
   };
 
-  // useEffect(() => {
-  //   // Replace with the actual URL of your Word document
-  //   const documentUrl = `https://gateway.lighthouse.storage/ipfs/${model.uploadUsageDocumentation}`;
+  const handleLicenseDownload = async () => {
+    try {
+      const response = await axios.get(
+        `https://gateway.lighthouse.storage/ipfs/${model.uploadLicense}`,
+        { responseType: "blob" }
+      );
+      console.log(response);
 
-  //   axios
-  //     .get(documentUrl, {
-  //       responseType: "arraybuffer", // Make sure to request the data as an array buffer
-  //     })
-  //     .then((response) => {
-  //       const data = new Blob([response.data], {
-  //         type: "application/octet-stream",
-  //       });
-  //       // console.log("Document data:--- ",data);
-  //       const url = URL.createObjectURL(data);
-  //       setDocumentData(url);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching Word document:", error);
-  //     });
-  // }, []);
+      const blob = new Blob([response.data], {
+        type: "application/octet-stream",
+      });
+
+      // Get the content-type header from the response
+      const contentTypeHeader = response.headers["content-type"];
+
+      // Extract the file extension from the content-type header
+      const fileExtension = contentTypeHeader.split("/").pop();
+
+      const blobURL = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = blobURL;
+      link.download = `licence.${fileExtension}`;
+      link.style.display = "none";
+
+      document.body.appendChild(link);
+      link.click();
+
+      URL.revokeObjectURL(blobURL);
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
+
+  const handleUsageDownload = async () => {
+    try {
+      const response = await axios.get(
+        `https://gateway.lighthouse.storage/ipfs/${model.uploadUsageDocumentation}`,
+        { responseType: "blob" }
+      );
+      console.log(response);
+
+      const blob = new Blob([response.data], {
+        type: "application/octet-stream",
+      });
+
+      // Get the content-type header from the response
+      const contentTypeHeader = response.headers["content-type"];
+
+      // Extract the file extension from the content-type header
+      const fileExtension = contentTypeHeader.split("/").pop();
+
+      const blobURL = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = blobURL;
+      link.download = `usageDoc.${fileExtension}`;
+      link.style.display = "none";
+
+      document.body.appendChild(link);
+      link.click();
+
+      URL.revokeObjectURL(blobURL);
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
+
+  const encryptionSignature = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    const messageRequested = (await lighthouse.getAuthMessage(address)).data
+      .message;
+    const signedMessage = await signer.signMessage(messageRequested);
+    return {
+      signedMessage: signedMessage,
+      publicKey: address,
+    };
+  };
 
   const handleBuyModel = async () => {
     try {
@@ -91,8 +164,8 @@ function SingleModel() {
         const con = await modelInstance();
         console.log("Hello");
         console.log("model Id: ", parseInt(model[11]._hex, 16));
-        console.log("Price of model: ", parseInt(model[2]._hex, 16));
-        const price = parseInt(model[2]._hex, 16);
+        console.log("Price of model: ", parseInt(model[4]._hex, 16));
+        const price = parseInt(model[4]._hex, 16);
         console.log("Ether value: ", ethers.utils.parseEther(price.toString()));
         console.log("Hi");
         const tx = await con.purchaseModel(parseInt(model[11]._hex, 16), {
@@ -107,25 +180,37 @@ function SingleModel() {
           parseInt(model[11]._hex, 16)
         );
         console.log("Purchase status: ", status);
-        // const cid = dataset[4];
+        const cid = model[6];
 
-        // const { publicKey, signedMessage } = await encryptionSignature();
-        // const keyObject = await lighthouse.fetchEncryptionKey(
-        //   cid,
-        //   publicKey,
-        //   signedMessage
-        // );
+        const { publicKey, signedMessage } = await encryptionSignature();
 
-        // const fileType = "text/csv";
-        // const decrypted = await lighthouse.decryptFile(
-        //   cid,
-        //   keyObject.data.key,
-        //   fileType
-        // );
-        // console.log("Decryption: ", decrypted);
+        const { error, shards } = await recoverShards(
+          publicKey,
+          cid,
+          signedMessage,
+          3,
+          { "1.modelId": parseInt(model[11]._hex, 16).toString() }
+        );
 
-        // console.log(`https://files.lighthouse.storage/viewFile/${dataset[4]}`);
-        // navigate("/user-dashboard");
+        const { masterKey: recoveredKey } = await recoverKey(shards);
+
+        const fileType = "text/csv";
+        const model_file = await lighthouse.decryptFile(
+          cid,
+          recoveredKey,
+          fileType
+        );
+
+        console.log("Decrypted file", model_file);
+
+        const url = window.URL.createObjectURL(model_file);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "downloaded_file";
+        a.click();
+        window.URL.revokeObjectURL(url);
+
+        console.log("Decryption: ", model_file);
       }
     } catch (e) {
       setbtnloading(false);
@@ -152,27 +237,50 @@ function SingleModel() {
             {model[1]}
           </div>
         </div>
-        <div className="">
-          {/* <iframe
-            src={`https://gateway.lighthouse.storage/ipfs/${model.uploadUsageDocumentation}`}
-            style={{ width: "100%", height: "500px" }}
-            frameBorder="0"
-            scrolling="no"
-          /> */}
+        <div className="mx-4">
+          <div className="py-3">
+            <div className="single-model-documents">Licence Agreement</div>
+            <div className="d-flex">
+              <button
+                type="submit"
+                className="py-2 px-5 btn single-model-document-btn"
+                onClick={handleLicenseDownload}
+              >
+                View
+              </button>
+            </div>
+          </div>
+          <div className="py-3">
+            <div className="single-model-documents">Usage Documentation</div>
+            <div className="d-flex">
+              <button
+                type="submit"
+                className="py-2 px-5 btn single-model-document-btn"
+                onClick={handleUsageDownload}
+              >
+                View
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <div className="col-md-5 col-lg-4">
         <div className="py-5 single-model-details">
-          <div className="py-sm-5 py-4">
-            <button
-              type="submit"
-              className="py-2 px-5 btn single-model-download"
-              onClick={handleDownload}
-              disabled={model[10]}
-            >
-              Download
-            </button>
-          </div>
+          {model.isPublic || model.isPrivate ? (
+            <div className="py-sm-5 py-4">
+              <button
+                type="submit"
+                className="py-2 px-5 btn single-model-download"
+                onClick={handleDownload}
+                disabled={model[10]}
+              >
+                Download
+              </button>
+            </div>
+          ) : (
+            ""
+          )}
+
           <div className="pt-sm-4 pt-2 px-md-5 single-model-content">
             <div className="py-3">
               <div className="single-model-details-head">Category</div>
@@ -180,40 +288,36 @@ function SingleModel() {
             </div>
             <div className="py-3">
               <div className="single-model-details-head">Tags/keywords</div>
-              <div className="single-model-details-value">Value</div>
+              <div className="single-model-details-value">{model[3]}</div>
             </div>
-            <div className="py-3">
-              <div className="single-model-details-head">Licence Agreement</div>
-              <div className="single-model-details-value">Value</div>
-            </div>
-            <div className="py-3">
-              <div className="single-model-details-head">
-                Usage Documentation
-              </div>
-              <div className="single-model-details-value">Value</div>
-            </div>
+
             <div className="py-2">
               <div className="single-model-details-head">Price of Model</div>
               <div className="single-model-details-value">
-                {parseInt(model[3]._hex, 16)}
+                {parseInt(model[4]._hex, 16)}
               </div>
             </div>
-            <div className="py-4">
-              <button
-                type="submit"
-                className="btn rounded-pill my-2 py-sm-3 px-sm-5 model-buy-btn"
-                disabled={!model[10]}
-                onClick={handleBuyModel}
-              >
-                {btnloading ? (
-                  <>
-                    <PulseLoader color="#fff" size={12} />
-                  </>
-                ) : (
-                  <>Buy Now</>
-                )}
-              </button>
-            </div>
+            {model.isForSale ? (
+              <div className="py-4">
+                <button
+                  type="submit"
+                  className="btn rounded-pill my-2 py-sm-3 px-sm-5 model-buy-btn"
+                  disabled={!model[10]}
+                  onClick={handleBuyModel}
+                >
+                  {btnloading ? (
+                    <>
+                      <PulseLoader color="#fff" size={12} />
+                    </>
+                  ) : (
+                    <>Buy Now</>
+                  )}
+                </button>
+              </div>
+            ) : (
+              ""
+            )}
+
             <ToastContainer />
           </div>
         </div>

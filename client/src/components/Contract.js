@@ -4,9 +4,9 @@ import datasetMarketplaceABI from "../contracts/artifacts/DatasetMarketplaceABI.
 import modelMarketplaceABI from "../contracts/artifacts/ModelMarketplaceABI.json";
 
 export const AUTHORIZATION_ADDRESS =
-  "0x23FA9127D04161Cd0Ca3366303506128Be8CD89D";
-export const DATASET_ADDRESS = "0x96B95aaAcfcC33B67831772B9b77dce355fd194a";
-export const MODEL_ADDRESS = "0x2972376f8042A96a421590D9a83A15F63bD9eAE1";
+  "0x0F5e3C75D595cCa37556fA3a4554FbFA45aF05fC";
+export const DATASET_ADDRESS = "0x24d6E3AFd3afE716045ebB1A1B24d93eeEE76291";
+export const MODEL_ADDRESS = "0x4DD52DFF6231ccb21e4CFa89f149524FDb5b9c36";
 
 export const authorizationInstance = async () => {
   const { ethereum } = window;

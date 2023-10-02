@@ -49,7 +49,7 @@
   }
 }
 
-.sidebar-content.active {
+.sidebar-content.activeStyle {
   background: linear-gradient(to right, #4250ff, #6a79ff);
   border-radius: 0.5rem;
   color: #ffffff;
@@ -96,7 +96,7 @@
   border-radius: 0.5rem;
 }
 
-.link-style.active {
+.link-style.activeStyle {
   color: white !important;
   background-color: #4250ff;
   border-radius: 0.5rem;

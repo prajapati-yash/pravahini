@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../styles/sidebar/Sidebar.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import create1 from "../../assets/sidebar/create-black.png";
 import create2 from "../../assets/sidebar/create-white.png";
 import dashboard1 from "../../assets/sidebar/dashboard-black.png";
@@ -9,14 +9,21 @@ import dataset1 from "../../assets/sidebar/dataset-black.png";
 import dataset2 from "../../assets/sidebar/dataset-white.png";
 import model1 from "../../assets/sidebar/model-black.png";
 import model2 from "../../assets/sidebar/model-white.png";
-import code1 from "../../assets/sidebar/code-black.png";
-import code2 from "../../assets/sidebar/code-white.png";
 import computation1 from "../../assets/sidebar/computation-black.png";
 import computation2 from "../../assets/sidebar/computation-white.png";
+import { authorizationInstance } from "../Contract";
+import { useAccount } from "wagmi";
+import { ethers } from "ethers";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 function Sidebar() {
   const [activeComponent, setActiveComponent] = useState("/");
   const [createDropDown, setCreateDropDown] = useState(false);
+  const navigate = useNavigate();
+  const { address } = useAccount();
+  const { openConnectModal } = useConnectModal();
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   const handleItemClick = (componentName) => {
     setActiveComponent(componentName);
@@ -26,6 +33,87 @@ function Sidebar() {
     setCreateDropDown(!createDropDown);
   };
 
+  const verifyUserAccount = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        if (!provider) {
+          console.log("Metamask is not installed, please install!");
+        }
+        const con = await authorizationInstance();
+        const verifyTx = await con.isRegistered(address);
+        // result = verifyTx
+        console.log(verifyTx);
+        // console.log(con);
+        return verifyTx;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDatasetClick = async () => {
+    if (address) {
+      const test = await verifyUserAccount();
+      console.log("Test", test);
+      if (test) {
+        navigate("/dataset-marketplace/create-dataset");
+      } else {
+        navigate("/register");
+      }
+    } else {
+      openConnectModal();
+    }
+  };
+
+  const handleModelClick = async () => {
+    if (address) {
+      const test = await verifyUserAccount();
+      console.log("Test", test);
+      if (test) {
+        navigate("/model-marketplace/create-model");
+      } else {
+        navigate("/register");
+      }
+    } else {
+      openConnectModal();
+    }
+  };
+
+
+  const handleDashboardClick = async () => {
+    // window.location.reload();
+    if (address) {
+      const test = await verifyUserAccount();
+      console.log("Test", test);
+      if (test) {
+        // window.location.reload();
+        navigate("/user-dashboard");
+        window.location.reload();
+      } else {
+        navigate("/register");
+      }
+    } else {
+      openConnectModal();
+    }
+  };
+
+  const handleCompClick = async () => {
+    if (address) {
+      const test = await verifyUserAccount();
+      console.log("Test", test);
+      if (test) {
+        navigate("/de-computation");
+      } else {
+        navigate("/register");
+      }
+    } else {
+      openConnectModal();
+    }
+  };
+
   return (
     <div className="sidebar pt-4 sidebar-container position-fixed">
       <div className="collapse show" id="sidebarContent">
@@ -33,13 +121,13 @@ function Sidebar() {
           <li
             className="nav-item dropdown-center py-2 sidebar-items"
             onClick={showCreateDropDown}
-
             style={{ cursor: "pointer" }}
-
           >
             <a
               className={`nav-link sidebar-content align-items-center ${
-                activeComponent === "create" && createDropDown ? "active" : ""
+                activeComponent === "create" && createDropDown
+                  ? "activeStyle"
+                  : ""
               }`}
               onClick={() => handleItemClick("create")}
             >
@@ -72,22 +160,20 @@ function Sidebar() {
                 onClick={showCreateDropDown}
               >
                 <div className={`d-flex py-1 submenu-div`}>
-
                   <a
-                    href="/dataset-marketplace/create-dataset"
+                    // href="/dataset-marketplace/create-dataset"
                     className="link-style"
+                    onClick={handleDatasetClick}
                   >
-
                     Create Dataset
                   </a>
                 </div>
                 <div className={`d-flex py-1 submenu-div`}>
-
                   <a
-                    href="/model-marketplace/create-model"
+                    // href="/model-marketplace/create-model"
                     className="link-style"
+                    onClick={handleModelClick}
                   >
-
                     Create Model
                   </a>
                 </div>
@@ -96,8 +182,12 @@ function Sidebar() {
           </li>
           <li className="nav-item py-2 sidebar-items">
             <NavLink
-              className="nav-link sidebar-content align-items-center"
-              to="/user-dashboard"
+              className={`nav-link sidebar-content align-items-center ${
+                currentPath.includes("/user-dashboard") ? "activeStyle" : ""
+              }`}
+              onClick={() => {
+                handleDashboardClick();
+              }}
             >
               <img
                 className="sidebar-image"
@@ -116,8 +206,13 @@ function Sidebar() {
           </li>
           <li className="nav-item py-2">
             <NavLink
-              className="nav-link sidebar-content align-items-center"
+              className={`nav-link sidebar-content align-items-center ${
+                currentPath.includes("/dataset-marketplace")
+                  ? "activeStyle"
+                  : ""
+              }`}
               to="/dataset-marketplace"
+              onClick={() => handleItemClick()}
             >
               <img
                 className="sidebar-image"
@@ -136,8 +231,11 @@ function Sidebar() {
           </li>
           <li className="nav-item py-2">
             <NavLink
-              className={`nav-link sidebar-content align-items-center `}
+              className={`nav-link sidebar-content align-items-center ${
+                currentPath.includes("/model-marketplace") ? "activeStyle" : ""
+              }`}
               to="/model-marketplace"
+              onClick={() => handleItemClick("model")}
             >
               <img
                 className="sidebar-image"
@@ -154,30 +252,12 @@ function Sidebar() {
               Model Marketplace
             </NavLink>
           </li>
-          {/* <li className="nav-item py-2">
-            <NavLink
-              className={`nav-link sidebar-content align-items-center`}
-              to="/user-dashboard"
-            >
-              <img
-                className="sidebar-image"
-                src={code1}
-                height={20}
-                width={20}
-              />
-              <img
-                className="sidebar-image-hover"
-                src={code2}
-                height={20}
-                width={20}
-              />
-              Code
-            </NavLink>
-          </li> */}
           <li className="nav-item py-2">
             <NavLink
-              className={`nav-link sidebar-content align-items-center`}
-              to="/de-computation"
+              className={`nav-link sidebar-content align-items-center ${
+                currentPath.includes("/de-computation") ? "activeStyle" : ""
+              }`}
+              onClick={handleCompClick}
             >
               <img
                 className="sidebar-image"
