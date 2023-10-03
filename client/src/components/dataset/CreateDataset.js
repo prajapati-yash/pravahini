@@ -284,16 +284,7 @@ function CreateDataset() {
       });
       setbtnloading(true);
 
-      console.log(isPublic);
-      console.log(isPrivate);
-      console.log(isForSale);
-
-      console.log("Create Dataset data: ", createDataset);
-
-      const { image,dataset, demoDataset, license } = await uploadData();
-      console.log("cid image: ", image);
-      console.log("cid dataset: ", demoDataset);
-      console.log("cid license: ", license);
+      const { image, dataset, demoDataset, license } = await uploadData();
 
       const { ethereum } = window;
       if (ethereum) {
@@ -315,9 +306,6 @@ function CreateDataset() {
           isPublic,
           isPrivate,
           isForSale
-          // {
-          //   gasLimit: 20000000,
-          // }
         );
 
         console.log(tx);
@@ -392,7 +380,7 @@ function CreateDataset() {
                   }}
                   required
                 /> */}
-                 <textarea
+                <textarea
                   type="text"
                   id="datasetDescription"
                   name="datasetDescription"
@@ -406,7 +394,9 @@ function CreateDataset() {
                     });
                   }}
                   required
-                >{createDataset.datasetDescription}</textarea>
+                >
+                  {createDataset.datasetDescription}
+                </textarea>
               </div>
             </div>
 

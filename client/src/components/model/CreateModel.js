@@ -1,9 +1,6 @@
 import React, { useState, useRef } from "react";
 import upload from "../../assets/registration/upload.png";
 import "../../styles/model/CreateModel.css";
-import Navbar from "../navbar/Navbar";
-import Sidebar from "../sidebar/Sidebar";
-import Footer from "../footer/Footer";
 import { ethers } from "ethers";
 import { MODEL_ADDRESS, modelInstance } from "../Contract";
 import lighthouse from "@lighthouse-web3/sdk";
@@ -143,9 +140,7 @@ function CreateModel() {
       const uploadModel = document.getElementById("upload-model-file");
       const uploadLicense = document.getElementById("model-license-file");
       const uploadDocument = document.getElementById("model-doc-file");
-      // console.log("File: ", uploadImage.files);
 
-      console.log(isForSale);
       let modelCid = "";
 
       if (isForSale) {
@@ -190,11 +185,7 @@ function CreateModel() {
           conditions,
           aggregator
         );
-
-        console.log(responseCondition);
       } else {
-        console.log("Public Dataset....");
-
         const outputModel = await lighthouse.upload(
           uploadModel.files,
           process.env.REACT_APP_LIGHTHOUSE_API_KEY,
@@ -202,7 +193,7 @@ function CreateModel() {
           progressCallback
         );
         modelCid = outputModel.data.Hash;
-      }     
+      }
 
       const outputLicense = await lighthouse.upload(
         uploadLicense.files,
@@ -217,7 +208,6 @@ function CreateModel() {
         false,
         progressCallback
       );
-      // console.log("File Status:", output);
       return {
         model: modelCid,
         license: outputLicense.data.Hash,

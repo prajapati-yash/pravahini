@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../styles/model/SingleModel.css";
 import axios from "axios";
-import csvfile from "../../dummyData/data.csv";
-import xlsxFile from "../../dummyData/excelData.xlsx";
-import jsonFile from "../../dummyData/jsonData.json";
-import * as XLSX from "xlsx";
 import { useLocation } from "react-router-dom";
 import { modelInstance } from "../Contract";
 import { ethers } from "ethers";
@@ -20,7 +16,6 @@ function SingleModel() {
   const location = useLocation();
   console.log(location.state.data);
   const model = location.state ? location.state.data : "";
-  const [documentData, setDocumentData] = useState(null);
   const [btnloading, setbtnloading] = useState(false);
 
   const handleDownload = async () => {

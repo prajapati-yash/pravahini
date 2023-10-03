@@ -8,9 +8,6 @@ import { datasetInstance } from "../Contract";
 import { ClipLoader } from "react-spinners";
 
 function UserDatasets() {
-  //   const [img, setImg] = useState();
-  const [userName, setUserName] = useState();
-  const [occupation, setOccupation] = useState();
   const navigate = useNavigate();
   const [allUserDatasets, setAllUserDatasets] = useState([]);
   const [isPageLoading, setIsPageLoading] = useState(true);

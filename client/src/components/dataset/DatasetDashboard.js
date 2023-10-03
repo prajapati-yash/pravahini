@@ -24,8 +24,8 @@ function DatasetDashboard() {
 
     if (datasetDivRef.current) {
       datasetDivRef.current.scrollIntoView({
-        behavior: "smooth", // You can change this to "auto" if you prefer instant scrolling
-        block: "start", // Scroll to the start of the section
+        behavior: "smooth", 
+        block: "start",
       });
     }
   };
@@ -39,13 +39,6 @@ function DatasetDashboard() {
     });
 
     setFilteredDatasets(filtered);
-
-    if (datasetDivRef.current) {
-      datasetDivRef.current.scrollIntoView({
-        behavior: "smooth", // You can change this to "auto" if you prefer instant scrolling
-        block: "start", // Scroll to the start of the section
-      });
-    }
   };
 
   const handlePublicDatasetClick = (e) => {
@@ -57,13 +50,6 @@ function DatasetDashboard() {
     });
 
     setFilteredDatasets(filtered);
-
-    if (datasetDivRef.current) {
-      datasetDivRef.current.scrollIntoView({
-        behavior: "smooth", // You can change this to "auto" if you prefer instant scrolling
-        block: "start", // Scroll to the start of the section
-      });
-    }
   };
 
   const handleMedicineDatasets = (e) => {
@@ -132,10 +118,8 @@ function DatasetDashboard() {
         const filteredDatasets = getDatasetDetails.filter((dataset) => {
           return dataset.isPublic || dataset.isForSale;
         });
-        console.log("Filter: ", filteredDatasets);
         setAllDatasets(filteredDatasets);
 
-        console.log("All datasets", allDatasets);
       }
     } catch (error) {
       console.log(error);

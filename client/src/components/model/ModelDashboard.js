@@ -2,7 +2,6 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import img from "../../assets/dataset/filter.png";
-import img1 from "../../assets/home/security.png";
 import "../../styles/model/ModelDashboard.css";
 import { ethers } from "ethers";
 import { modelInstance } from "../Contract";
@@ -110,10 +109,7 @@ function ModelDashboard() {
         const filteredModels = getModelDetails.filter((model) => {
           return model.isPublic || model.isForSale;
         });
-        console.log("Filter: ", filteredModels);
         setAllModels(filteredModels);
-
-        console.log(allModels);
       }
     } catch (error) {
       console.log(error);
@@ -340,9 +336,6 @@ function ModelDashboard() {
                   className="col-xxl-3 col-md-5 col-sm-7 col-11 mx-1 mb-5 all-model-component"
                   index={key}
                 >
-                  {/* <div className="all-model-img-div">
-                    <img src={img1} className="all-model-img"></img>
-                  </div> */}
                   <div className="all-model-details">
                     <div className="all-model-title">{item.title}</div>
                     <div className="all-model-desc">{item.description}</div>
