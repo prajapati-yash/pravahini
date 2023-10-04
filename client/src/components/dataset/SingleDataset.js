@@ -289,7 +289,7 @@ function SingleDataset() {
             </div> */}
             <div className="py-3">
               <div className="single-dataset-details-head">
-                Price Of Dataset
+                Price Of Dataset (in BTT)
               </div>
               <div className="single-dataset-details-value">
                 {parseInt(dataset[2]._hex, 16)}

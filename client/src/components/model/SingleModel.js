@@ -287,7 +287,9 @@ function SingleModel() {
             </div>
 
             <div className="py-2">
-              <div className="single-model-details-head">Price of Model</div>
+              <div className="single-model-details-head">
+                Price of Model (in BTT)
+              </div>
               <div className="single-model-details-value">
                 {parseInt(model[4]._hex, 16)}
               </div>

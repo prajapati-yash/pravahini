@@ -52,7 +52,7 @@
 
 .efficient-url-text::-webkit-scrollbar {
   /* width: 2px !important; */
-  height: 0.5em !important;
+  height: 0.4em !important;
 }
  
 .efficient-url-text::-webkit-scrollbar-track {

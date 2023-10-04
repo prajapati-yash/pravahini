@@ -32,15 +32,15 @@ function Computation() {
         const messageBytes = ethers.utils.toUtf8Bytes(
           process.env.REACT_APP_MSG_TO_SIGN
         );
-        const sig = await signer.signMessage(messageBytes);
-        setSignature(sig);
-        const res = await axiosInstance.post("/de-computation", {
+        const sign = await signer.signMessage(messageBytes);
+
+        const res = await axios.post(`http://localhost:5500/de-computation`, {
           address,
-          signature,
+          sign,
         });
         const token = res.data.jwtToken;
         Cookies.set("jwtToken", token, { expires: 1 });
-        setPopupVisible(false)
+        setPopupVisible(false);
       } else {
         console.error("No Ethereum wallet detected");
       }
@@ -78,7 +78,7 @@ function Computation() {
 
   useEffect(() => {
     if (location.pathname === "/de-computation") {
-      const jwtToken = Cookies.get('jwtToken');
+      const jwtToken = Cookies.get("jwtToken");
       if (!jwtToken) {
         setPopupVisible(true);
       }
@@ -125,15 +125,12 @@ function Computation() {
                 </div>
 
                 <hr />
-                <button
-                  className="popup-btn"
-                  onClick={() => signMessage()}
-                >
+                <button className="popup-btn" onClick={() => signMessage()}>
                   Click ME to sign in for performing the computation
                 </button>
               </div>
             </div>
-          )} 
+          )}
         </div>
       </div>
       <Footer />

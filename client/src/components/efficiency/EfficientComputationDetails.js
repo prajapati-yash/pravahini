@@ -1,7 +1,8 @@
-import React,{useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAccount } from "wagmi";
 import Cookies from "js-cookie";
+import { ClipLoader } from "react-spinners";
 
 function EfficientComputationDetails() {
   const { address } = useAccount();
@@ -9,9 +10,13 @@ function EfficientComputationDetails() {
   const [userJobs, setUserJobs] = useState([]);
   const [cid, setCid] = useState("");
   const [showButton, setShowButton] = useState(true);
-  const [btnloadingArray, setBtnLoadingArray] = useState(Array(userJobs.length).fill(false));
-  const [cidbtnloadingArray, setCidBtnLoadingArray] = useState(Array(userJobs.length).fill(false));
-  const token = Cookies.get('jwtToken');
+  const [btnloadingArray, setBtnLoadingArray] = useState(
+    Array(userJobs.length).fill(false)
+  );
+  const [cidbtnloadingArray, setCidBtnLoadingArray] = useState(
+    Array(userJobs.length).fill(false)
+  );
+  const token = Cookies.get("jwtToken");
   const tokenHeaders = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -43,9 +48,7 @@ function EfficientComputationDetails() {
         axios
           .post(updateJobStatusUrl, jobData, tokenHeaders)
           .then((updateResponse) => {
-            console.log(
-              "Job status updated in the database:"
-            );
+            console.log("Job status updated in the database:");
           })
           .catch((updateError) => {
             console.error(
@@ -53,7 +56,7 @@ function EfficientComputationDetails() {
               updateError
             );
           });
-          newBtnLoadingArray[index] = false;
+        newBtnLoadingArray[index] = false;
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -61,55 +64,58 @@ function EfficientComputationDetails() {
       });
   };
 
-  const handleGetCID = (jobId, index) =>{
-    console.log("Started Cid Getting")
+  const handleGetCID = (jobId, index) => {
+    console.log("Started Cid Getting");
     // const index = dataList.findIndex((data) => data.jobId === jobId );
     // if(index !== -1){
-      const newCidBtnLoadingArray = [...btnloadingArray];
-      newCidBtnLoadingArray[index] = true;
-      setCidBtnLoadingArray(newCidBtnLoadingArray);
-      console.log("Getting CID of this Job Id!")
+    const newCidBtnLoadingArray = [...btnloadingArray];
+    newCidBtnLoadingArray[index] = true;
+    setCidBtnLoadingArray(newCidBtnLoadingArray);
+    console.log("Getting CID of this Job Id!");
     const apiURL = `${process.env.REACT_APP_BACKEND_URL}/container1/get-cid/:${jobId}`;
 
     axios
-    .get(apiURL, tokenHeaders)
-    .then((response) =>{
-      const { cid } = response.data;
-      setCid(cid);
-      setShowButton(false);
-      try{
-      const updateJobUrl = `${process.env.REACT_APP_BACKEND_URL}/container1/update-cid`;
-      const jobData = {
-        walletAddress: address, 
-        jobId: jobId,
-        cid: cid,
-      };
+      .get(apiURL, tokenHeaders)
+      .then((response) => {
+        const { cid } = response.data;
+        setCid(cid);
+        setShowButton(false);
+        try {
+          const updateJobUrl = `${process.env.REACT_APP_BACKEND_URL}/container1/update-cid`;
+          const jobData = {
+            walletAddress: address,
+            jobId: jobId,
+            cid: cid,
+          };
 
-      // Post request to save the data in the database
+          // Post request to save the data in the database
 
-      axios
-        .post(updateJobUrl, jobData, tokenHeaders)
-        .then((saveResponse) => {
-          console.log("Job details updated:");
-        })
-        .catch((saveError) => {
-          console.error("Error updating job:", saveError);
-        });}catch(error){
-          console.log("While Updating job", error)
+          axios
+            .post(updateJobUrl, jobData, tokenHeaders)
+            .then((saveResponse) => {
+              console.log("Job details updated:");
+            })
+            .catch((saveError) => {
+              console.error("Error updating job:", saveError);
+            });
+        } catch (error) {
+          console.log("While Updating job", error);
         }
         newCidBtnLoadingArray[index] = false;
-  
-    })
-    .catch((error)=>{
-      console.error("Error:",error);
-      newCidBtnLoadingArray[index] = false;
-    })
-  // }
-  }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        newCidBtnLoadingArray[index] = false;
+      });
+    // }
+  };
 
   const handleDeleteJob = (jobId) => {
     axios
-      .delete(`${process.env.REACT_APP_BACKEND_URL}/container1/delete-job/${jobId}`, tokenHeaders)
+      .delete(
+        `${process.env.REACT_APP_BACKEND_URL}/container1/delete-job/${jobId}`,
+        tokenHeaders
+      )
       .then((response) => {
         console.log("Deletion Started");
         // Remove the deleted job from the userJobs array
@@ -122,11 +128,11 @@ function EfficientComputationDetails() {
       });
   };
 
-
   const fetchUserJobs = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/container1/user-jobs?walletAddress=${address}`, tokenHeaders
+        `${process.env.REACT_APP_BACKEND_URL}/container1/user-jobs?walletAddress=${address}`,
+        tokenHeaders
       );
       const userJobs = response.data;
       setUserJobs(userJobs);
@@ -151,7 +157,7 @@ function EfficientComputationDetails() {
   }, []);
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid py-3">
       <div className="table-responsive">
         <table className="table table-striped">
           <thead className="dataset-table-head">
@@ -165,63 +171,72 @@ function EfficientComputationDetails() {
               <th>Delete</th>
             </tr>
           </thead>
-        
+
           <tbody>
             {userJobs.map((job, index) => (
               <tr className="dataset-table-body" key={index}>
                 <td>{index + 1}</td>
                 <td>{job.jobId}</td>
-                <td>
+                <td className="efficient-get-cid-url">
                   {job.cid ? (
-                    <a href={`https://ipfs.io/ipfs/${job.cid}`} target="_blank" rel="noopener noreferrer">
-                    {job.cid}
-                  </a>
+                    <a
+                      href={`https://ipfs.io/ipfs/${job.cid}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {job.cid}
+                    </a>
                   ) : (
-                    <button onClick={() => handleGetCID(job.jobId)} className="bg-info border-0 rounded-3 text-white">
+                    <button
+                      onClick={() => handleGetCID(job.jobId)}
+                      className="bg-info border-0 rounded-3 text-white"
+                    >
                       {cidbtnloadingArray[index] ? (
-                        <svg
-                          className="animate-spin button-spin-svg-pic"
-                          version="1.1"
-                          id="L9"
-                          xmlns="http://www.w3.org/2000/svg"
-                          x="0px"
-                          y="0px"
-                          viewBox="0 0 100 100"
-                          style={{ fill: "#fff" }}
-                        >
-                          <path d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50"></path>
-                        </svg>
+                        <ClipLoader color="#fff" />
                       ) : (
                         <> Get CID</>
                       )}
-                    </button> 
+                    </button>
                   )}
                 </td>
                 <td>{new Date(job.timeStamp).toLocaleString()}</td>
-                <td > <button className={job.jobStatus === "InProgress" ? "bg-warning text-white border-0 rounded-3" : job.jobStatus === "Completed" ? "bg-success text-white border-0 rounded-3" : "white"}> {job.jobStatus}</button></td>
                 <td>
                   {" "}
-                  <button onClick={() => handleCheckJobStatus(job.jobId, index) } className="bg-primary text-white border-0 rounded-3">
-                  {btnloadingArray[index] ? (
-                  <svg
-                    className="animate-spin button-spin-svg-pic"
-                    version="1.1"
-                    id="L9"
-                    xmlns="http://www.w3.org/2000/svg"
-                    x="0px"
-                    y="0px"
-                    viewBox="0 0 100 100"
-                    style={{ fill: "#fff" }}
+                  <button
+                    className={
+                      job.jobStatus === "In Progress"
+                        ? "bg-warning text-white border-0 rounded-3"
+                        : job.jobStatus === "Completed"
+                        ? "bg-success text-white border-0 rounded-3"
+                        : job.jobStatus === "InProgress"
+                        ? "bg-warning text-white border-0 rounded-3"
+                        : "white"
+                    }
                   >
-                    <path d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50"></path>
-                  </svg>
-                ) : (
-                  <> Check Job Status</>
-                )}
+                    {" "}
+                    {job.jobStatus}
                   </button>
                 </td>
                 <td>
-                  <button onClick={() => handleDeleteJob(job.jobId)} className="bg-danger text-white my-auto border-0 rounded-3">Delete</button>
+                  {" "}
+                  <button
+                    onClick={() => handleCheckJobStatus(job.jobId, index)}
+                    className="bg-primary text-white border-0 rounded-3"
+                  >
+                    {btnloadingArray[index] ? (
+                      <ClipLoader color="#fff" />
+                    ) : (
+                      <> Check Job Status</>
+                    )}
+                  </button>
+                </td>
+                <td>
+                  <button
+                    onClick={() => handleDeleteJob(job.jobId)}
+                    className="bg-danger text-white my-auto border-0 rounded-3"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

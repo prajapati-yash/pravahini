@@ -16,7 +16,7 @@ function HomeHero() {
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
-  const [isShaking, setShaking] = useState(false);;
+  const [isShaking, setShaking] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -74,9 +74,15 @@ function HomeHero() {
     <div className="d-flex flex-lg-row flex-column hero-main-container px-4 px-sm-5 my-xl-4 mx-2">
       <div className="container-fluid hero-container px-4 py-3 px-sm-5 py-sm-4 col-lg-6">
         <div>
-          <p className="hero-text">Welcome to Pravahini (प्रवाहिनी)</p>
+          <p className="hero-text">
+            Welcome to Pravahini (प्रवाहिनी) -<br />
+            <span style={{fontSize: "2rem"}}>Where Data Flows, Models Grow, and AI Glows!</span>
+          </p>
           <p className="hero-sub-text ">
-          Discover and access datasets for your machine learning models, purchase pre-trained ML models, list your own datasets and ML models for sale, and harness decentralized computing for your machine learning tasks.
+            Discover and access datasets for your machine learning models,
+            purchase pre-trained ML models, list your own datasets and ML models
+            for sale, and harness decentralized computing for your machine
+            learning tasks.
           </p>
         </div>
 

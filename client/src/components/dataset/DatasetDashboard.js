@@ -24,7 +24,7 @@ function DatasetDashboard() {
 
     if (datasetDivRef.current) {
       datasetDivRef.current.scrollIntoView({
-        behavior: "smooth", 
+        behavior: "smooth",
         block: "start",
       });
     }
@@ -119,7 +119,6 @@ function DatasetDashboard() {
           return dataset.isPublic || dataset.isForSale;
         });
         setAllDatasets(filteredDatasets);
-
       }
     } catch (error) {
       console.log(error);
@@ -147,7 +146,9 @@ function DatasetDashboard() {
           <div className="py-2">
             <div className="dataset-dash-head">Datasets</div>
             <div className="pb-sm-3 pb-1 dataset-dash-subhead">
-              Explore, analyze and share quality data
+              Discover, analyze, and share high-quality datasets.
+              Go-to platform for seamless exploration, analysis, and
+              collaborative sharing of top-notch datasets.
             </div>
           </div>
 
@@ -203,7 +204,9 @@ function DatasetDashboard() {
                   </a>
                   <a
                     className={`dropdown-item ${
-                      activeComponent === "publicDatasets" ? "active-button" : ""
+                      activeComponent === "publicDatasets"
+                        ? "active-button"
+                        : ""
                     }`}
                     onClick={handlePublicDatasetClick}
                   >

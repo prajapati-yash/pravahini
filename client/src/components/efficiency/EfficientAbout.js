@@ -51,9 +51,48 @@ function EfficientAbout() {
                 >
                   <div className="accordion-body">
                     <li className="accordion-list-item">
-                      Ensure that your dataset URLs are in the raw GitHub URL
-                      format.
+                      Upload your Dataset file to IPFS. Visit{" "}
+                      <a href="https://docs.ipfs.tech/how-to/">IPFS Docs</a> for
+                      further instructions.
                     </li>
+                    <li className="accordion-list-item">
+                      Once file is uploaded, construct the IPFS link as below.
+                      ipfs://CID/fileName.csv
+                    </li>
+                    <div className="accordian-div">
+                      <div className="efficient-url-container">
+                        <p className="accordion-list-item">
+                          Example IPFS Dataset URL:
+                        </p>
+                        <li className="pb-1 efficient-url-text accordion-list-item">
+                          ipfs://CID/fileName.csv <br />
+                          <li className="pb-1 efficient-url-text accordion-list-item">
+                            <b>CID:</b> Content Identifier, <br />
+                          </li>
+                          <li className="pb-1 efficient-url-text accordion-list-item">
+                            <b>Filename:</b> With your chosen File Name
+                          </li>
+                        </li>
+                        <li className="accordion-list-item">
+                          After adding the datasets url, click on the "+" button
+                          and provide the additional URLs.
+                        </li>
+                      </div>
+                    </div>
+
+                    <div className="my-3">
+                      {" "}
+                      <span
+                        className="bg-danger px-2 py-1 text-white"
+                        style={{
+                          fontWeight: "650",
+                          borderRadius: "0.5rem",
+                          fontSize: "1.1rem",
+                        }}
+                      >
+                        Or
+                      </span>
+                    </div>
                     <li className="accordion-list-item">
                       The datasets should be publicly accessible on GitHub.
                     </li>
@@ -61,7 +100,7 @@ function EfficientAbout() {
                       The datasets must be in CSV file format.
                     </li>
                     <li className="accordion-list-item">
-                      To add multiple datasets, click on the "Add" button and
+                      After adding the datasets url, click on the "+" button and
                       provide the additional URLs.
                     </li>
                     <div className="accordian-div">
@@ -101,7 +140,7 @@ function EfficientAbout() {
                 >
                   <div className="accordion-body">
                     <li className="accordion-list-item">
-                      The model URL should also be in the raw GitHub URL format.
+                      The model URL should be in the raw GitHub URL format.
                     </li>
                     <li className="accordion-list-item">
                       The model repository must be public.
@@ -146,10 +185,10 @@ function EfficientAbout() {
                     </li>
                     <div className="efficient-url-container accordian-div">
                       <li className="efficient-url-text pb-1 accordion-list-item">
-                        abc = pd.read_csv("/inputs/abc.csv")
+                        abc = pd.read_csv("/inputs/data/abc.csv")
                       </li>
                       <li className="efficient-url-text pb-1 pt-2 accordion-list-item">
-                        xyz = pd.read_csv("/inputs/xyz.csv")
+                        xyz = pd.read_csv("/inputs/data/xyz.csv")
                       </li>
                     </div>
                   </div>

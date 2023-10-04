@@ -36,7 +36,7 @@ function ComputationAbout() {
   return (
     <div className="container-fluid">
       <div className="d-md-flex pt-2 computation-about-title">
-        Decentralized Computation of ML Model
+        Decentralized Computation
       </div>
       <div className="py-4">
         <div className="px-0 mt-4 px-sm-3">

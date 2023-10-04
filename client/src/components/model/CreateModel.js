@@ -363,20 +363,20 @@ function CreateModel() {
                   <option value="" disabled>
                     Select Category
                   </option>
-                  <option value="Drugs and Medicine" className="model-dropdown">
-                    Drugs and Medicine
+                  <option value="Text Generation" className="model-dropdown">
+                    Text Generation
                   </option>
-                  <option value="Education" className="model-dropdown">
-                    Education
+                  <option value="Image Generation" className="model-dropdown">
+                    Image Generation
                   </option>
-                  <option value="Earth and Nature" className="model-dropdown">
-                    Earth and Nature
+                  <option value="Audio Synthesis" className="model-dropdown">
+                    Audio Synthesis
                   </option>
                   <option
-                    value="Science and Technology"
+                    value="Others"
                     className="model-dropdown"
                   >
-                    Science and Technology
+                    Others
                   </option>
                 </select>
               </div>
@@ -406,8 +406,53 @@ function CreateModel() {
             </div>
 
             <div className="py-3">
+              <div className="d-flex justify-content-flex-start create-dataset-head">
+                Model For*
+              </div>
+
+              <div className="btn-group d-flex pt-2">
+                <div className="pe-sm-3 pe-1">
+                  <input
+                    class="model-button"
+                    type="radio"
+                    name="model-btn"
+                    value="free"
+                    checked={isPublic}
+                    onChange={handleOptionChange}
+                    required
+                  />
+                  <label className="px-1 model-btn-text">Public(free)</label>
+                </div>
+                <div className="px-sm-3 px-1">
+                  <input
+                    class="model-button"
+                    type="radio"
+                    name="model-btn"
+                    value="private"
+                    checked={isPrivate}
+                    onChange={handleOptionChange}
+                    required
+                  />
+                  <label className="px-1 model-btn-text">Private</label>
+                </div>
+                <div className="px-sm-3 px-1">
+                  <input
+                    class="model-button"
+                    type="radio"
+                    name="model-btn"
+                    value="sell"
+                    checked={isForSale}
+                    onChange={handleOptionChange}
+                    required
+                  />
+                  <label className="px-1 model-btn-text">Sell</label>
+                </div>
+              </div>
+            </div>
+
+            <div className="py-3">
               <div className="d-flex justify-content-flex-start create-model-head">
-                Model Price *
+                Model Price (in BTT) *
               </div>
               <div className="">
                 <input
@@ -446,16 +491,22 @@ function CreateModel() {
                   ref={fileInputRefModel}
                   style={{ display: "none" }}
                   onChange={handleFileChangeModel}
+                  accept=".tar.gz"
                   required
                 ></input>
               </div>
               <div className="d-flex upload-model-selected-file">
                 <div className="col-1"></div>
-                {selectedFileNameModel && (
-                  <div className="model-selected-file-text">
-                    File: {selectedFileNameModel}
-                  </div>
-                )}
+                <div className="row">
+                  <span className="info-text">
+                    Upload the ML-Model (.tar.gz).
+                  </span>
+                  {selectedFileNameModel && (
+                    <div className="d-flex model-selected-file-text">
+                      File: {selectedFileNameModel}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -478,16 +529,23 @@ function CreateModel() {
                   ref={fileInputRefLicense}
                   style={{ display: "none" }}
                   onChange={handleFileChangeLicense}
+                  accept=".pdf"
                   required
                 ></input>
               </div>
               <div className="d-flex model-license-selected-file">
                 <div className="col-1"></div>
-                {selectedFileNameLicense && (
-                  <div className="model-selected-file-text">
-                    File: {selectedFileNameLicense}
-                  </div>
-                )}
+                <div className="row">
+                  <span className="info-text">
+                    Upload the license (.pdf) which contains the terms and
+                    conditions of the ML-Model.
+                  </span>
+                  {selectedFileNameLicense && (
+                    <div className="d-flex model-selected-file-text">
+                      File: {selectedFileNameLicense}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -512,59 +570,27 @@ function CreateModel() {
                   ref={fileInputRefModelDoc}
                   style={{ display: "none" }}
                   onChange={handleFileChangeModelDoc}
+                  accept=".pdf"
                   required
                 ></input>
               </div>
               <div className="d-flex model-doc-selected-file">
                 <div className="col-1"></div>
-                {selectedFileNameModelDoc && (
-                  <div className="model-selected-file-text">
-                    File: {selectedFileNameModelDoc}
-                  </div>
-                )}
+                <div className="row">
+                  <span className="info-text">
+                    Upload the documentation (.pdf) which contains
+                    guidelines of using your Model.
+                  </span>
+                  {selectedFileNameModelDoc && (
+                    <div className="d-flex model-selected-file-text">
+                      File: {selectedFileNameModelDoc}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
-            <div class="py-3 btn-group">
-              <div className="px-sm-3 px-1">
-                <input
-                  class="model-button"
-                  type="radio"
-                  name="model-btn"
-                  value="free"
-                  checked={isPublic}
-                  onChange={handleOptionChange}
-                  required
-                />
-                <label className="px-1 model-btn-text">Public(free)</label>
-              </div>
-              <div className="px-sm-3 px-1">
-                <input
-                  class="model-button"
-                  type="radio"
-                  name="model-btn"
-                  value="private"
-                  checked={isPrivate}
-                  onChange={handleOptionChange}
-                  required
-                />
-                <label className="px-1 model-btn-text">Private</label>
-              </div>
-              <div className="px-sm-3 px-1">
-                <input
-                  class="model-button"
-                  type="radio"
-                  name="model-btn"
-                  value="sell"
-                  checked={isForSale}
-                  onChange={handleOptionChange}
-                  required
-                />
-                <label className="px-1 model-btn-text">Sell</label>
-              </div>
-            </div>
-
-            <div>
+            <div className="py-3">
               <button
                 type="submit"
                 className="btn rounded-pill my-2 py-sm-2 px-sm-5 px-4 create-model-btn"

@@ -44,42 +44,42 @@ function ModelDashboard() {
     setFilteredModels(filtered);
   };
 
-  const handleMedicineModels = (e) => {
+  const handleTextGenModels = (e) => {
     e.preventDefault();
-    setActiveComponent("drugs&med");
+    setActiveComponent("textGeneration");
 
     const filtered = allModels.filter((model) => {
-      return model.category === "Drugs and Medicine";
+      return model.category === "Text Generation";
     });
     setFilteredModels(filtered);
   };
 
-  const handleEducationModels = (e) => {
+  const handleImageGenModels = (e) => {
     e.preventDefault();
-    setActiveComponent("education");
+    setActiveComponent("imageGeneration");
 
     const filtered = allModels.filter((model) => {
-      return model.category === "Education";
+      return model.category === "Image Generation";
     });
     setFilteredModels(filtered);
   };
 
-  const handleNatureModels = (e) => {
+  const handleAudioSynModels = (e) => {
     e.preventDefault();
-    setActiveComponent("earth&nature");
+    setActiveComponent("audioSynthesis");
 
     const filtered = allModels.filter((model) => {
-      return model.category === "Earth and Nature";
+      return model.category === "Audio Synthesis";
     });
     setFilteredModels(filtered);
   };
 
-  const handleTechModels = (e) => {
+  const handleOtherModels = (e) => {
     e.preventDefault();
-    setActiveComponent("sci&tech");
+    setActiveComponent("other");
 
     const filtered = allModels.filter((model) => {
-      return model.category === "Science and Technology";
+      return model.category === "Others";
     });
     setFilteredModels(filtered);
   };
@@ -137,8 +137,9 @@ function ModelDashboard() {
           <div className="py-2">
             <div className="model-dash-head">Models</div>
             <div className="pb-sm-3 pb-1 model-dash-subhead">
-              Search and discover hundreds of trained, ready-to-deploy machine
-              learning models in one place.
+              Simplifies your search for ready-to-use machine learning models.
+              Discover and deploy hundreds of trained models effortlessly, all
+              in one convenient place.
             </div>
           </div>
 
@@ -221,38 +222,38 @@ function ModelDashboard() {
           <button
             type="button"
             className={`mx-sm-3 mx-2 med-model-dash-btn ${
-              activeComponent === "drugs&med" ? "active-button" : ""
+              activeComponent === "textGeneration" ? "active-button" : ""
             }`}
-            onClick={handleMedicineModels}
+            onClick={handleTextGenModels}
           >
-            Drugs and Medicine
+            Text Generation
           </button>
           <button
             type="button"
             className={`mx-sm-3 mx-2 edu-model-dash-btn ${
-              activeComponent === "education" ? "active-button" : ""
+              activeComponent === "imageGeneration" ? "active-button" : ""
             }`}
-            onClick={handleEducationModels}
+            onClick={handleImageGenModels}
           >
-            Education
+            Image Generation
           </button>
           <button
             type="button"
             className={`mx-sm-3 mx-2 ear-model-dash-btn ${
-              activeComponent === "earth&nature" ? "active-button" : ""
+              activeComponent === "audioSynthesis" ? "active-button" : ""
             }`}
-            onClick={handleNatureModels}
+            onClick={handleAudioSynModels}
           >
-            Earth & Nature
+            Audio Synthesis
           </button>
           <button
             type="button"
             className={`mx-sm-3 mx-2 sci-model-dash-btn ${
-              activeComponent === "sci&tech" ? "active-button" : ""
+              activeComponent === "others" ? "active-button" : ""
             }`}
-            onClick={handleTechModels}
+            onClick={handleOtherModels}
           >
-            Science & Technology
+            Others
           </button>
         </div>
 
@@ -282,40 +283,41 @@ function ModelDashboard() {
               <li>
                 <a
                   className={`dropdown-item ${
-                    activeComponent === "drugs&med" ? "active-button" : ""
+                    activeComponent === "textGeneration" ? "active-button" : ""
                   }`}
+                  onClick={handleTextGenModels}
                 >
-                  Drugs and Medicines
+                  Text Generation
                 </a>
               </li>
               <li>
                 <a
                   className={`dropdown-item ${
-                    activeComponent === "education" ? "active-button" : ""
+                    activeComponent === "imageGeneration" ? "active-button" : ""
                   }`}
-                  onClick={handleEducationModels}
+                  onClick={handleImageGenModels}
                 >
-                  Education
+                  Image Generation
                 </a>
               </li>
               <li>
                 <a
                   className={`dropdown-item ${
-                    activeComponent === "earth&nature" ? "active-button" : ""
+                    activeComponent === "audioSynthesis" ? "active-button" : ""
                   }`}
-                  onClick={handleNatureModels}
+                  onClick={handleAudioSynModels}
                 >
-                  Earth and Nature
+                  Audio Synthesis
                 </a>
               </li>
               <li>
                 <a
                   className={`dropdown-item ${
-                    activeComponent === "sci&tech" ? "active-button" : ""
+                    activeComponent === "others" ? "active-button" : ""
                   }`}
-                  onClick={handleTechModels}
+                  onClick={handleOtherModels}
                 >
-                  Science and Technology
+                  Others
                 </a>
               </li>
             </ul>

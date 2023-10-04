@@ -65,7 +65,7 @@ router.post("/save-job", async (req, res) => {
       const updatedJob = await container1Model.findOneAndUpdate(
         { walletAddress, jobId },
         { jobStatus },
-        { new: true }
+        // { new: true }
       );
   
       if (updatedJob) {
@@ -111,8 +111,14 @@ router.delete('/delete-job/:jobId', async(req, res) =>{
         try {
             const jobList = JSON.parse(jobListOutput);
             if (Array.isArray(jobList) && jobList.length > 0) {
-                const state = jobList[0].State.State;
+                let state = jobList[0].State.State;
+                console.log("State", state)
+                if(state === "New"){
+                  state = "In Progress";
+                  res.json({ state });
+                }else{
                 res.json({ state });
+                }
             } else {
                 res.status(404).json({ error: 'Job not found' });
             }

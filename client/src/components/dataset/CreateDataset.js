@@ -16,8 +16,15 @@ import { DATASET_ADDRESS } from "../Contract";
 function CreateDataset() {
   const navigate = useNavigate();
   const [btnloading, setbtnloading] = useState(false);
-
   const [selectedOption, setSelectedOption] = useState("free");
+  const [showText, setShowText] = useState(false);
+
+  const handleMouseEnter1 = () => {
+    setShowText(true);
+  };
+  const handleMouseLeave1 = () => {
+    setShowText(false);
+  };
 
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
@@ -365,21 +372,6 @@ function CreateDataset() {
                 Description *
               </div>
               <div className="">
-                {/* <input
-                  type="text"
-                  id="datasetDescription"
-                  name="datasetDescription"
-                  className="py-md-1 py-sm-1 dataset-input-form-data"
-                  placeholder="Enter Dataset Description"
-                  value={createDataset.datasetDescription}
-                  onChange={(e) => {
-                    setCreateDataset({
-                      ...createDataset,
-                      datasetDescription: e.target.value,
-                    });
-                  }}
-                  required
-                /> */}
                 <textarea
                   type="text"
                   id="datasetDescription"
@@ -445,7 +437,52 @@ function CreateDataset() {
 
             <div className="py-3">
               <div className="d-flex justify-content-flex-start create-dataset-head">
-                Price of Dataset *
+                Dataset For*
+              </div>
+
+              <div className="btn-group d-flex pt-2">
+                <div className="pe-sm-3 pe-1">
+                  <input
+                    class="dataset-button"
+                    type="radio"
+                    name="dataset-btn"
+                    value="free"
+                    checked={isPublic}
+                    onChange={handleOptionChange}
+                    required
+                  />
+                  <label className="px-1 dataset-btn-text">Public(free)</label>
+                </div>
+                <div className="px-sm-3 px-1">
+                  <input
+                    class="dataset-button"
+                    type="radio"
+                    name="dataset-btn"
+                    value="private"
+                    checked={isPrivate}
+                    onChange={handleOptionChange}
+                    required
+                  />
+                  <label className="px-1 dataset-btn-text">Private</label>
+                </div>
+                <div className="px-sm-3 px-1">
+                  <input
+                    class="dataset-button"
+                    type="radio"
+                    name="dataset-btn"
+                    value="sell"
+                    checked={isForSale}
+                    onChange={handleOptionChange}
+                    required
+                  />
+                  <label className="px-1 dataset-btn-text">Sell</label>
+                </div>
+              </div>
+            </div>
+
+            <div className="py-3">
+              <div className="d-flex justify-content-flex-start create-dataset-head">
+                Price of Dataset (in BTT) * 
               </div>
               <div className="">
                 <input
@@ -487,16 +524,22 @@ function CreateDataset() {
                   ref={fileInputRefDataset}
                   style={{ display: "none" }}
                   onChange={handleFileChangeDataset}
+                  accept=".csv, .json"
                   required
                 ></input>
               </div>
               <div className="d-flex upload-dataset-selected-file">
                 <div className="col-1"></div>
-                {selectedFileNameDataset && (
-                  <div className="dataset-selected-file-text">
-                    File: {selectedFileNameDataset}
-                  </div>
-                )}
+                <div className="row">
+                  <span className="info-text">
+                    Upload the Dataset (.csv, .json), which you want to create.
+                  </span>
+                  {selectedFileNameDataset && (
+                    <div className="d-flex dataset-selected-file-text">
+                      File: {selectedFileNameDataset}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -515,22 +558,30 @@ function CreateDataset() {
                 <div className="upload-demo-dataset-text">
                   Upload Demo Dataset *
                 </div>
+
                 <input
                   type="file"
                   id="upload-demo-dataset-file"
                   ref={fileInputRefDemoDataset}
                   style={{ display: "none" }}
                   onChange={handleFileChangeDemoDataset}
+                  accept=".csv, .json"
                   required
                 ></input>
               </div>
+
               <div className="d-flex upload-demo-dataset-selected-file">
                 <div className="col-1"></div>
-                {selectedDemoDataset && (
-                  <div className="dataset-selected-file-text">
-                    File: {selectedDemoDataset}
-                  </div>
-                )}
+                <div className="row">
+                  <span className="info-text">
+                    Upload the Demo Dataset (.csv, .json), which contains minimum 10 rows.
+                  </span>
+                  {selectedDemoDataset && (
+                    <div className="d-flex dataset-selected-file-text">
+                      File: {selectedDemoDataset}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -553,16 +604,22 @@ function CreateDataset() {
                   ref={fileInputRefDatasetImg}
                   style={{ display: "none" }}
                   onChange={handleFileChangeDatasetImg}
+                  accept=".jpeg, .png, .jpg"
                   required
                 ></input>
               </div>
               <div className="d-flex dataset-image-selected-file">
                 <div className="col-1"></div>
-                {selectedFileNameDatasetImg && (
-                  <div className="dataset-selected-file-text">
-                    File: {selectedFileNameDatasetImg}
-                  </div>
-                )}
+                <div className="row">
+                  <span className="info-text">
+                    Upload the image (.jpeg, .jpg, .png) of your dataset cover.
+                  </span>
+                  {selectedFileNameDatasetImg && (
+                    <div className="d-flex dataset-selected-file-text">
+                      File: {selectedFileNameDatasetImg}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -585,59 +642,27 @@ function CreateDataset() {
                   ref={fileInputRefLicense}
                   style={{ display: "none" }}
                   onChange={handleLicenseFileChange}
+                  accept=".pdf"
                   required
                 ></input>
               </div>
               <div className="d-flex dataset-license-selected-file">
                 <div className="col-1"></div>
-                {selectedFileNameLicense && (
-                  <div className="dataset-selected-file-text">
-                    File: {selectedFileNameLicense}
-                  </div>
-                )}
+                <div className="row">
+                  <span className="info-text">
+                    Upload the license (.pdf) which contains the terms and conditions
+                    of the dataset.
+                  </span>
+                  {selectedFileNameLicense && (
+                    <div className="d-flex dataset-selected-file-text">
+                      File: {selectedFileNameLicense}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
-            <div class="py-3 btn-group">
-              <div className="px-sm-3 px-1">
-                <input
-                  class="dataset-button"
-                  type="radio"
-                  name="dataset-btn"
-                  value="free"
-                  checked={isPublic}
-                  onChange={handleOptionChange}
-                  required
-                />
-                <label className="px-1 dataset-btn-text">Public(free)</label>
-              </div>
-              <div className="px-sm-3 px-1">
-                <input
-                  class="dataset-button"
-                  type="radio"
-                  name="dataset-btn"
-                  value="private"
-                  checked={isPrivate}
-                  onChange={handleOptionChange}
-                  required
-                />
-                <label className="px-1 dataset-btn-text">Private</label>
-              </div>
-              <div className="px-sm-3 px-1">
-                <input
-                  class="dataset-button"
-                  type="radio"
-                  name="dataset-btn"
-                  value="sell"
-                  checked={isForSale}
-                  onChange={handleOptionChange}
-                  required
-                />
-                <label className="px-1 dataset-btn-text">Sell</label>
-              </div>
-            </div>
-
-            <div>
+            <div className="py-3">
               <button
                 type="submit"
                 className="btn rounded-pill my-2 py-sm-2 px-sm-5 px-4 create-dataset-btn"
