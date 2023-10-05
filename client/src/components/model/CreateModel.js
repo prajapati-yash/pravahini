@@ -196,7 +196,7 @@ function CreateModel() {
           progressCallback
         );
         modelCid = outputModel.data.Hash;
-
+      }
 
       const outputLicense = await lighthouse.upload(
         uploadLicense.files,
@@ -216,7 +216,9 @@ function CreateModel() {
         license: outputLicense.data.Hash,
         document: outputDocument.data.Hash,
       };
-    } catch (e) {
+    
+    
+   } catch (e) {
       console.log(e);
     }
   };
