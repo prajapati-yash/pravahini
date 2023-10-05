@@ -141,6 +141,7 @@ function CreateModel() {
       const uploadLicense = document.getElementById("model-license-file");
       const uploadDocument = document.getElementById("model-doc-file");
 
+
       let modelCid = "";
 
       if (isForSale) {
@@ -185,7 +186,9 @@ function CreateModel() {
           conditions,
           aggregator
         );
+
       } else {
+
         const outputModel = await lighthouse.upload(
           uploadModel.files,
           process.env.REACT_APP_LIGHTHOUSE_API_KEY,
@@ -193,7 +196,7 @@ function CreateModel() {
           progressCallback
         );
         modelCid = outputModel.data.Hash;
-      }
+
 
       const outputLicense = await lighthouse.upload(
         uploadLicense.files,

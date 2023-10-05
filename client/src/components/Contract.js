@@ -8,6 +8,7 @@ export const AUTHORIZATION_ADDRESS =
 export const DATASET_ADDRESS = "0x24d6E3AFd3afE716045ebB1A1B24d93eeEE76291";
 export const MODEL_ADDRESS = "0xFd3c306578C4bd70Ef9f3752d2B1C9b97858E82f";
 
+
 export const authorizationInstance = async () => {
   const { ethereum } = window;
   if (ethereum) {

@@ -79,6 +79,7 @@ function HomeHero() {
             <span style={{fontSize: "2rem"}}>Where Data Flows, Models Grow, and AI Glows!</span>
           </p>
           <p className="hero-sub-text ">
+
             Discover and access datasets for your machine learning models,
             purchase pre-trained ML models, list your own datasets and ML models
             for sale, and harness decentralized computing for your machine

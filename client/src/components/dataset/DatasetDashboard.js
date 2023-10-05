@@ -204,9 +204,11 @@ function DatasetDashboard() {
                   </a>
                   <a
                     className={`dropdown-item ${
+
                       activeComponent === "publicDatasets"
                         ? "active-button"
                         : ""
+
                     }`}
                     onClick={handlePublicDatasetClick}
                   >
