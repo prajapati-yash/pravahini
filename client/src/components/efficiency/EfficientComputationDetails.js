@@ -110,16 +110,16 @@ function EfficientComputationDetails() {
     // }
   };
 
-  const handleDeleteJob = (jobId) => {
+  const handleDeleteJob = (id) => {
     axios
       .delete(
-        `${process.env.REACT_APP_BACKEND_URL}/container1/delete-job/${jobId}`,
+        `http://localhost:5500/container1/delete-job/${id}`,
         tokenHeaders
       )
       .then((response) => {
         console.log("Deletion Started");
         // Remove the deleted job from the userJobs array
-        const updatedUserJobs = userJobs.filter((job) => job.jobId !== jobId);
+        const updatedUserJobs = userJobs.filter((job) => job._id !== id);
         setUserJobs(updatedUserJobs);
         console.log("Deleted!");
       })
@@ -232,7 +232,7 @@ function EfficientComputationDetails() {
                 </td>
                 <td>
                   <button
-                    onClick={() => handleDeleteJob(job.jobId)}
+                    onClick={() => handleDeleteJob(job._id)}
                     className="bg-danger text-white my-auto border-0 rounded-3"
                   >
                     Delete
