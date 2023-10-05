@@ -24,8 +24,8 @@ function DatasetDashboard() {
 
     if (datasetDivRef.current) {
       datasetDivRef.current.scrollIntoView({
-        behavior: "smooth", // You can change this to "auto" if you prefer instant scrolling
-        block: "start", // Scroll to the start of the section
+        behavior: "smooth",
+        block: "start",
       });
     }
   };
@@ -39,13 +39,6 @@ function DatasetDashboard() {
     });
 
     setFilteredDatasets(filtered);
-
-    if (datasetDivRef.current) {
-      datasetDivRef.current.scrollIntoView({
-        behavior: "smooth", // You can change this to "auto" if you prefer instant scrolling
-        block: "start", // Scroll to the start of the section
-      });
-    }
   };
 
   const handlePublicDatasetClick = (e) => {
@@ -57,13 +50,6 @@ function DatasetDashboard() {
     });
 
     setFilteredDatasets(filtered);
-
-    if (datasetDivRef.current) {
-      datasetDivRef.current.scrollIntoView({
-        behavior: "smooth", // You can change this to "auto" if you prefer instant scrolling
-        block: "start", // Scroll to the start of the section
-      });
-    }
   };
 
   const handleMedicineDatasets = (e) => {
@@ -132,10 +118,7 @@ function DatasetDashboard() {
         const filteredDatasets = getDatasetDetails.filter((dataset) => {
           return dataset.isPublic || dataset.isForSale;
         });
-        console.log("Filter: ", filteredDatasets);
         setAllDatasets(filteredDatasets);
-
-        console.log("All datasets", allDatasets);
       }
     } catch (error) {
       console.log(error);
@@ -163,7 +146,9 @@ function DatasetDashboard() {
           <div className="py-2">
             <div className="dataset-dash-head">Datasets</div>
             <div className="pb-sm-3 pb-1 dataset-dash-subhead">
-              Explore, analyze and share quality data
+              Discover, analyze, and share high-quality datasets.
+              Go-to platform for seamless exploration, analysis, and
+              collaborative sharing of top-notch datasets.
             </div>
           </div>
 
@@ -219,7 +204,11 @@ function DatasetDashboard() {
                   </a>
                   <a
                     className={`dropdown-item ${
-                      activeComponent === "publicDatasets" ? "active-button" : ""
+
+                      activeComponent === "publicDatasets"
+                        ? "active-button"
+                        : ""
+
                     }`}
                     onClick={handlePublicDatasetClick}
                   >

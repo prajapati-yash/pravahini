@@ -39,12 +39,11 @@
   border: 0.4px solid white;
 }
 
-
 .visualization-compute-dataset-img {
+  cursor: pointer;
   width: 2.6rem;
   margin-left: 1.2rem;
 }
-
 
 .visualization-compute-dataset-img:hover {
   transform: scale(1.1);
@@ -55,16 +54,34 @@
   margin-right: 2rem;
 }
 
-
 .visualization-display-urls {
   color: #000;
   padding-left: 0.4rem;
+  overflow: auto;
+  white-space: nowrap;
+  padding: 0rem 0.2rem;
 }
 
+.visualization-display-urls::-webkit-scrollbar {
+  /* width: 2px !important; */
+  height: 0.3em !important;
+}
+
+.visualization-display-urls::-webkit-scrollbar-track {
+  /* background: #6a79ff; */
+  margin-left: 0.2rem;
+  border-radius: 5rem;
+}
+
+.visualization-display-urls::-webkit-scrollbar-thumb {
+  background-color: #4250ff !important;
+  border-radius: 5rem !important;
+}
 
 .visualization-display-urls-btn {
   border-radius: 0.5rem;
   outline: none;
+  margin-left: 0.3rem;
 }
 
 .visualization-compute-model-btn {
@@ -106,7 +123,12 @@
   color: white;
 }
 
-@media only screen and (max-width: 992px) {
+.cid-info {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+@media only screen and (max-width: 1200px) {
   .visualization-compute-model-btn {
     margin-left: 0rem;
   }
@@ -117,7 +139,6 @@
   }
 }
 
-
 @media only screen and (max-width: 992px) {
   .visualization-compute-dataset-img {
     width: 2.6rem;
@@ -125,12 +146,12 @@
   }
 }
 
-
 @media only screen and (max-width: 767px) {
   .visualization-compute-container {
     border-top-left-radius: 5rem;
     border-top-right-radius: 5rem;
     border-bottom-left-radius: 0rem;
+    margin-bottom: 2.5rem;
   }
 
   .visualization-compute-img {

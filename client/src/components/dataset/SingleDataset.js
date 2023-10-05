@@ -16,7 +16,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { recoverShards, recoverKey } from "@lighthouse-web3/kavach";
 
 function SingleDataset() {
-  // const [csvData, setCSVData] = useState([]);
   const [tableHeaders, setTableHeaders] = useState([]);
   const [tableRows, setTableRows] = useState([]);
   const { address } = useAccount();
@@ -24,13 +23,9 @@ function SingleDataset() {
   console.log(location.state.data);
   const dataset = location.state ? location.state.data : "";
   const [btnloading, setbtnloading] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCSVData();
-    // fetchXLSXData();
-    // fetchJSONData();
-    // console.log("Datasets: ", datasets);
   }, []);
 
   const fetchCSVData = async () => {
@@ -59,44 +54,6 @@ function SingleDataset() {
       setTableRows(parsedData);
     } catch (error) {
       console.error("Error fetching CSV file:", error);
-    }
-  };
-
-  const fetchXLSXData = async () => {
-    try {
-      const response = await axios.get(xlsxFile, {
-        responseType: "arraybuffer",
-      });
-      const buffer = response.data;
-      const workbook = XLSX.read(buffer, { type: "array" });
-      const firstSheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[firstSheetName];
-
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-      console.log(jsonData);
-      if (jsonData.length > 0) {
-        const headers = jsonData[0];
-        setTableHeaders(headers);
-        setTableRows(jsonData.slice(1));
-      }
-    } catch (error) {
-      console.error("Error fetching XLSX file:", error);
-    }
-  };
-
-  const fetchJSONData = async () => {
-    try {
-      // const response = await axios.get(jsonFile);
-      const jsonData = jsonFile;
-      console.log("json data: ", jsonData);
-
-      if (jsonData.length > 0) {
-        const headers = Object.keys(jsonData[0]);
-        setTableHeaders(headers);
-        setTableRows(jsonData);
-      }
-    } catch (error) {
-      console.error("Error fetching JSON file:", error);
     }
   };
 
@@ -204,12 +161,7 @@ function SingleDataset() {
           console.log("Metamask is not installed, please install!");
         }
         const con = await datasetInstance();
-        console.log("Hello");
-        console.log("Dataset Id: ", parseInt(dataset[11]._hex, 16));
-        console.log("Price of Dataset: ", parseInt(dataset[2]._hex, 16));
         const price = parseInt(dataset[2]._hex, 16);
-        console.log("Ether value: ", ethers.utils.parseEther(price.toString()));
-        console.log("Hi");
         const tx = await con.purchaseDataset(parseInt(dataset[11]._hex, 16), {
           value: ethers.utils.parseEther(price.toString()),
         });
@@ -222,7 +174,6 @@ function SingleDataset() {
           parseInt(dataset[11]._hex, 16),
           address
         );
-        console.log("Purchase status: ", status);
         const cid = dataset[4];
 
         const { publicKey, signedMessage } = await encryptionSignature();
@@ -244,7 +195,6 @@ function SingleDataset() {
           fileType
         );
 
-        console.log("Decrypted file", dataset_file);
 
         const url = window.URL.createObjectURL(dataset_file);
         const a = document.createElement("a");
@@ -252,11 +202,6 @@ function SingleDataset() {
         a.download = "downloaded_file";
         a.click();
         window.URL.revokeObjectURL(url);
-
-        console.log("Decryption: ", dataset_file);
-
-        // console.log(`https://files.lighthouse.storage/viewFile/${dataset[4]}`);
-        // navigate("/user-dashboard");
       }
     } catch (e) {
       setbtnloading(false);
@@ -344,7 +289,7 @@ function SingleDataset() {
             </div> */}
             <div className="py-3">
               <div className="single-dataset-details-head">
-                Price Of Dataset
+                Price Of Dataset (in BTT)
               </div>
               <div className="single-dataset-details-value">
                 {parseInt(dataset[2]._hex, 16)}

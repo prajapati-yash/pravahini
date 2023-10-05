@@ -31,6 +31,12 @@ const howWorksContent = [
     title:
       "Here you can find the list of datasets and ML Models which you can buy and use it. There will be free as well as paid Datasets and ML Models.",
   },
+  {
+    number: "6",
+    head: "Decentralized Computation :",
+    title:
+      "Here you can use decentralized computing for your ML model computations. To facilitate this, we provide two robust containers tailored to meet your specific requirements.",
+  },
 ];
 
 function HowItWorks() {

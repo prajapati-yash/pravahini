@@ -8,12 +8,6 @@ import { datasetInstance } from "../Contract";
 import { ClipLoader } from "react-spinners";
 
 function SubscribedDatasets() {
-  //   const [img, setImg] = useState();
-  const [userName, setUserName] = useState();
-  const [occupation, setOccupation] = useState();
-  const navigate = useNavigate();
-  const datasetDivRef = React.useRef(null);
-  const [filterDropdown, setFilterDropdown] = useState(false);
   const [allSubscribedDatasets, setAllSubscribedDatasets] = useState([]);
   const [isPageLoading, setIsPageLoading] = useState(true);
 

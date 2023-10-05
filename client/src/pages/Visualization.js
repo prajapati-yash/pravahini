@@ -16,14 +16,16 @@ function Visualization() {
             <div className="col-lg-3">
               <Sidebar />
             </div>
-            <div className="d-flex flex-md-row flex-column col-lg-9">
-              <div className="row">
+            <div className="flex-md-row flex-column col-lg-9">
+              <div className="d-flex row">
                 <div className="col-md-7">
                   <VisualizationAbout />
                 </div>
                 <div className="col-md-5 px-0">
                   <VisualizationCompute />
                 </div>
+              </div>
+              <div>
                 <VisualizationComputationDetails />
               </div>
             </div>

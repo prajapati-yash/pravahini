@@ -1,21 +1,25 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "../../styles/visualization/VisualizationCompute.css";
 import hero from "../../assets/computation/visualization2.png";
 import add from "../../assets/computation/add.png";
 import axios from "axios";
 import { useAccount } from "wagmi";
 import Cookies from "js-cookie";
+import { PulseLoader } from "react-spinners";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function VisualizationCompute() {
-  const {address} = useAccount();
+  const { address } = useAccount();
   const [datasetUrls, setDatasetUrls] = useState([]);
   const [datasetUrl, setDatasetUrl] = useState("");
   const [notebookUrl, setNotebookUrl] = useState("");
   const [jobId, setJobId] = useState("");
   const [btnloading, setbtnloading] = useState(false);
+  const [cidloading, setcidloading] = useState(false);
   const [cid, setCid] = useState("");
   const [showButton, setShowButton] = useState(true);
-  const token = Cookies.get('jwtToken');
+  const token = Cookies.get("jwtToken");
   const tokenHeaders = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -38,97 +42,111 @@ function VisualizationCompute() {
     setDatasetUrls(newUrls);
   };
 
-
   const handleExecute = () => {
-    if(!address){
-      console.log("Wallet Address is required!")
-    }else{
-    console.log("Started Execution...")
-    setbtnloading(true);
-    setJobId("");
-    setShowButton(true);
-    setCid("");
-    const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/container2/execute`;
-    const requestData = {
-      notebookUrl: notebookUrl,
-      inputs: datasetUrls.map((url) => ({ url: url })),
-    };
+    if (!address) {
+      console.log("Wallet Address is required!");
+    } else {
+      console.log("Started Execution...");
 
-    const startTimeStamp = new Date();
+      toast.info("Your Job is computing", {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      setbtnloading(true);
+      setJobId("");
+      setShowButton(true);
+      setCid("");
+      const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/container2/execute`;
+      const requestData = {
+        notebookUrl: notebookUrl,
+        inputs: datasetUrls.map((url) => ({ url: url })),
+      };
+
+      const startTimeStamp = new Date();
+      axios
+        .post(apiUrl, requestData, tokenHeaders)
+        .then((response) => {
+          const { jobId } = response.data;
+
+          setJobId(jobId);
+          setCid(cid);
+
+          const saveJobUrl = `${process.env.REACT_APP_BACKEND_URL}/container2/save-job`;
+          const jobData = {
+            walletAddress: address,
+            jobId: jobId,
+            cid: "",
+            timeStamp: startTimeStamp,
+            jobStatus: "In Progress",
+          };
+
+          // Post request to save the data in the database
+          axios
+            .post(saveJobUrl, jobData, tokenHeaders)
+            .then((saveResponse) => {
+              console.log("Job details saved:", saveResponse.data);
+            })
+            .catch((saveError) => {
+              console.error("Error saving job:", saveError);
+            });
+
+          setbtnloading(false);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          setbtnloading(false);
+        });
+    }
+  };
+
+  const handleGetCID = (jobId) => {
+    console.log("Started Cid Getting");
+    // const index = dataList.findIndex((data) => data.jobId === jobId );
+    // if(index !== -1){
+    console.log("Getting CID of this Job Id!");
+    setcidloading(true);
+    const apiURL = `${process.env.REACT_APP_BACKEND_URL}/container2/get-cid/:${jobId}`;
+
     axios
-      .post(apiUrl, requestData, tokenHeaders)
+      .get(apiURL, tokenHeaders)
       .then((response) => {
-        const { jobId } = response.data;
-
-        setJobId(jobId);
+        const { cid } = response.data;
         setCid(cid);
+        
+        setShowButton(false);
+        try {
+          const updateJobUrl = `${process.env.REACT_APP_BACKEND_URL}/container2/update-cid`;
+          const jobData = {
+            walletAddress: address,
+            jobId: jobId,
+            cid: cid,
+          };
 
-        const saveJobUrl = `${process.env.REACT_APP_BACKEND_URL}/container2/save-job`;
-        const jobData = {
-          walletAddress: address, 
-          jobId: jobId,
-          cid: "",
-          timeStamp:startTimeStamp,
-          jobStatus:"InProgress"
-        };
-  
-        // Post request to save the data in the database
-        axios
-          .post(saveJobUrl, jobData, tokenHeaders)
-          .then((saveResponse) => {
-            console.log("Job details saved:", saveResponse.data);
-          })
-          .catch((saveError) => {
-            console.error("Error saving job:", saveError);
-          });
-  
-        setbtnloading(false);
+          // Post request to save the data in the database
+
+          axios
+            .post(updateJobUrl, jobData, tokenHeaders)
+            .then((saveResponse) => {
+              console.log("Job details updated:", saveResponse.data);
+            })
+            .catch((saveError) => {
+              console.error("Error updating job:", saveError);
+            });
+        } catch (error) {
+          console.log("While Updating job", error);
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
-        setbtnloading(false);
-      });}
+      });
   };
-
-  const handleGetCID = (jobId) =>{
-    console.log("Started Cid Getting")
-    // const index = dataList.findIndex((data) => data.jobId === jobId );
-    // if(index !== -1){
-      console.log("Getting CID of this Job Id!")
-    const apiURL = `${process.env.REACT_APP_BACKEND_URL}/container2/get-cid/:${jobId}`;
-    
-    axios
-    .get(apiURL, tokenHeaders)
-    .then((response) =>{
-      const { cid } = response.data;
-      setCid(cid);
-      setShowButton(false);
-      try{
-      const updateJobUrl = `${process.env.REACT_APP_BACKEND_URL}/container2/update-cid`;
-      const jobData = {
-        walletAddress: address, 
-        jobId: jobId,
-        cid: cid,
-      };
-
-      // Post request to save the data in the database
-
-      axios
-        .post(updateJobUrl, jobData, tokenHeaders)
-        .then((saveResponse) => {
-          console.log("Job details updated:", saveResponse.data);
-        })
-        .catch((saveError) => {
-          console.error("Error updating job:", saveError);
-        });}catch(error){
-          console.log("While Updating job", error)
-        }
-  
-    })
-    .catch((error)=>{
-      console.error("Error:",error);
-    })
-  }
 
   return (
     <div>
@@ -168,7 +186,9 @@ function VisualizationCompute() {
                     key={index}
                     className="d-flex align-items-center mb-2 bg-white visualization-display-url-container"
                   >
-                    <div className="flex-grow-1 visualization-display-urls">{url}</div>
+                    <div className="flex-grow-1 visualization-display-urls">
+                      {url}
+                    </div>
                     <button
                       className="btn btn-danger visualization-display-urls-btn"
                       onClick={() => handleRemoveUrl(index)}
@@ -195,46 +215,53 @@ function VisualizationCompute() {
                   />
                 </div>
                 <div>
-                  <button className="rounded-pill visualization-compute-model-btn" onClick={()=>handleExecute()}>
-                  {btnloading ? (
-                  <svg
-                    className="animate-spin button-spin-svg-pic"
-                    version="1.1"
-                    id="L9"
-                    xmlns="http://www.w3.org/2000/svg"
-                    x="0px"
-                    y="0px"
-                    viewBox="0 0 100 100"
-                    style={{ fill: "#fff" }}
+                  <button
+                    className="rounded-pill visualization-compute-model-btn"
+                    onClick={() => handleExecute()}
+                    disabled={notebookUrl == "" && datasetUrls == ""}
                   >
-                    <path d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50"></path>
-                  </svg>
-                ) : (
-                  <> Compute</>
-                )}
+                    {btnloading ? (
+                      <PulseLoader color="#fff" size={12} />
+                    ) : (
+                      <> Compute</>
+                    )}
                   </button>
                 </div>
               </div>
             </div>
 
             <div className="py-2">
-              <div className="visualization-compute-job-id">Job id: {jobId}</div>
+              <div className="visualization-compute-job-id">
+                Job id: {jobId}
+              </div>
             </div>
 
             <div className="d-flex py-2 align-items-center">
               <div className="visualization-compute-cid">cid:</div>
               <div className="px-3">
-              {showButton ? (
-                <button className="rounded-pill visualization-compute-cid-btn" onClick={()=>handleGetCID(jobId)}>
-                 Get CID
-                 </button>
+                {showButton ? (
+                  <button
+                    className="rounded-pill visualization-compute-cid-btn"
+                    onClick={() => handleGetCID(jobId)}
+                  >
+                    {cidloading ? (
+                      <PulseLoader color="#fff" size={8} />
+                    ) : (
+                      <>Get CID</>
+                    )}
+                  </button>
                 ) : (
                   cid
                 )}
               </div>
             </div>
+            <div className="cid-info">
+              *CID will be generated after your job is computed. You can track
+              your job status from the below table.
+            </div>
           </div>
         </div>
+        <ToastContainer />
       </div>
     </div>
   );
