@@ -217,8 +217,8 @@ function CreateModel() {
         model: modelCid,
         license: outputLicense.data.Hash,
         document: outputDocument.data.Hash,
-      };
-    } catch (e) {
+      };  
+   } catch (e) {
       console.log(e);
     }
   };
