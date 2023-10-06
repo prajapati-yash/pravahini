@@ -219,9 +219,7 @@ function CreateModel() {
         model: modelCid,
         license: outputLicense.data.Hash,
         document: outputDocument.data.Hash,
-      };
-    
-    
+      };  
    } catch (e) {
       console.log(e);
     }

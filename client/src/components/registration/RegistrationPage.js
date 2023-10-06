@@ -109,6 +109,17 @@ function RegistrationPage() {
         navigate("/user-dashboard");
       }
     } catch (e) {
+      toast.warn("Fill all the details!", {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setbtnloading(false)
       console.log("Error in creating user account: ", e);
     }
   };
@@ -132,12 +143,16 @@ function RegistrationPage() {
               ref={fileInputRef}
               style={{ display: "none" }}
               onChange={handleFileChange}
+
+              required
             ></input>
+
           </div>
 
           <div className="selected-image">
             {selectedFileName && <p>Selected Image: {selectedFileName}</p>}
           </div>
+            <p className="text-white">Upload the Image to display it on User Dashboard!<span style={{color: "#FFB800"}}>*</span></p>
 
           {/* Registration Details */}
 
