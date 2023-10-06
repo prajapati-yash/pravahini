@@ -80,11 +80,11 @@ router.post("/save-job", async (req, res) => {
   });
 
   
-router.delete('/delete-job/:jobId', async(req, res) =>{
-    const {jobId} = req.params;
+router.delete('/delete-job/:id', async(req, res) =>{
+    const {id} = req.params;
   
     try{
-      const deletedJob = await container1Model.findOneAndDelete({jobId});
+      const deletedJob = await container1Model.findOneAndDelete({ _id: id});
       if(deletedJob){
         res.status(200).json({message:"Job deleted successfully!"})
       }else{

@@ -196,7 +196,13 @@ function CreateModel() {
           progressCallback
         );
         modelCid = outputModel.data.Hash;
+<<<<<<< HEAD
       }
+=======
+
+        }
+
+>>>>>>> 70b5d1419e5c9dbc8b1e6fc791ad2a2b229f4779
 
       const outputLicense = await lighthouse.upload(
         uploadLicense.files,
