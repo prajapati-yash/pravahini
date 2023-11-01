@@ -1,6 +1,6 @@
 # Pravahini (प्रवाहिनी) - Where Data Flows, Models Grow, and AI Glows! 🌊🤖
 
-Checkout WeathHedge Platform: https://pravahini.vercel.app
+Checkout Pravahini Platform: https://pravahini.vercel.app
 
 ## About Pravahini
 
