@@ -157,12 +157,8 @@ function SingleModel() {
           console.log("Metamask is not installed, please install!");
         }
         const con = await modelInstance();
-        console.log("Hello");
-        console.log("model Id: ", parseInt(model[11]._hex, 16));
-        console.log("Price of model: ", parseInt(model[4]._hex, 16));
         const price = parseInt(model[4]._hex, 16);
         console.log("Ether value: ", ethers.utils.parseEther(price.toString()));
-        console.log("Hi");
         const tx = await con.purchaseModel(parseInt(model[11]._hex, 16), {
           value: ethers.utils.parseEther(price.toString()),
         });
@@ -172,9 +168,9 @@ function SingleModel() {
         setbtnloading(false);
 
         const status = await con.getPurchaseStatus(
-          parseInt(model[11]._hex, 16)
+          parseInt(model[11]._hex, 16),
+          address
         );
-        console.log("Purchase status: ", status);
         const cid = model[6];
 
         const { publicKey, signedMessage } = await encryptionSignature();
@@ -189,7 +185,7 @@ function SingleModel() {
 
         const { masterKey: recoveredKey } = await recoverKey(shards);
 
-        const fileType = "text/csv";
+        const fileType = "application/gzip";
         const model_file = await lighthouse.decryptFile(
           cid,
           recoveredKey,

@@ -163,7 +163,7 @@ function CreateModel() {
         const conditions = [
           {
             id: 1,
-            chain: "BTTC_Testnet",
+            chain: "BTTC",
             method: "getPurchaseStatus",
             standardContractType: "Custom",
             contractAddress: MODEL_ADDRESS,

@@ -36,7 +36,6 @@ function SubscribedModels() {
       await allModelData();
       setIsPageLoading(false);
     }
-    console.log("hello");
     fetchSubscribedModels();
   }, []);
 
