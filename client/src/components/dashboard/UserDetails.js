@@ -95,6 +95,26 @@ function UserDetails() {
     }
   };
 
+  useEffect(() => {
+    // Enable Bootstrap tooltips
+    const tooltipTriggerList = [].slice.call(
+      document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    );
+    tooltipTriggerList.map(
+      (tooltipTriggerEl) => new window.bootstrap.Tooltip(tooltipTriggerEl)
+    );
+
+    // Clean up when the component unmounts
+    return () => {
+      tooltipTriggerList.forEach((tooltipTriggerEl) => {
+        const tooltip = window.bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+        if (tooltip) {
+          tooltip.dispose();
+        }
+      });
+    };
+  });
+
   return (
     <div className="dashboard-main-component">
       <div className="d-flex flex-md-row flex-column user-details-component py-4 px-1">
@@ -145,6 +165,9 @@ function UserDetails() {
         <div className="d-flex py-4 justify-content-center dashboard-btns">
           <button
             type="button"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="The datasets that are created by user will be displayed here."
             className={`mx-sm-3 mx-2 dashboard-dataset-btn ${
               activeComponent === "userDatasets" ? "active-button" : ""
             }`}
@@ -154,6 +177,9 @@ function UserDetails() {
           </button>
           <button
             type="button"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="The ML models that are created by user will be displayed here."
             className={`mx-sm-3 mx-2 dashboard-model-btn ${
               activeComponent === "userModels" ? "active-button" : ""
             }`}
@@ -163,6 +189,9 @@ function UserDetails() {
           </button>
           <button
             type="button"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="The datasets or models that user have bought will be displayed here."
             className={`mx-sm-3 mx-2 dashboard-subscription-btn ${
               showButtons === true ? "active-button" : ""
             }`}

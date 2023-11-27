@@ -93,33 +93,25 @@ function DatasetDashboard() {
   };
 
   const handleSearchChange = (query) => {
+    setActiveComponent("allDatasets");
     setSearchQuery(query);
 
     const filtered = allDatasets.filter((item) =>
       item.title.toLowerCase().includes(query.toLowerCase())
     );
 
-    // console.log("Filtered items: ",filtered);
     setFilteredDatasets(filtered);
   };
 
   const allData = async () => {
     try {
-      const { ethereum } = window;
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        if (!provider) {
-          console.log("Metamask is not installed, please install!");
-        }
-        const con = await datasetInstance();
-        const getDatasetDetails = await con.getAllDatasets();
+      const con = await datasetInstance();
+      const getDatasetDetails = await con.getAllDatasets();
 
-        const filteredDatasets = getDatasetDetails.filter((dataset) => {
-          return dataset.isPublic || dataset.isForSale;
-        });
-        setAllDatasets(filteredDatasets);
-      }
+      const filteredDatasets = getDatasetDetails.filter((dataset) => {
+        return dataset.isPublic || dataset.isForSale;
+      });
+      setAllDatasets(filteredDatasets);
     } catch (error) {
       console.log(error);
     }
@@ -131,7 +123,6 @@ function DatasetDashboard() {
       await allData();
       setIsPageLoading(false);
     }
-    console.log("hello");
     fetchDatasets();
   }, []);
 
@@ -146,9 +137,9 @@ function DatasetDashboard() {
           <div className="py-2">
             <div className="dataset-dash-head">Datasets</div>
             <div className="pb-sm-3 pb-1 dataset-dash-subhead">
-              Discover, analyze, and share high-quality datasets.
-              Go-to platform for seamless exploration, analysis, and
-              collaborative sharing of top-notch datasets.
+              Discover, analyze, and share high-quality datasets. Go-to platform
+              for seamless exploration, analysis, and collaborative sharing of
+              top-notch datasets.
             </div>
           </div>
 
@@ -204,11 +195,9 @@ function DatasetDashboard() {
                   </a>
                   <a
                     className={`dropdown-item ${
-
                       activeComponent === "publicDatasets"
                         ? "active-button"
                         : ""
-
                     }`}
                     onClick={handlePublicDatasetClick}
                   >

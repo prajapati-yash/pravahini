@@ -85,6 +85,7 @@ function ModelDashboard() {
   };
 
   const handleSearchChange = (query) => {
+    setActiveComponent("allModels");
     setSearchQuery(query);
 
     const filtered = allModels.filter((item) =>
@@ -122,7 +123,6 @@ function ModelDashboard() {
       await allModelData();
       setIsPageLoading(false);
     }
-    console.log("hello");
     fetchModels();
   }, []);
 

@@ -94,7 +94,6 @@ function RegistrationPage() {
           console.log("Metamask is not installed, please install!");
         }
         const con = await authorizationInstance();
-        console.log("Hello");
         const tx = await con.setUser(
           formData.userName,
           formData.userOccupation,

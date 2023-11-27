@@ -169,7 +169,6 @@ function CreateDataset() {
   const progressCallback = (progressData) => {
     let percentageDone =
       100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
-    console.log(percentageDone);
   };
 
   const uploadData = async () => {
@@ -180,14 +179,10 @@ function CreateDataset() {
         "upload-demo-dataset-file"
       );
       const uploadLicense = document.getElementById("dataset-license-file");
-      // console.log("File: ", uploadImage.files);
 
-      console.log(isForSale);
       let datasetCid = "";
 
       if (isForSale) {
-        console.log("Paid Dataset....");
-
         const sig = await encryptionSignature();
         const outputDataset = await lighthouse.uploadEncrypted(
           uploadDataset.files,
@@ -204,7 +199,7 @@ function CreateDataset() {
         const conditions = [
           {
             id: 1,
-            chain: "BTTC_Testnet",
+            chain: "BTTC",
             method: "getPurchaseStatus",
             standardContractType: "Custom",
             contractAddress: DATASET_ADDRESS,
@@ -230,8 +225,6 @@ function CreateDataset() {
 
         console.log(responseCondition);
       } else {
-        console.log("Public Dataset....");
-
         const outputDataset = await lighthouse.upload(
           uploadDataset.files,
           process.env.REACT_APP_LIGHTHOUSE_API_KEY,
@@ -261,9 +254,6 @@ function CreateDataset() {
         false,
         progressCallback
       );
-      // console.log("File Status:", output);
-
-      console.log("Dataset CID: ", datasetCid);
 
       return {
         image: outputImage.data.Hash,
@@ -482,7 +472,7 @@ function CreateDataset() {
 
             <div className="py-3">
               <div className="d-flex justify-content-flex-start create-dataset-head">
-                Price of Dataset (in BTT) * 
+                Price of Dataset (in BTT) *
               </div>
               <div className="">
                 <input
@@ -574,7 +564,8 @@ function CreateDataset() {
                 <div className="col-1"></div>
                 <div className="row">
                   <span className="info-text">
-                    Upload the Demo Dataset (.csv, .json), which contains minimum 10 rows.
+                    Upload the Demo Dataset (.csv, .json), which contains
+                    minimum 10 rows.
                   </span>
                   {selectedDemoDataset && (
                     <div className="d-flex dataset-selected-file-text">
@@ -650,8 +641,8 @@ function CreateDataset() {
                 <div className="col-1"></div>
                 <div className="row">
                   <span className="info-text">
-                    Upload the license (.pdf) which contains the terms and conditions
-                    of the dataset.
+                    Upload the license (.pdf) which contains the terms and
+                    conditions of the dataset.
                   </span>
                   {selectedFileNameLicense && (
                     <div className="d-flex dataset-selected-file-text">

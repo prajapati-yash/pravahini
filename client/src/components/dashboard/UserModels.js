@@ -35,7 +35,6 @@ function UserModels() {
       await allModelData();
       setIsPageLoading(false);
     }
-    console.log("hello");
     fetchUserModels();
   }, []);
 

@@ -20,7 +20,7 @@ function SingleDataset() {
   const [tableRows, setTableRows] = useState([]);
   const { address } = useAccount();
   const location = useLocation();
-  console.log(location.state.data);
+  // console.log(location.state.data);
   const dataset = location.state ? location.state.data : "";
   const [btnloading, setbtnloading] = useState(false);
 
@@ -49,7 +49,6 @@ function SingleDataset() {
           return rowData;
         });
 
-      console.log(parsedData);
       setTableHeaders(headers);
       setTableRows(parsedData);
     } catch (error) {
@@ -194,7 +193,6 @@ function SingleDataset() {
           recoveredKey,
           fileType
         );
-
 
         const url = window.URL.createObjectURL(dataset_file);
         const a = document.createElement("a");

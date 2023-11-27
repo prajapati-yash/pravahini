@@ -41,11 +41,34 @@ const BTTChain = {
   testnet: true,
 };
 
+const BTTMainChain = {
+  id: 199,
+  name: "BitTorrent Chain Donau",
+  network: "BitTorrent Chain Donau",
+  iconUrl: "https://testscan.bt.io/static/media/BTT.e13a6c4e.svg",
+  iconBackground: "#fff",
+  nativeCurrency: {
+    decimals: 18,
+    name: "BitTorrent Chain Donau",
+    symbol: "BTT",
+  },
+  rpcUrls: {
+    default: "https://rpc.bt.io/",
+  },
+  blockExplorers: {
+    default: {
+      name: "BitTorrent Chain Donau",
+      url: "https://bttcscan.com",
+    },
+  },
+  testnet: false,
+};
+
 const { chains, publicClient } = configureChains(
-  [BTTChain, polygonMumbai, mainnet, polygon, optimism, arbitrum, zora],
+  [BTTMainChain],
   [
     jsonRpcProvider({
-      rpc: (chain) => ({ http: "https://pre-rpc.bittorrentchain.io/" }),
+      rpc: (chain) => ({ http: "https://rpc.bt.io/" }),
     }),
     alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
   ]

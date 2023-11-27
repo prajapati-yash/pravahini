@@ -35,7 +35,6 @@ function SubscribedDatasets() {
       await allSubscribedData();
       setIsPageLoading(false);
     }
-    console.log("hello");
     fetchSubscribedDatasets();
   }, []);
 

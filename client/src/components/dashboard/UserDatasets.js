@@ -36,7 +36,6 @@ function UserDatasets() {
       await allData();
       setIsPageLoading(false);
     }
-    console.log("hello");
     fetchUserDatasets();
   }, []);
 
