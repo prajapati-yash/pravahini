@@ -6,14 +6,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { darkTheme } from "@rainbow-me/rainbowkit";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import {
-  polygonMumbai,
-  mainnet,
-  polygon,
-  optimism,
-  arbitrum,
-  zora,
-} from "wagmi/chains";
+import { mainnet } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 // import SignMessage from "./components/efficiency/SignMessage";
@@ -65,7 +58,7 @@ const BTTMainChain = {
 };
 
 const { chains, publicClient } = configureChains(
-  [BTTMainChain],
+  [BTTMainChain, mainnet],
   [
     jsonRpcProvider({
       rpc: (chain) => ({ http: "https://rpc.bt.io/" }),
