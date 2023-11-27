@@ -34,7 +34,7 @@ function Computation() {
         );
         const sign = await signer.signMessage(messageBytes);
 
-        const res = await axios.post(`http://localhost:5500/de-computation`, {
+        const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/de-computation`, {
           address,
           sign,
         });

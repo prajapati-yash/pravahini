@@ -197,7 +197,9 @@ function CreateModel() {
         );
         modelCid = outputModel.data.Hash;
 
+
         }
+
 
 
       const outputLicense = await lighthouse.upload(
@@ -217,8 +219,8 @@ function CreateModel() {
         model: modelCid,
         license: outputLicense.data.Hash,
         document: outputDocument.data.Hash,
-      };
-    } catch (e) {
+      };  
+   } catch (e) {
       console.log(e);
     }
   };

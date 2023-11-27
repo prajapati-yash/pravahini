@@ -113,7 +113,7 @@ function EfficientComputationDetails() {
   const handleDeleteJob = (id) => {
     axios
       .delete(
-        `http://localhost:5500/container1/delete-job/${id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/container1/delete-job/${id}`,
         tokenHeaders
       )
       .then((response) => {
