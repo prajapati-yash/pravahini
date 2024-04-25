@@ -14,6 +14,9 @@ import { PulseLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { recoverShards, recoverKey } from "@lighthouse-web3/kavach";
+import Chartss from "./chartpage.js";
+import Count from "./count.js";
+
 
 function SingleDataset() {
   const [tableHeaders, setTableHeaders] = useState([]);
@@ -23,6 +26,15 @@ function SingleDataset() {
   // console.log(location.state.data);
   const dataset = location.state ? location.state.data : "";
   const [btnloading, setbtnloading] = useState(false);
+  const [displayedRows, setDisplayedRows] = useState(10);
+  
+  const handleViewMore = () => {
+    setDisplayedRows(displayedRows + 10);
+  };
+
+  const handleViewLess = () => {
+    setDisplayedRows(displayedRows - 10);
+  };
 
   useEffect(() => {
     fetchCSVData();
@@ -33,28 +45,41 @@ function SingleDataset() {
       const response = await axios.get(
         `https://gateway.lighthouse.storage/ipfs/${dataset.uploadDemoDataset}`
       );
+      // console.log(response);----data je uploaded 6
       const csvData = response.data;
-
+      // console.log(csvData)
+      // console.log(data);
       const rows = csvData.split("\n");
+      // console.log(rows)---bdhi row
       const headers = rows[0].split(",").map((header) => header.trim());
+      // console.log(headers)----first row
       const parsedData = rows
-        .slice(1)
-        .filter((row) => row.trim() !== "")
-        .map((row) => {
-          const values = row.split(",").map((value) => value.trim());
-          const rowData = {};
-          headers.forEach((header, index) => {
-            rowData[header] = values[index];
-          });
-          return rowData;
+      .slice(1)
+      .filter((row) => row.trim() !== "")
+      .map((row) => {
+        const values = row.split(",").map((value) => value.trim());
+        const rowData = {};
+        headers.forEach((header, index) => {
+          rowData[header] = values[index];
         });
-
+        return rowData;
+      });
+      // console.log(parsedData)
+      // setData(parsedData[0]);
+      // console.log(data)
       setTableHeaders(headers);
       setTableRows(parsedData);
+      // console.log(tableRows);
+
+      console.log("Number of rows:", parsedData.length);
+      console.log("Column names:", headers);
+      return { rowCount: parsedData.length, columnNames: headers };
     } catch (error) {
       console.error("Error fetching CSV file:", error);
+      return { rowCount: 0, columnNames: [] }; 
     }
   };
+
 
   const handleDownload = async () => {
     try {
@@ -168,6 +193,7 @@ function SingleDataset() {
         console.log(tx);
         await tx.wait();
         setbtnloading(false);
+       
 
         const status = await con.getPurchaseStatus(
           parseInt(dataset[11]._hex, 16),
@@ -217,6 +243,7 @@ function SingleDataset() {
     }
   };
 
+
   return (
     <div className="d-flex flex-md-row flex-column">
       <div className="py-3 col-md-7 col-lg-8">
@@ -224,6 +251,11 @@ function SingleDataset() {
           <div className="single-dataset-head">{dataset[0]}</div>
           <div className="single-dataset-subhead">{dataset[1]}</div>
         </div>
+
+        <div>
+          <Chartss />
+        </div>
+        
         <div className="py-4">
           {tableRows.length > 0 && (
             <div className="single-dataset-table">
@@ -237,14 +269,21 @@ function SingleDataset() {
                     </tr>
                   </thead>
                   <tbody>
-                    {tableRows.map((row, rowIndex) => (
+                    {/* {tableRows.map((row, rowIndex) => (
                       <tr key={rowIndex} className="dataset-table-body">
                         {tableHeaders.map((header, colIndex) => (
                           <td key={colIndex}>{row[header]}</td>
                         ))}
                       </tr>
-                    ))}
-
+                    ))} */}
+                     {tableRows.slice(0, displayedRows).map((row, rowIndex) => (
+                    <tr key={rowIndex} className="dataset-table-body">
+                      {tableHeaders.map((header, colIndex) => (
+                        <td key={colIndex}>{row[header]}</td>
+                      ))}
+                    </tr>
+                  ))}
+{/* allready commented */}
                     {/* {tableRows.map((row, rowIndex) => (
                           <tr key={rowIndex} className='dataset-table-body'>
                             {row.map((value, colIndex) => (
@@ -257,10 +296,36 @@ function SingleDataset() {
               </div>
             </div>
           )}
+
+          {tableRows.length > displayedRows && (
+          <button className="button-more" onClick={handleViewMore}>
+            View More
+          </button>
+        )}
+
+        {displayedRows > 10 && (
+          <button className="button-less" onClick={handleViewLess}>
+            View Less
+          </button>
+        )}
         </div>
       </div>
       <div className="col-md-5 col-lg-4">
         <div className="py-5 single-dataset-details">
+
+          <div className="count-row">
+            <Count />
+            <p>It contains data about the </p>
+            <ul>
+              {tableHeaders.map((header, index) => (
+                <React.Fragment key={index}>
+                <li>{header}</li>
+                {index !== tableHeaders.length - 1 && <span>, </span>}
+                </React.Fragment>
+              ))}
+            </ul>
+
+            </div>
           {dataset.isPublic || dataset.isPrivate ? (
             <div className="py-sm-5 py-4">
               <button
