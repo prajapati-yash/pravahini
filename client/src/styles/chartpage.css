@@ -1,0 +1,357 @@
+/* main page css */
+.main-module{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+}
+
+.count-row{
+    margin: 20px auto 0;
+    margin-left: 50px;
+    height: max-content;
+    width: 80%;
+    color: #fff;
+}
+.count-row p{
+  margin: 0 !important;
+  text-align: left;
+}
+
+.count-row ul{
+    margin-top: 0;
+    padding-left: 0 !important;
+    list-style-type: none;
+    color: #fff;
+    height: max-content !important;
+    margin-bottom: 0 !important;
+    text-align: left;
+}
+
+.count-row ul li{
+    color: white;
+    display: inline;
+    height: max-content;
+}
+
+/* buttons css */
+
+.button-more,
+.button-less{
+    height: 50px;
+    text-align: center;
+    width: 45%;
+    cursor: pointer;
+    color: black;
+    transition: all 0.3s;
+    position: relative;
+    border: none;
+    outline: none;
+    opacity: .4;
+    margin-top: -30px;
+}
+
+.button-more{
+    margin-left: -40px;
+}
+
+  .button-more:hover,
+  .button-less:hover{
+    opacity: 1; 
+    transform: scale(1, 1);
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    background-color: none !important;
+  }
+  
+
+.button-list{
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+}
+
+.chart-button{
+    display: inline-block;
+    outline: 0;
+    cursor: pointer;
+    border: none;
+    padding: 0 40px;
+    height: 45px;
+    line-height: 45px;
+    border-radius: 7px;
+    background: linear-gradient(to right, #4250ff, #6a79ff);
+    color: white;
+    font-weight: 400;
+    font-size: 16px;
+    box-shadow: none !important;
+    /* box-shadow: 0 4px 14px 0 rgb(0 118 255 / 39%); */
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+    position: relative;
+}
+
+.chart-button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s ease-in-out;
+}
+.icon-graph {
+    display: none;   
+    position: absolute;
+    top: 12%;
+    left: 90%;
+    margin: 10px;
+    transition: right 0.3s ease-in-out;
+    margin-right: 60px;
+}
+.chart-button:hover span {
+    padding-right: 20px;
+}
+.chart-button:hover .icon-graph {
+    display: inline;  
+    transition: 1s;
+}
+.chart-button.active .icon-graph{
+    display: inline;  
+    display: inline;
+    top: -20px; 
+    left: -40px;
+    background-color: rgb(0 118 255 / 39%);
+    border-radius: 50%;
+    padding: 6px;
+    width: 35px;
+    height: 35px;
+}
+
+/* chart input css - message box */
+
+@keyframes backInDown1 {
+    0% {
+      transform: translateX(-10px) translateY(-50px) scale(.90);
+      opacity: .7;
+    }
+  
+    80% {
+      transform: translateX(-10px) translateY(0px) scale(.90);
+      opacity: .7;
+    }
+  
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  @keyframes backInDown2 {
+    0% {
+      transform: translateY(-50px) scale(.90);
+      opacity: .7;
+    }
+  
+    80% {
+      transform: translateY(0px) scale(.90);
+      opacity: .7;
+    }
+  
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  @keyframes backInDown3 {
+    0% {
+      transform: translateX(-10px) translateY(-50px) scale(.90);
+      opacity: .7;
+    }
+  
+    80% {
+      transform: translateX(-10px) translateY(0px) scale(.90);
+      opacity: .7;
+    }
+  
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+.barchart-content{
+    background-color: white;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px;
+    margin-top: 10px;
+    position: relative;
+    border-radius: 15px;
+    -webkit-animation: backInDown1 0.2s;
+    animation: backInDown1 1s;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+}
+
+.linechart-content{
+    background-color: white;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px;
+    margin-top: 10px;
+    position: relative;
+    border-radius: 15px;
+    -webkit-animation: backInDown2 0.2s;
+    animation: backInDown2 1s;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+}
+
+.piechart-content{
+    background-color: white;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px;
+    margin-top: 10px;
+    position: relative;
+    border-radius: 15px;
+    -webkit-animation: backInDown3 0.2s;
+    animation: backInDown3 1s;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+}
+
+.barchart-content::after{
+    content: '';
+	position: absolute;
+	top: 0;
+	left: 20%;
+	width: 0;
+	height: 0;
+	border: 20px solid transparent;
+	border-bottom-color: white;
+	border-top: 0;
+	border-right: 0;
+	margin-left: -10px;
+	margin-top: -20px;
+    transition-timing-function: ease-in-out;
+}
+
+
+.linechart-content::after{
+    content: '';
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 0;
+	height: 0;
+	border: 20px solid transparent;
+	border-bottom-color: white;
+	border-top: 0;
+	margin-left: -20px;
+	margin-top: -20px;
+}
+
+.piechart-content::after{
+    content: '';
+	position: absolute;
+	top: 0;
+	left: 80%;
+	width: 0;
+	height: 0;
+	border: 20px solid transparent;
+	border-bottom-color: white;
+	border-top: 0;
+	border-left: 0;
+	margin-left: -10px;
+	margin-top: -20px;
+}
+
+.barchartpara{
+    text-align: left;
+}
+
+.question{
+    font-weight: bold;
+}
+
+.options{
+    display: inline;
+    margin-bottom: 20px;
+}
+
+.checkbox input {
+    opacity: 0;
+    height: 0;
+    width: 0;
+}
+
+.checkbox{
+    display: inline-block;
+    background-color: rgba(255, 255, 255, .9);
+    border: 2px solid rgba(139, 139, 139, .3);
+    color: #adadad;
+    border-radius: 25px;
+    white-space: nowrap;
+    margin: 2px 1px;
+    padding: 3px 15px;
+    cursor: pointer;
+}
+
+.checkbox::before{
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 12px;
+    padding: 2px 6px 2px 2px;
+    content: "\f067";
+    transition: transform .3s ease-in-out;
+}
+
+  .checkbox.active{
+    background: linear-gradient(to right, #4250ff, #6a79ff);
+    color: white;
+  }
+
+  .select-container select {
+    width: 150px;
+    height: 40px;
+    padding: 6px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+
+
+.select-container select:focus {
+  border-color: #0070f3;
+}
+
+    transition: border-color 0.3s ease;
+  }
+  
+  .select-container select:focus {
+    border-color: #0070f3;
+  }
+
+
+.chart-container{
+    width: 500px;
+    height: 300px;
+    margin: 0 auto;
+    margin-left: 80px;
+}
+.chart-area{
+    margin: 0 auto;
+
+}
+
