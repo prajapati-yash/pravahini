@@ -15,6 +15,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { recoverShards, recoverKey } from "@lighthouse-web3/kavach";
 import Chartss from "./chartpage.js";
+// import Chartss from "./barchart.js";
 import Count from "./count.js";
 
 
