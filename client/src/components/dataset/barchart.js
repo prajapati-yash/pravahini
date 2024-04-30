@@ -25,12 +25,18 @@ const Chartss = () => {
   const location = useLocation();
   const dataset = location.state ? location.state.data : null;
   const [xAxisColumn, setXAxisColumn] = useState("");
-
+  const [yAxisColumn, setYAxisColumn] = useState("");
   const [chartType, setChartType] = useState("bar");
   const [stackedColumns, setStackedColumns] = useState([]);
   const [LineColumns, setLineColumns] = useState([]);
+
   const [averages, setAverages] = useState([]);
   const [countData, setCountData] = useState([]);
+
+
+  
+
+  // const [lineColumns, setLineColumns] = useState([]);
 
 
   useEffect(() => {
@@ -38,11 +44,38 @@ const Chartss = () => {
       fetchCSVData();
     }
   }, [dataset]);
+
   useEffect(() => {
     if (xAxisColumn && stackedColumns.length > 0) {
       calculateAverages();
     }
   }, [xAxisColumn, stackedColumns]);
+  
+  const calculateAverages = () => {
+    const uniqueXValues = Array.from(new Set(tableRows.map((row) => row[xAxisColumn]).filter((value) => value !== undefined && value !== "")));
+  
+    const calculatedAverages = uniqueXValues.map((xValue) => {
+      const filteredRows = tableRows.filter((row) => row[xAxisColumn] === xValue);
+  
+      const averageValues = {};
+      stackedColumns.forEach((column) => {
+        const values = filteredRows.map((row) => parseFloat(row[column])).filter((value) => !isNaN(value));
+        const sum = values.reduce((total, value) => total + value, 0);
+        const avg = values.length > 0 ? sum / values.length : 0;
+        averageValues[column] = avg;
+      });
+  
+      // return { [xAxisColumn]: xValue, ...averageValues };
+      return { [xAxisColumn]: xValue, ...averageValues, count: filteredRows.length };
+
+    });
+  
+    setAverages(calculatedAverages);
+    setCountData(calculatedAverages.map((entry) => ({ [xAxisColumn]: entry[xAxisColumn], count: entry.count })));
+
+  };
+  
+  
 
   const fetchCSVData = async () => {
     try {
@@ -65,50 +98,21 @@ const Chartss = () => {
 
       setXAxisColumn(headers[0]);
       // setStackedColumns([headers[0]]);
-
       setLineColumns([headers[0]]);
     } catch (error) {
       console.error("Error fetching CSV file:", error);
     }
   };
-
-
-  const calculateAverages = () => {
-    const uniqueXValues = Array.from(new Set(tableRows.map((row) => row[xAxisColumn]).filter((value) => value !== undefined && value !== "")));
-  
-    const calculatedAverages = uniqueXValues.map((xValue) => {
-      const filteredRows = tableRows.filter((row) => row[xAxisColumn] === xValue);
-  
-      const averageValues = {};
-      stackedColumns.forEach((column) => {
-        const values = filteredRows.map((row) => parseFloat(row[column])).filter((value) => !isNaN(value));
-        const sum = values.reduce((total, value) => total + value, 0);
-        const avg = values.length > 0 ? sum / values.length : 0;
-        averageValues[column] = avg;
-      });
-  
-      return { [xAxisColumn]: xValue, ...averageValues, count: filteredRows.length };
-
-    });
-  
-    setAverages(calculatedAverages);
-    setCountData(calculatedAverages.map((entry) => ({ [xAxisColumn]: entry[xAxisColumn], count: entry.count })));
-
-  };
-
-// checkbox selection in bar chart
   const handleCheckboxChange = (column) => {
-
+    // Toggle the checked state of the clicked checkbox
     if (stackedColumns.includes(column)) {
       setStackedColumns(stackedColumns.filter((col) => col !== column));
     } else {
       setStackedColumns([...stackedColumns, column]);
     }
   };
-
-  // checkbox selection in line chart
   const handleCheckboxChange2 = (column) => {
-
+    // Toggle the checked state of the clicked checkbox
     if (LineColumns.includes(column)) {
       setLineColumns(LineColumns.filter((col) => col !== column));
     } else {
@@ -140,33 +144,37 @@ const Chartss = () => {
   };
 
 
+
+
   const renderChartInputs = () => {
     if (chartType === "bar") {
       return (
         <div className="barchart-content">
           <p className="barchartpara">Bar charts are used to compare discrete categories of data. They display data as rectangular bars of varying lengths, with each bar representing a category.
-
-          <br /> <br /> Here, You can select column to show on X-axes and columns to show average values. It is recommended to use brush below the graph to check the data range properly.</p>          
+          <br /> <br /> Here, You can select column to show on X-axes and columns to show average values. It is recommended to use brush below the graph to check the data range properly.</p>
+          
           <p className="question">Select columns for Stacked Graph:</p>
           
           <div className="options">
-          {tableHeaders.map((column) => (
-
+          {tableHeaders.map((column, index) => (
             isNumericColumn(column) && (
-
             <label key={column} className={`checkbox ${stackedColumns.includes(column) ? 'active' : ''}`}>
               <input
                 type="checkbox"
                 className="boxes"
-                checked={stackedColumns.includes(column)}
-
+                checked={index === 0 || stackedColumns.includes(column)}
+                // onChange={(e) =>
+                //   e.target.checked
+                //     ? setStackedColumns([...stackedColumns, column])
+                //     : setStackedColumns(
+                //       stackedColumns.filter((col) => col !== column)
+                //     )
+                // }
                 onChange={() => handleCheckboxChange(column)}
               />
               {column}
             </label>
-
             )
-
           ))}
           
           </div>
@@ -190,24 +198,26 @@ const Chartss = () => {
       return (
         <div className="linechart-content">
           <p className="barchartpara">A line chart is a fundamental visualization tool used to display data trends across categories. It consists of a series of data points connected by lines, making it easy to observe changes, patterns, or relationships within the dataset. 
-
-          <br /><br /> Here, You can analize the behaviour of data in particular column. </p>
-          
+          <br /> Here, Each line represent data of column. </p>
           <p className="question">Select columns for Line Graph:</p>
           <div className="options">
           {tableHeaders.map((column) => (
-            isNumericColumn(column) && (
             <label key={column} className={`checkbox ${LineColumns.includes(column) ? 'active' : ''}`}>
               <input
                 type="checkbox"
                 className="boxes"
                 checked={LineColumns.includes(column)}
+                // onChange={(e) =>
+                //   e.target.checked
+                //     ? setLineColumns([...lineColumns, column])
+                //     : setLineColumns(
+                //       lineColumns.filter((col) => col !== column)
+                //     )
+                // }
                 onChange={() => handleCheckboxChange2(column)}
               />
               {column}
             </label>
-            )
-
           ))}
           </div>
           <p className="question">Select column for X:</p>
@@ -231,7 +241,7 @@ const Chartss = () => {
       return (
         <div className="piechart-content">
           <p className="barchartpara">A pie chart is a circular statistical graphic used to represent proportions or percentages within a whole. It is divided into slices to illustrate numerical proportions. Each slice represents a category or value, and the size of each slice corresponds to the proportion of the whole it represents.
-          <br /><br /> Here, You are recommended to select the column, for which you want to see the proportion of each data in entire dataset. </p>
+          <br /> Here, It is recommended to select that column for which you want to see the proportion of each data in entire dataset. </p>
           <p className="question">Select Column Name:</p>
           <div className="select-container">
           <select
@@ -250,54 +260,64 @@ const Chartss = () => {
     }
   };
 
-
-//   const CustomTooltip = ({ active, payload, label, xAxisColumn, yAxisColumns }) => {
-//     if (active && payload && payload.length) {
-//       const tooltipContent = payload.map((entry) => (
-//         <p key={entry.dataKey}>{`${entry.dataKey}: ${entry.value}`}</p>
-//       ));
+  const CustomTooltip = ({ active, payload, label, xAxisColumn, yAxisColumns }) => {
+    if (active && payload && payload.length) {
+      const tooltipContent = payload.map((entry) => (
+        <p key={entry.dataKey}>{`${entry.dataKey}: ${entry.value}`}</p>
+      ));
     
-//       return (
-//         <div className="custom-tooltip">
-//           {tooltipContent}
-//         </div>
-//       );
-//     }
+      return (
+        <div className="custom-tooltip">
+          {tooltipContent}
+        </div>
+      );
+    }
   
-//     return null;
-//   };
-  
-  
+    return null;
+  };
 
   const renderChart = () => {
     if (tableRows.length === 0) {
       return <p>Loading...</p>;
     }
 
-    if (tableRows.length === 0 || xAxisColumn === "" || (chartType === "bar" && stackedColumns.length === 0) || (chartType === "line" && LineColumns.length === 0)) {
-      return (
-        <div className="loading">
-          <div class="loader"></div>
-          <p>Select columns to plot the graph over here!</p>
-        </div>
-      );
-    }
-
     switch (chartType) {
       case "bar":
-
+        // const filteredRows = tableRows.map((row) => {
+        //   const filteredRow = {};
+        //   Object.keys(row).forEach((key) => {
+        //     if (key !== xAxisColumn && !isNaN(parseFloat(row[key]))) {
+        //       filteredRow[key] = parseFloat(row[key]);
+        //     }
+        //   });
+        //   return { ...filteredRow, [xAxisColumn]: row[xAxisColumn] };
+        // });
+        // console.log("123156",xAxisColumn)
+        // const filteredRows = tableRows.map((row) => {
+        //     const filteredRow = {};
+        //     Object.keys(row).forEach((key) => {
+        //       if (key !== xAxisColumn && !isNaN(parseFloat(row[key]))) {
+        //         filteredRow[key] = parseFloat(row[key]);
+        //       }
+        //     });
+        //     return { ...filteredRow, [xAxisColumn]: row[xAxisColumn] };
+        //   });
+          
         if (averages.length === 0 || stackedColumns.length === 0) {
           return null;
         }
-
-
         const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f50", "#00bfff"];
-
         return (
           <ResponsiveContainer width="100%" height="100%">
           <BarChart width={500} height={300} data={averages}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey={xAxisColumn}/>
+            <XAxis
+            dataKey={xAxisColumn}
+            // type="category"
+            // allowDuplicatedCategory={false}
+            // tickCount={uniqueXValues.length}
+            // ticks={uniqueXValues}
+            />
             <YAxis />
             <Tooltip  />
             <Legend />
@@ -311,11 +331,12 @@ const Chartss = () => {
                 fill={colors[index % colors.length]} 
               />
             ))}
-            <Bar key="count" dataKey="count" stackId="b" fill="#800080" />
+                    <Bar key="count" dataKey="count" stackId="b" fill="#800080" />
+
           </BarChart>
           </ResponsiveContainer>
         );
-        
+
       case "line":
         const filteredRows2 = tableRows.map((row) => {
           const filteredRow = {};
@@ -418,8 +439,46 @@ const Chartss = () => {
     }
 };
 
+// const renderUniqueValues = () => {
+//   // Collect unique non-empty values from the selected xAxisColumn
+//   const uniqueValues = new Set(
+//     tableRows.map((row) => row[xAxisColumn]).filter((value) => value !== undefined && value !== "")
+//   );
+
+//   return (
+//     <div className="unique-values">
+//       <p>Unique Values for {xAxisColumn}:</p>
+//       <ul>
+//         {[...uniqueValues].map((value, index) => (
+//           <li key={index}>{value}</li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// };
+
+
+
   return (
     <div className="main-module">
+         {/* <div className="column-data-type-message">
+          {xAxisColumn && renderColumnDataTypeMessage(xAxisColumn)}
+        </div> */}
+       
+      {/* <div className="averages">
+        {averages.map((averageData, index) => (
+          <div key={index}>
+            <p>{`${xAxisColumn}: ${averageData[xAxisColumn]}`}</p>
+            <ul>
+              {stackedColumns.map((column) => (
+                <li key={column}>
+                {`${column}: ${averageData[column] !== undefined && !isNaN(averageData[column]) ? averageData[column].toFixed(2) : '-'}`}
+              </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div> */}
       <div className="button-list">
         <button
           className={`chart-button ${activeButton==="bar" ? "active" : ""} ${chartType === "bar" ? "btn-primary" : "btn-secondary"
@@ -456,4 +515,3 @@ const Chartss = () => {
 };
 
 export default Chartss;
-

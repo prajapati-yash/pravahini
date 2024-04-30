@@ -40,7 +40,7 @@
 .button-less{
     height: 50px;
     text-align: center;
-    width: 45%;
+    width: 30vw;
     cursor: pointer;
     color: black;
     transition: all 0.3s;
@@ -256,7 +256,7 @@
 }
 
 .piechart-content::after{
-    content: '';
+  content: '';
 	position: absolute;
 	top: 0;
 	left: 80%;
@@ -345,13 +345,51 @@
 
 
 .chart-container{
-    width: 500px;
+    /* width: 500px; */
+    /* height: 300px; */
+    width: 40vw;
     height: 300px;
     margin: 0 auto;
-    margin-left: 80px;
+    /* margin-left: 80px; */
+    display: flex;
+    justify-content: flex-start;
+    align-items: last baseline;
+}
+@media screen and (max-width:768px){
+  .chart-container{
+    /* width: 500px; */
+    /* height: 300px; */
+    width: 90vw;
+    height: 300px;
+    margin: 0 auto;
+}
 }
 .chart-area{
     margin: 0 auto;
-
 }
 
+/* before loading chart animation  */
+.loading{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #0070f3;
+  border-radius: 10px;
+}
+
+.loader {
+  width: 120px;
+  height: 20px;
+  -webkit-mask: linear-gradient(90deg,#000 70%,#0000 0) left/20% 100%;
+  background:
+   linear-gradient(#0070f3 0 0) left -25% top 0 /20% 100% no-repeat
+   #ddd;
+  animation: l7 4s infinite steps(6);
+  margin-bottom: 15px;
+}
+@keyframes l7 {
+    100% {background-position: right -25% top 0}
+}
