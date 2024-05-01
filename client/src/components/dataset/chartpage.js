@@ -25,6 +25,7 @@ const Chartss = () => {
   const location = useLocation();
   const dataset = location.state ? location.state.data : null;
   const [xAxisColumn, setXAxisColumn] = useState("");
+
   const [chartType, setChartType] = useState("bar");
   const [stackedColumns, setStackedColumns] = useState([]);
   const [LineColumns, setLineColumns] = useState([]);
@@ -37,7 +38,6 @@ const Chartss = () => {
       fetchCSVData();
     }
   }, [dataset]);
-
   useEffect(() => {
     if (xAxisColumn && stackedColumns.length > 0) {
       calculateAverages();
@@ -65,11 +65,13 @@ const Chartss = () => {
 
       setXAxisColumn(headers[0]);
       // setStackedColumns([headers[0]]);
+
       setLineColumns([headers[0]]);
     } catch (error) {
       console.error("Error fetching CSV file:", error);
     }
   };
+
 
   const calculateAverages = () => {
     const uniqueXValues = Array.from(new Set(tableRows.map((row) => row[xAxisColumn]).filter((value) => value !== undefined && value !== "")));
@@ -96,6 +98,7 @@ const Chartss = () => {
 
 // checkbox selection in bar chart
   const handleCheckboxChange = (column) => {
+
     if (stackedColumns.includes(column)) {
       setStackedColumns(stackedColumns.filter((col) => col !== column));
     } else {
@@ -105,6 +108,7 @@ const Chartss = () => {
 
   // checkbox selection in line chart
   const handleCheckboxChange2 = (column) => {
+
     if (LineColumns.includes(column)) {
       setLineColumns(LineColumns.filter((col) => col !== column));
     } else {
@@ -141,22 +145,28 @@ const Chartss = () => {
       return (
         <div className="barchart-content">
           <p className="barchartpara">Bar charts are used to compare discrete categories of data. They display data as rectangular bars of varying lengths, with each bar representing a category.
+
           <br /> <br /> Here, You can select column to show on X-axes and columns to show average values. It is recommended to use brush below the graph to check the data range properly.</p>          
           <p className="question">Select columns for Stacked Graph:</p>
           
           <div className="options">
           {tableHeaders.map((column) => (
+
             isNumericColumn(column) && (
+
             <label key={column} className={`checkbox ${stackedColumns.includes(column) ? 'active' : ''}`}>
               <input
                 type="checkbox"
                 className="boxes"
                 checked={stackedColumns.includes(column)}
+
                 onChange={() => handleCheckboxChange(column)}
               />
               {column}
             </label>
+
             )
+
           ))}
           
           </div>
@@ -180,6 +190,7 @@ const Chartss = () => {
       return (
         <div className="linechart-content">
           <p className="barchartpara">A line chart is a fundamental visualization tool used to display data trends across categories. It consists of a series of data points connected by lines, making it easy to observe changes, patterns, or relationships within the dataset. 
+
           <br /><br /> Here, You can analize the behaviour of data in particular column. </p>
           
           <p className="question">Select columns for Line Graph:</p>
@@ -196,6 +207,7 @@ const Chartss = () => {
               {column}
             </label>
             )
+
           ))}
           </div>
           <p className="question">Select column for X:</p>
@@ -215,7 +227,6 @@ const Chartss = () => {
 
       );
     } 
-
     else if (chartType === "pie") {
       return (
         <div className="piechart-content">
@@ -238,6 +249,24 @@ const Chartss = () => {
       );
     }
   };
+
+
+//   const CustomTooltip = ({ active, payload, label, xAxisColumn, yAxisColumns }) => {
+//     if (active && payload && payload.length) {
+//       const tooltipContent = payload.map((entry) => (
+//         <p key={entry.dataKey}>{`${entry.dataKey}: ${entry.value}`}</p>
+//       ));
+    
+//       return (
+//         <div className="custom-tooltip">
+//           {tooltipContent}
+//         </div>
+//       );
+//     }
+  
+//     return null;
+//   };
+  
   
 
   const renderChart = () => {
@@ -266,6 +295,7 @@ const Chartss = () => {
         if (averages.length === 0 || stackedColumns.length === 0) {
           return null;
         }
+
 
         const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f50", "#00bfff"];
 
@@ -432,3 +462,4 @@ const Chartss = () => {
 };
 
 export default Chartss;
+
