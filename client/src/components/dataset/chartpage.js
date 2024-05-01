@@ -283,6 +283,14 @@ const Chartss = () => {
       );
     }
 
+    const customTooltipFormatter = (value, name, props) => {
+      if (typeof value === 'number') {
+        return `${value.toFixed(2)}`;
+      }
+      return value;
+    };
+
+
     switch (chartType) {
       case "bar":
 
@@ -299,7 +307,8 @@ const Chartss = () => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey={xAxisColumn}/>
             <YAxis />
-            <Tooltip  />
+
+            <Tooltip formatter={customTooltipFormatter} />
             <Legend />
             <ReferenceLine y={0} stroke="#000" />
             <Brush dataKey={xAxisColumn} height={30} stroke="#8884d8" />
