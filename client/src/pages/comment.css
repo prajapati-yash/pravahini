@@ -1,0 +1,21 @@
+.body{
+    background-color: black;
+}
+.react-responsive-modal-modal{
+border-radius: 10px;
+/* width: 5000px !important; */
+/* padding:0px 30px; */
+
+}
+.react-responsive-modal-modal h2{
+    font-size: medium;
+    font-weight: 400;
+}
+.react-responsive-modal-modal p{
+    font-size: small;
+}
+.react-responsive-modal-closeButton svg{
+    position: relative;
+    margin: -15px;
+    display:none;
+}

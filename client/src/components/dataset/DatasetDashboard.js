@@ -360,10 +360,13 @@ function DatasetDashboard() {
                     </div>
                     <div
                       className="all-dataset-btn"
-                      onClick={() =>
+                      onClick={() =>{
                         navigate("/dataset-marketplace/single-dataset", {
                           state: { data: item },
-                        })
+                        }
+                      )
+                      
+                      }
                       }
                     >
                       View More &gt;

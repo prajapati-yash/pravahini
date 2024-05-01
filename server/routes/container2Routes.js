@@ -100,85 +100,85 @@ router.delete("/delete-job/:jobId", async (req, res) => {
   }
 });
 
-router.get("/get-job-status/:jobId", (req, res) => {
-  const jobId = req.params;
-  const output = jobId.jobId.replace(/:/g, "");
-  const jobListCommand = `bacalhau list --id-filter=${output} --output json`;
-  const jobListExecution = spawnSync("bash", ["-c", jobListCommand]);
+  router.get("/get-job-status/:jobId", (req, res) => {
+    const jobId = req.params;
+    const output = jobId.jobId.replace(/:/g, "");
+    const jobListCommand = `bacalhau list --id-filter=${output} --output json`;
+    const jobListExecution = spawnSync("bash", ["-c", jobListCommand]);
 
-  if (jobListExecution.status === 0) {
-    const jobListOutput = jobListExecution.stdout.toString().trim();
+    if (jobListExecution.status === 0) {
+      const jobListOutput = jobListExecution.stdout.toString().trim();
 
-    try {
-      const jobList = JSON.parse(jobListOutput);
-      if (Array.isArray(jobList) && jobList.length > 0) {
-        let state = jobList[0].State.State;
-        console.log("State", state);
-        if (state === "New") {
-          state = "In Progress";
+      try {
+        const jobList = JSON.parse(jobListOutput);
+        if (Array.isArray(jobList) && jobList.length > 0) {
+          let state = jobList[0].State.State;
+          console.log("State", state);
+          if (state === "New") {
+            state = "In Progress";
 
-          res.json({ state });
+            res.json({ state });
+          } else {
+            res.json({ state });
+          }
         } else {
-          res.json({ state });
+          res.status(404).json({ error: "Job not found" });
         }
-      } else {
-        res.status(404).json({ error: "Job not found" });
+      } catch (error) {
+        res.status(500).json({ error: "Failed to parse jobList JSON" });
       }
-    } catch (error) {
-      res.status(500).json({ error: "Failed to parse jobList JSON" });
-    }
-  } else {
-    res.status(500).json({ error: "Failed to get job information" });
-  }
-});
-
-router.get("/get-cid/:jobId", (req, res) => {
-  const jobId = req.params;
-  const output = jobId.jobId.replace(/:/g, "");
-  const jobInfoCommand = `bacalhau describe ${output}`;
-  const jobInfoExecution = spawnSync("bash", ["-c", jobInfoCommand]);
-
-  if (jobInfoExecution.status === 0) {
-    const jobInfo = jobInfoExecution.stdout.toString().trim();
-    const cidRegex = /PublishedResults:[\s\S]*?CID:\s*(\S+)/;
-    //     const cidRegex = /CID:\s*(\S+)/;
-    const match = jobInfo.match(cidRegex);
-    if (match && match.length > 1) {
-      const cid = match[1];
-      jobIdToDownload = jobId;
-      res.json({ cid, jobInfo });
     } else {
-      res.status(500).json({ error: "CID not found in jobInfo" });
+      res.status(500).json({ error: "Failed to get job information" });
     }
-  } else {
-    res.status(500).json({ error: "Failed to get job information" });
+  });
+
+  router.get("/get-cid/:jobId", (req, res) => {
+    const jobId = req.params;
+    const output = jobId.jobId.replace(/:/g, "");
+    const jobInfoCommand = `bacalhau describe ${output}`;
+    const jobInfoExecution = spawnSync("bash", ["-c", jobInfoCommand]);
+
+    if (jobInfoExecution.status === 0) {
+      const jobInfo = jobInfoExecution.stdout.toString().trim();
+      const cidRegex = /PublishedResults:[\s\S]*?CID:\s*(\S+)/;
+      //     const cidRegex = /CID:\s*(\S+)/;
+      const match = jobInfo.match(cidRegex);
+      if (match && match.length > 1) {
+        const cid = match[1];
+        jobIdToDownload = jobId;
+        res.json({ cid, jobInfo });
+      } else {
+        res.status(500).json({ error: "CID not found in jobInfo" });
+      }
+    } else {
+      res.status(500).json({ error: "Failed to get job information" });
+    }
+  });
+
+  router.post("/execute", (req, res) => {
+    const { notebookUrl, inputs } = req.body;
+    const notebookFileName = getFileNameFromUrl(notebookUrl);
+    const outputFileName = generateOutputFileName(notebookUrl);
+    const inputArgs = inputs
+      .map((input) => `-i src=${input.url},dst=/inputs/data/`)
+      .join(" ");
+    const jobCommand = `bacalhau docker run --wait=false --id-only --timeout ${timeout} --wait-timeout-secs ${waitTimeout} -w /inputs -i src=${notebookUrl},dst=/inputs/notebook/ ${inputArgs} ${dockerImage} -- jupyter nbconvert --execute --to notebook --output /outputs/${outputFileName} /inputs/notebook/${notebookFileName}`;
+    const jobExecution = spawnSync("bash", ["-c", jobCommand]);
+    const jobId = jobExecution.stdout.toString().trim();
+    res.json({ jobId });
+  });
+
+  function getFileNameFromUrl(url) {
+    const parts = url.split("/");
+    return parts[parts.length - 1];
   }
-});
 
-router.post("/execute", (req, res) => {
-  const { notebookUrl, inputs } = req.body;
-  const notebookFileName = getFileNameFromUrl(notebookUrl);
-  const outputFileName = generateOutputFileName(notebookUrl);
-  const inputArgs = inputs
-    .map((input) => `-i src=${input.url},dst=/inputs/data/`)
-    .join(" ");
-  const jobCommand = `bacalhau docker run --wait=false --id-only --timeout ${timeout} --wait-timeout-secs ${waitTimeout} -w /inputs -i src=${notebookUrl},dst=/inputs/notebook/ ${inputArgs} ${dockerImage} -- jupyter nbconvert --execute --to notebook --output /outputs/${outputFileName} /inputs/notebook/${notebookFileName}`;
-  const jobExecution = spawnSync("bash", ["-c", jobCommand]);
-  const jobId = jobExecution.stdout.toString().trim();
-  res.json({ jobId });
-});
-
-function getFileNameFromUrl(url) {
-  const parts = url.split("/");
-  return parts[parts.length - 1];
-}
-
-function generateOutputFileName(notebookUrl) {
-  const urlParts = notebookUrl.split("/");
-  const notebookName = urlParts[urlParts.length - 1];
-  const fileNameParts = notebookName.split(".");
-  fileNameParts.pop();
-  return `${fileNameParts.join(".")}_output.ipynb`;
-}
+  function generateOutputFileName(notebookUrl) {
+    const urlParts = notebookUrl.split("/");
+    const notebookName = urlParts[urlParts.length - 1];
+    const fileNameParts = notebookName.split(".");
+    fileNameParts.pop();
+    return `${fileNameParts.join(".")}_output.ipynb`;
+  }
 
 module.exports = router;

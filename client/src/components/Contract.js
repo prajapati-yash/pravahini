@@ -28,7 +28,6 @@ export const authorizationInstance = async () => {
       userAuthorizationABI,
       signer
     );
-    // console.log(con);
     return con;
   } else {
     console.log("error");
@@ -48,7 +47,7 @@ export const datasetInstance = async () => {
       datasetMarketplaceABI,
       signer
     );
-    // console.log(con);
+    console.log(con);
     return con;
   } else {
     console.log("error");

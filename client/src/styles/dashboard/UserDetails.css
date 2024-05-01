@@ -69,7 +69,6 @@
   border-radius: 1rem;
   border: 1px solid #6a79ff;
 }
-
 .dashboard-dataset-btn:hover,
 .dashboard-model-btn:hover,
 .dashboard-subscription-btn:hover {
@@ -78,6 +77,21 @@
   box-shadow: 2px 2px 3px 2px rgba(180, 164, 246, 0.308);
   border: 1px solid #4250ff;
 }
+.save-btn{
+  font-size: 1rem;
+  background-color: white;
+  color: #4250ff;
+  border-radius: 0.5rem;
+  border: 1px solid #6a79ff;
+
+}
+.save-btn:hover{
+  background-color: #6a79ff;
+  color: white;
+  box-shadow: 2px 2px 3px 2px rgba(180, 164, 246, 0.308);
+  border: 1px solid white;
+}
+
 
 .subscription-dataset-btn,
 .subscription-model-btn {

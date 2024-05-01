@@ -10,6 +10,8 @@ import union from "../../assets/home/union-2.png";
 import heroimg from "../../assets/home/heroImage.png";
 import security from "../../assets/home/security.png";
 import unioncopy from "../../assets/home/union-copy.png";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 function HomeHero() {
   const navigate = useNavigate();
@@ -40,8 +42,17 @@ function HomeHero() {
       if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
-        if (!provider) {
-          console.log("Metamask is not installed, please install!");
+        const messageBytes = ethers.utils.toUtf8Bytes(
+          process.env.REACT_APP_MSG_TO_SIGN
+        );
+        if(!Cookies.get("jwtToken")){
+        const sign = await signer.signMessage(messageBytes);
+        const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/de-computation`, {
+          address,
+          sign,
+        });
+        const token = res.data.jwtToken;
+        Cookies.set("jwtToken", token, { expires: 1 });
         }
         const con = await authorizationInstance();
         const verifyTx = await con.isRegistered(address);
@@ -49,6 +60,8 @@ function HomeHero() {
         console.log(verifyTx);
         // console.log(con);
         return verifyTx;
+      }else {
+        console.log("Metamask is not installed, please install!");
       }
     } catch (error) {
       console.log(error);
@@ -58,6 +71,7 @@ function HomeHero() {
   const connectWallet = async () => {
     if (address) {
       const test = await verifyUserAccount();
+     
       console.log(test);
       if (test) {
         navigate("/user-dashboard");

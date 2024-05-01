@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
 import Navbar from '../components/navbar/Navbar';
 import Footer from '../components/footer/Footer';
 import SingleDataset from '../components/dataset/SingleDataset';
 import Sidebar from '../components/sidebar/Sidebar';
+import Comment from './Comment';
+
 
 function IndividualDataset() {
+ 
   return (
     <div style={{ background: "linear-gradient(to right, #E9F1FF, #B5D2FE)" }}>
       <Navbar /> 
@@ -16,6 +19,8 @@ function IndividualDataset() {
             </div>
             <div className="col-lg-9 px-0">
               <SingleDataset />  
+             
+              <Comment/>
             </div>
           </div>
         </div>

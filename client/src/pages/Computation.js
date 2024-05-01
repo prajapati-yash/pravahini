@@ -22,32 +22,31 @@ function Computation() {
     baseURL: process.env.REACT_APP_BACKEND_URL,
   });
 
-  const signMessage = async () => {
-    try {
-      if (window.ethereum) {
-        await window.ethereum.request({ method: "eth_requestAccounts" }); // Prompt user to connect their wallet
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
+    const signMessage = async () => {
+      try {
+        if (window.ethereum) {
+          await window.ethereum.request({ method: "eth_requestAccounts" }); // Prompt user to connect their wallet
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const signer = provider.getSigner();
+          const messageBytes = ethers.utils.toUtf8Bytes(
+            process.env.REACT_APP_MSG_TO_SIGN
+          );
+          const sign = await signer.signMessage(messageBytes);
 
-        const messageBytes = ethers.utils.toUtf8Bytes(
-          process.env.REACT_APP_MSG_TO_SIGN
-        );
-        const sign = await signer.signMessage(messageBytes);
-
-        const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/de-computation`, {
-          address,
-          sign,
-        });
-        const token = res.data.jwtToken;
-        Cookies.set("jwtToken", token, { expires: 1 });
-        setPopupVisible(false);
-      } else {
-        console.error("No Ethereum wallet detected");
+          const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/de-computation`, {
+            address,
+            sign,
+          });
+          const token = res.data.jwtToken;
+          Cookies.set("jwtToken", token, { expires: 1 });
+          setPopupVisible(false);
+        } else {
+          console.error("No Ethereum wallet detected");
+        }
+      } catch (error) {
+        console.error("Error signing the message:", error);
       }
-    } catch (error) {
-      console.error("Error signing the message:", error);
-    }
-  };
+    };
 
   useEffect(() => {
     const prevAddress = Cookies.get("prevAddress");

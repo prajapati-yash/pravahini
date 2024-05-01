@@ -17,7 +17,7 @@ function SingleModel() {
   console.log(location.state.data);
   const model = location.state ? location.state.data : "";
   const [btnloading, setbtnloading] = useState(false);
-
+console.log(model);
   const handleDownload = async () => {
     try {
       const response = await axios.get(

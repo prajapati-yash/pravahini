@@ -25,6 +25,7 @@ function SingleDataset() {
   const [btnloading, setbtnloading] = useState(false);
 
   useEffect(() => {
+    console.log("dataset",dataset)
     fetchCSVData();
   }, []);
 
@@ -48,7 +49,6 @@ function SingleDataset() {
           });
           return rowData;
         });
-
       setTableHeaders(headers);
       setTableRows(parsedData);
     } catch (error) {
@@ -160,7 +160,10 @@ function SingleDataset() {
           console.log("Metamask is not installed, please install!");
         }
         const con = await datasetInstance();
-        const price = parseInt(dataset[2]._hex, 16);
+        // const price = parseInt(dataset[2]._hex, 16);
+        const price=dataset.length > 11 && dataset[11] && dataset[11]._hex
+        ? parseInt(dataset[2]._hex, 16)
+        : null;
         const tx = await con.purchaseDataset(parseInt(dataset[11]._hex, 16), {
           value: ethers.utils.parseEther(price.toString()),
         });
@@ -303,6 +306,9 @@ function SingleDataset() {
                 License
               </button>
             </div>
+
+            {/* <div>Dataset Id:-{parseInt(dataset[11]._hex, 16)}</div> */}
+
             {dataset.isForSale ? (
               <div className="py-4">
                 <button

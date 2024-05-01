@@ -3,6 +3,7 @@ import Navbar from '../components/navbar/Navbar';
 import Sidebar from '../components/sidebar/Sidebar';
 import SingleModel from '../components/model/SingleModel';
 import Footer from '../components/footer/Footer';
+import Comment from './Comment';
 
 function IndividualModel() {
   return (
@@ -16,6 +17,7 @@ function IndividualModel() {
             </div>
             <div className="col-lg-9 px-0">
               <SingleModel />  
+              <Comment/>
             </div>
           </div>
         </div>
