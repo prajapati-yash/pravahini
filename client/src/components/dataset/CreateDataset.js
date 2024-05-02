@@ -223,7 +223,7 @@ function CreateDataset() {
           aggregator
         );
 
-        console.log(responseCondition);
+        // console.log(responseCondition);
       } else {
         const outputDataset = await lighthouse.upload(
           uploadDataset.files,
@@ -305,7 +305,7 @@ function CreateDataset() {
           isForSale
         );
 
-        console.log(tx);
+        // console.log(tx);
         await tx.wait();
         setbtnloading(false);
         navigate("/dataset-marketplace");

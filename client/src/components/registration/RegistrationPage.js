@@ -31,31 +31,56 @@ function RegistrationPage() {
   
 // here if already registered user then redirect to user-dashboard
   useEffect(() => {
-    const fetchUserData = async () => {
+    // const fetchUserData = async () => {
+    //   try {
+    //     // Get the user's address or any other unique identifier
+    //     const { ethereum } = window;
+    //     if (ethereum) {
+    //       const provider = new ethers.providers.Web3Provider(ethereum);
+    //       const signer = provider.getSigner();
+    //       const address = await signer.getAddress();
+
+    //       // Make an API call to fetch user data
+    //       const response = await axios.get(
+    //         `${process.env.REACT_APP_BACKEND_URL}/user/register?`,{params:{address:address}}
+    //       );
+
+    //       // If user data is found, redirect to the user dashboard
+    //       if (response.data) {
+    //         navigate("/user-dashboard");
+    //       }
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching user data:", error);
+    //   }
+    // };
+
+    // fetchUserData();
+    const verifyUserAccount = async () => {
       try {
-        // Get the user's address or any other unique identifier
         const { ethereum } = window;
         if (ethereum) {
           const provider = new ethers.providers.Web3Provider(ethereum);
           const signer = provider.getSigner();
           const address = await signer.getAddress();
-
-          // Make an API call to fetch user data
-          const response = await axios.get(
-            `${process.env.REACT_APP_BACKEND_URL}/user/register?`,{params:{_id:address}}
-          );
-
-          // If user data is found, redirect to the user dashboard
-          if (response.data) {
+          const con = await authorizationInstance();
+          const verifyTx = await con.isRegistered(address);
+          // result = verifyTx
+          if(verifyTx){
             navigate("/user-dashboard");
+          }else{
+            navigate("/register");
           }
+          // console.log(con);
+          return verifyTx;
+        }else {
+          console.log("Metamask is not installed, please install!");
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.log(error);
       }
     };
-
-    fetchUserData();
+    verifyUserAccount();
   }, [navigate]);
 
  
@@ -78,14 +103,14 @@ function RegistrationPage() {
   const progressCallback = (progressData) => {
     let percentageDone =
       100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
-    console.log(percentageDone);
+    // console.log(percentageDone);
   };
 
   const uploadImage = async () => {
     try {
       console.log("API Key", process.env.REACT_APP_LIGHTHOUSE_API_KEY);
       const fileInput = document.querySelector('input[type="file"]');
-      console.log("File: ", fileInput.files);
+      // console.log("File: ", fileInput.files);
 
       const output = await lighthouse.upload(
         fileInput.files,
@@ -94,7 +119,7 @@ function RegistrationPage() {
         progressCallback
       );
 
-      console.log("File Status:", output);
+      // console.log("File Status:", output);
       return output.data.Hash;
     } catch (e) {
       console.log(e);
@@ -116,7 +141,7 @@ const createUserAccount = async () => {
       setbtnloading(true);
 
     const cid = await uploadImage();
-      console.log("cid: ", cid);
+      // console.log("cid: ", cid);
 
       const { ethereum } = window;
       if (ethereum) {
@@ -126,7 +151,7 @@ const createUserAccount = async () => {
         }else{
           const signer = provider.getSigner();
           const address = await signer.getAddress();
-          console.log("address",address);
+          // console.log("address",address);
           const con = await authorizationInstance();
           const tx = await con.setUser(
           formData.userName,
@@ -135,8 +160,8 @@ const createUserAccount = async () => {
           formData.userLocation,
           cid
         );
-        console.log(formData);
-        console.log(tx);
+        // console.log(formData);
+        // console.log(tx);
         await tx.wait();
         setbtnloading(false);
 
@@ -148,7 +173,7 @@ const createUserAccount = async () => {
           Email: formData.userEmail,
         };
         await axios.post(`${process.env.REACT_APP_BACKEND_URL}/user/register`,userObject).then(response => {
-          console.log('User updated successfully!', response.data);
+          console.log('User updated successfully!');
           // Handle the successful response here
         })
         .catch(error => {

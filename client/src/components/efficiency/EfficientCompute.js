@@ -112,14 +112,14 @@ function EfficientCompute() {
     console.log("Getting CID of this Job Id!");
     setcidloading(true);
     const apiURL = `${process.env.REACT_APP_BACKEND_URL}/container1/get-cid/:${jobId}`;
-    console.log(jobId);
+    // console.log(jobId);
 
     axios
       .get(apiURL, tokenHeaders)
       .then((response) => {
         const { cid } = response.data;
         setCid(cid);
-        console.log(`CID for current ${jobId} is `, cid);
+        // console.log(`CID for current ${jobId} is `, cid);
         setcidloading(false);
         setShowButton(false);
         try {

@@ -24,7 +24,7 @@ function UserDatasets() {
         const con = await datasetInstance();
         const getDatasetDetails = await con.getAllDatasetsOfUser();
         setAllUserDatasets(getDatasetDetails);
-        console.log(allUserDatasets);
+        // console.log(allUserDatasets);
       }
     } catch (error) {
       console.log(error);

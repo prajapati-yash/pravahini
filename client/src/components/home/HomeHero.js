@@ -57,7 +57,7 @@ function HomeHero() {
         const con = await authorizationInstance();
         const verifyTx = await con.isRegistered(address);
         // result = verifyTx
-        console.log(verifyTx);
+        console.log("verify",verifyTx);
         // console.log(con);
         return verifyTx;
       }else {
@@ -72,7 +72,7 @@ function HomeHero() {
     if (address) {
       const test = await verifyUserAccount();
      
-      console.log(test);
+      // console.log(test);
       if (test) {
         navigate("/user-dashboard");
         window.location.reload();

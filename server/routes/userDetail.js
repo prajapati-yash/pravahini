@@ -7,8 +7,8 @@ const mongoose = require("mongoose");
 router.post('/register', async (req, res) => {
   try {
     const { address,userData, Email } = req.body;
-    console.log(userData[4]); // Log the value of userData[4]
-    console.log('Request body:', req.body); // Log the request body
+    // console.log(userData[4]); // Log the value of userData[4]
+    // console.log('Request body:', req.body); // Log the request body
 
     if (!Email || Email === null) {
       return res.status(400).json({ error: 'Email is required' });
@@ -49,7 +49,7 @@ router.get('/register', async (req, res) => {
     try {
       const {address }= req.query; // Get the user ID from the query parameter
       const user = await userDetailSchema.findOne({address});
-      console.log(user); // Log the user object
+      // console.log(user); // Log the user object
       res.json(user);
     } catch (err) {
       res.status(500).json({ error: 'Internal server error' });

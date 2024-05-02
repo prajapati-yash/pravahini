@@ -39,7 +39,7 @@ function SingleDataset() {
   };
 
   useEffect(() => {
-    console.log("dataset",dataset)
+    // console.log("dataset",dataset)
     fetchCSVData();
   }, []);
 
@@ -74,8 +74,8 @@ function SingleDataset() {
       setTableRows(parsedData);
       // console.log(tableRows);
 
-      console.log("Number of rows:", parsedData.length);
-      console.log("Column names:", headers);
+      // console.log("Number of rows:", parsedData.length);
+      // console.log("Column names:", headers);
       return { rowCount: parsedData.length, columnNames: headers };
     } catch (error) {
       console.error("Error fetching CSV file:", error);
@@ -90,7 +90,7 @@ function SingleDataset() {
         `https://gateway.lighthouse.storage/ipfs/${dataset.uploadDataset}`,
         { responseType: "blob" }
       );
-      console.log(response);
+      // console.log(response);
 
       const blob = new Blob([response.data], {
         type: "application/octet-stream",
@@ -125,7 +125,7 @@ function SingleDataset() {
         `https://gateway.lighthouse.storage/ipfs/${dataset.uploadLicense}`,
         { responseType: "blob" }
       );
-      console.log(response);
+      // console.log(response);
 
       const blob = new Blob([response.data], {
         type: "application/octet-stream",
@@ -196,7 +196,7 @@ function SingleDataset() {
           value: ethers.utils.parseEther(price.toString()),
         });
 
-        console.log(tx);
+        // console.log(tx);
         await tx.wait();
         setbtnloading(false);
        

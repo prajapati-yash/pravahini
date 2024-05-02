@@ -55,38 +55,7 @@ function UserDetails() {
     navigate("/user-dashboard/subscription/user-models");
     setActiveComponent("subscribedModels");
   };
-  // const editEmail=async(e)=>{
-  //   e.preventDefault();
-  //   const { ethereum } = window;
-  //   if (ethereum) {
-  //     const provider = new ethers.providers.Web3Provider(ethereum);
-  //     // const signer = provider.getSigner();
-  //     if (!provider) {
-  //       console.log("Metamask is not installed, please install!");
-  //     }else{
-  //       const address = await provider.getSigner().getAddress();
-  //       console.log("address",address);
-    
-  //       const con = await authorizationInstance();
-  //       const userData = await con.getUser(address);
-
-  //       const email= prompt("Enter your email");
-  //       console.log("email",email);
-  //       setEmail(email);
-  //       const data ={_id:address,userData, Email: email};
-  //       console.log("dataaaaa",data.userData);
-  //       await axios.put(`${process.env.REACT_APP_BACKEND_URL}/user/register`,data).then(response => {
-  //         console.log('User updated successfully!', response.data);
-  //         // Handle the successful response here
-  //       }).catch(error => {
-  //         console.error('Error updating user:', error);
-  //         // Handle the error here
-  //       });
-  //     }
-      
-  //   }
-  // }
-
+  
   const editEmail = async () => {
     setIsEditingEmail(true);
   };
@@ -100,17 +69,17 @@ function UserDetails() {
         console.log("Metamask is not installed, please install!");
       } else {
         const address = await provider.getSigner().getAddress();
-        console.log("address", address);
+        // console.log("address", address);
 
         const con = await authorizationInstance();
         const userData = await con.getUser(address);
 
         const data = { address, userData, Email: newEmail };
-        console.log("dataaaaa", data.userData);
+        // console.log("dataaaaa", data.userData);
         await axios
           .put(`${process.env.REACT_APP_BACKEND_URL}/user/register`, data)
           .then((response) => {
-            console.log("User updated successfully!", response.data);
+            console.log("User updated successfully!");
             setEmail(newEmail); // Update the Email state with the new email
             setIsEditingEmail(false); // Exit editing mode
           })
@@ -131,7 +100,7 @@ function UserDetails() {
           console.log("Metamask is not installed, please install!");
         }else{
           const address = await signer.getAddress();
-          console.log("address",address);
+          // console.log("address",address);
           //get request to get email from mongodb with address
           const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/register?address=${address}` );
           const con = await authorizationInstance();

@@ -20,7 +20,6 @@ router.put('/comment', (req, res) => {
   
     let collection;
     if (req.originalUrl == '/dataset/comment') {
-      console.log("hello");
       collection = datasetComment;
     } else {
       collection = modelComment;

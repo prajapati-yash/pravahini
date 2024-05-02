@@ -14,17 +14,17 @@ import { recoverShards, recoverKey } from "@lighthouse-web3/kavach";
 function SingleModel() {
   const { address } = useAccount();
   const location = useLocation();
-  console.log(location.state.data);
+  // console.log(location.state.data);
   const model = location.state ? location.state.data : "";
   const [btnloading, setbtnloading] = useState(false);
-console.log(model);
+// console.log(model);
   const handleDownload = async () => {
     try {
       const response = await axios.get(
         `https://gateway.lighthouse.storage/ipfs/${model.uploadModel}`,
         { responseType: "blob" }
       );
-      console.log(response);
+      // console.log(response);
 
       const blob = new Blob([response.data], {
         type: "application/octet-stream",
@@ -59,7 +59,7 @@ console.log(model);
         `https://gateway.lighthouse.storage/ipfs/${model.uploadLicense}`,
         { responseType: "blob" }
       );
-      console.log(response);
+      // console.log(response);
 
       const blob = new Blob([response.data], {
         type: "application/octet-stream",
@@ -94,7 +94,7 @@ console.log(model);
         `https://gateway.lighthouse.storage/ipfs/${model.uploadUsageDocumentation}`,
         { responseType: "blob" }
       );
-      console.log(response);
+      // console.log(response);
 
       const blob = new Blob([response.data], {
         type: "application/octet-stream",
@@ -158,12 +158,12 @@ console.log(model);
         }
         const con = await modelInstance();
         const price = parseInt(model[4]._hex, 16);
-        console.log("Ether value: ", ethers.utils.parseEther(price.toString()));
+        // console.log("Ether value: ", ethers.utils.parseEther(price.toString()));
         const tx = await con.purchaseModel(parseInt(model[11]._hex, 16), {
           value: ethers.utils.parseEther(price.toString()),
         });
 
-        console.log(tx);
+        // console.log(tx);
         await tx.wait();
         setbtnloading(false);
 
@@ -192,7 +192,7 @@ console.log(model);
           fileType
         );
 
-        console.log("Decrypted file", model_file);
+        // console.log("Decrypted file", model_file);
 
         const url = window.URL.createObjectURL(model_file);
         const a = document.createElement("a");
@@ -201,7 +201,7 @@ console.log(model);
         a.click();
         window.URL.revokeObjectURL(url);
 
-        console.log("Decryption: ", model_file);
+        // console.log("Decryption: ", model_file);
       }
     } catch (e) {
       setbtnloading(false);
@@ -215,7 +215,7 @@ console.log(model);
         progress: undefined,
         theme: "light",
       });
-      console.log("Error in buying dataset: ", e.reason);
+      // console.log("Error in buying dataset: ", e.reason);
     }
   };
 

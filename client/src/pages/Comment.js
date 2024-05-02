@@ -49,7 +49,7 @@ function Comment() {
             } else {
                 response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/dataset/comment`, userData,tokenHeaders);
             }
-            console.log('User data saved successfully:', response.data);
+            console.log('User data saved successfully');
         } catch (error) {
             console.error('Error saving user data:', error);
         }
@@ -63,7 +63,7 @@ function Comment() {
         if (window.location.pathname === "/model-marketplace/single-model") {
             axios.put(`${process.env.REACT_APP_BACKEND_URL}/model/comment/reply`, newReply,tokenHeaders).then(response => {
                 // Handle the response from the server
-                console.log(response.data);
+                // console.log(response.data);
             })
                 .catch(error => {
                     // Handle any errors
@@ -73,7 +73,7 @@ function Comment() {
            
             axios.put(`${process.env.REACT_APP_BACKEND_URL}/dataset/comment/reply`, newReply,tokenHeaders).then(response => {
                 // Handle the response from the server
-                console.log(response.data);
+                // console.log(response.data);
             })
                 .catch(error => {
                     // Handle any errors
@@ -88,7 +88,7 @@ function Comment() {
         try {
             let response;
             // Make a DELETE request to your backend API
-            console.log("Token Headers",tokenHeaders);
+            // console.log("Token Headers",tokenHeaders);
             if (window.location.pathname === "/model-marketplace/single-model") {
                 
                 response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/model/comment/delete`,commentId,tokenHeaders);
@@ -100,7 +100,7 @@ function Comment() {
                 },tokenHeaders);
             }
 
-            console.log(response.data.message);
+            // console.log(response.data.message);
             // Handle successful delete, e.g., update the UI
         } catch (error) {
             console.error(error);
@@ -120,7 +120,7 @@ function Comment() {
                 response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/dataset/comment/edit`, data,tokenHeaders);
             }
 
-            console.log(response.data.message);
+            // console.log(response.data.message);
             // Handle successful edit, e.g., update the UI
         } catch (error) {
             console.error(error);
@@ -153,9 +153,9 @@ function Comment() {
     //     setSingleData([...datasetComment]);
     // }, [DatasetId, comments]);
     useEffect(() => {
-        console.log(DatasetId)
+        // console.log(DatasetId)
         const datasetComment = comments.find(obj => obj._id === DatasetId)?.comments ||[];
-        console.log(datasetComment)
+        // console.log(datasetComment)
         setSingleData(datasetComment);
       }, [DatasetId, comments]);
    

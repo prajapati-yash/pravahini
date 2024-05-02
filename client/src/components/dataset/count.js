@@ -23,9 +23,9 @@ function Count() {
         `https://gateway.lighthouse.storage/ipfs/${dataset.uploadDataset}`
       );
       const csvData = response.data;
-      console.log(response);
+      // console.log(response);
 
-            console.log(csvData)
+      // console.log(csvData)
 
       const rows = csvData.split("\n");
       const headers = rows[0].split(",").map((header) => header.trim());
@@ -44,8 +44,8 @@ function Count() {
       setTableHeaders(headers);
       setTableRows(parsedData);
     
-      console.log("Number of rows:", parsedData.length);
-      console.log("Column names:", headers);
+      // console.log("Number of rows:", parsedData.length);
+      // console.log("Column names:", headers);
       return { rowCount: parsedData.length, columnNames: headers };
     } catch (error) {
       console.error("Error fetching CSV file:", error);

@@ -112,7 +112,7 @@ router.delete('/delete-job/:id', async(req, res) =>{
             const jobList = JSON.parse(jobListOutput);
             if (Array.isArray(jobList) && jobList.length > 0) {
                 let state = jobList[0].State.State;
-                console.log("State", state)
+                // console.log("State", state)
                 if(state === "New"){
                   state = "In Progress";
                   res.json({ state });
