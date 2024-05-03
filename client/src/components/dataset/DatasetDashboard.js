@@ -6,7 +6,12 @@ import img1 from "../../assets/home/security.png";
 import "../../styles/dataset/DatasetDashboard.css";
 import { ethers } from "ethers";
 import { datasetInstance } from "../Contract";
+import axios from "axios";
+import Cookies from "js-cookie";
 import { ClipLoader } from "react-spinners";
+import { useAccount } from "wagmi";
+import { authorizationInstance } from "../Contract";
+
 
 function DatasetDashboard() {
   const [activeComponent, setActiveComponent] = useState("allDatasets");
@@ -16,6 +21,46 @@ function DatasetDashboard() {
   const datasetDivRef = React.useRef(null);
   const [allDatasets, setAllDatasets] = useState([]);
   const [isPageLoading, setIsPageLoading] = useState(true);
+  const { address } = useAccount();
+
+  useEffect(()=>{
+    const verifyUserAccount = async () => {
+      try {
+        const { ethereum } = window;
+        if (ethereum) {
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          const messageBytes = ethers.utils.toUtf8Bytes(
+            process.env.REACT_APP_MSG_TO_SIGN
+          );
+          if(address){
+
+            if(!Cookies.get("jwtToken")){
+            const sign = await signer.signMessage(messageBytes);
+            const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/de-computation`, {
+              address,
+              sign,
+            });
+            const token = res.data.jwtToken;
+            Cookies.set("jwtToken", token, { expires: 1 });
+            }
+            const con = await authorizationInstance();
+            const verifyTx = await con.isRegistered(address);
+            // result = verifyTx
+            console.log("verify",verifyTx);
+            // console.log(con);
+            return verifyTx;
+          }
+        }else {
+          console.log("Metamask is not installed, please install!");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    verifyUserAccount();
+  },[navigate, address]);
+
 
   const handleAllDatasetClick = (e) => {
     e.preventDefault();

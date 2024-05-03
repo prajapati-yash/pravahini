@@ -10,6 +10,7 @@ import { authorizationInstance } from "../Contract";
 import { useAccount } from "wagmi";
 import { ClipLoader } from "react-spinners";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
@@ -28,7 +29,45 @@ function UserDetails() {
   const { address } = useAccount();
   const navigate = useNavigate();
   const [isPageLoading, setIsPageLoading] = useState(true);
+ 
+  
+  useEffect(()=>{
+    const verifyUserAccount = async () => {
+      try {
+        const { ethereum } = window;
+        if (ethereum) {
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          const messageBytes = ethers.utils.toUtf8Bytes(
+            process.env.REACT_APP_MSG_TO_SIGN
+          );
+          if(address){
 
+            if(!Cookies.get("jwtToken")){
+            const sign = await signer.signMessage(messageBytes);
+            const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/de-computation`, {
+              address,
+              sign,
+            });
+            const token = res.data.jwtToken;
+            Cookies.set("jwtToken", token, { expires: 1 });
+            }
+            const con = await authorizationInstance();
+            const verifyTx = await con.isRegistered(address);
+            // result = verifyTx
+            console.log("verify",verifyTx);
+            // console.log(con);
+            return verifyTx;
+          }else {
+          }
+          console.log("Metamask is not installed, please install!");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    verifyUserAccount();
+  },[address,navigate])
   const handleDatasetClick = (e) => {
     setShowButtons(false);
     e.preventDefault();

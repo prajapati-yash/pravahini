@@ -86,9 +86,9 @@ function Comment() {
     const handleDeleteComment = async (commentId) => {
         // console.log("CommentId",commentId)
         try {
-            let response;
             // Make a DELETE request to your backend API
             // console.log("Token Headers",tokenHeaders);
+            let response;
             if (window.location.pathname === "/model-marketplace/single-model") {
                 
                 response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/model/comment/delete`,commentId,tokenHeaders);
@@ -133,11 +133,11 @@ function Comment() {
             try {
                 let response;
                 if (window.location.pathname === "/dataset-marketplace/single-dataset") {
-                    response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataset/comments`,tokenHeaders);
+                    response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataset/comments`);
                     setComments(response.data);
                    
                 } else {
-                    response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/model/comments`,tokenHeaders);
+                    response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/model/comments`);
                     // console.log(response.data)
                     setComments(response.data);
                 }
@@ -194,6 +194,7 @@ function Comment() {
             <div style={{ background: '#D7E6FD', border: '2px solid white', borderRadius: '50px', marginRight: "50px" }}>
                 <CommentSection
                 className="react-responsive-modal-modal"
+
                     currentUser={{
                         currentUserId: id,
                         currentUserImg: `https://gateway.lighthouse.storage/ipfs/${img}`,
@@ -201,10 +202,10 @@ function Comment() {
                     }}
 
                     commentData={visibleComments}
-                    onSubmitAction={(data) => {
-                        const newData = [data, ...singleData]; // Prepend new comment to the existing comments
-                        setSingleData(newData); // Update the state with the new comments
-                        sendUserDataToBackend({ data }); // Send the new comment to the backend
+                    onSubmitAction={async (data) => {
+                            const newData = [data, ...singleData]; // Prepend new comment to the existing comments
+                            setSingleData(newData); // Update the state with the new comments
+                            await sendUserDataToBackend({ data }); // Send the new comment to the backend
                     }}
                     onReplyAction={(data) => { postReply(data) }}
                     currentData={(data) => { console.log("Data", data); }}

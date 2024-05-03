@@ -32,7 +32,7 @@ app.use(
   expressJwt({
     secret: JWT_SECRET_KEY,
     algorithms: ["HS256"],
-  }).unless({ path: ["/", "/de-computation","/user/register","/dataset/comment/delete"] })
+  }).unless({ path: ["/", "/de-computation","/user/register","/dataset/comments","/model/comments"] })
 );
 
 app.post("/de-computation", async (req, res) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useRef} from "react";
 import "../../styles/dataset/SingleDataset.css";
 import axios from "axios";
 import csvfile from "../../dummyData/data.csv";
@@ -15,9 +15,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { recoverShards, recoverKey } from "@lighthouse-web3/kavach";
 import Chartss from "./chartpage.js";
-
+import ComputationPopup from "../../pages/ComputationPopUp.js";
 // import Chartss from "./barchart.js";
 import Count from "./count.js";
+import Cookies from "js-cookie";
 
 
 function SingleDataset() {
@@ -29,6 +30,9 @@ function SingleDataset() {
   const dataset = location.state ? location.state.data : "";
   const [btnloading, setbtnloading] = useState(false);
   const [displayedRows, setDisplayedRows] = useState(10);
+  const [isPopupVisible, setPopupVisible] = useState(false); // Initialize to true to always show initially
+
+  const popupRef = useRef(null);
   
   const handleViewMore = () => {
     setDisplayedRows(displayedRows + 10);
@@ -249,8 +253,81 @@ function SingleDataset() {
     }
   };
 
-
+  useEffect(() => {
+    if (isPopupVisible) {
+      window.scrollTo(0,0);
+      document.body.style.overflow = "hidden"; // Disable scrolling on body
+    } else {
+      document.body.style.overflow = "auto"; // Enable scrolling on body
+    }
+  
+    return () => {
+      document.body.style.overflow = "auto"; // Make sure scrolling is enabled when component is unmounted
+    };
+  }, [isPopupVisible]);
+  
+  const signMessage = async () => {
+    try {
+      if (window.ethereum) {
+        await window.ethereum.request({ method: "eth_requestAccounts" }); // Prompt user to connect their wallet
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const messageBytes = ethers.utils.toUtf8Bytes(
+          process.env.REACT_APP_MSG_TO_SIGN
+        );
+        const sign = await signer.signMessage(messageBytes);
+  
+        const res = await axios.post(
+          `${process.env.REACT_APP_BACKEND_URL}/de-computation`,
+          {
+            address,
+            sign,
+          }
+        );
+        const token = res.data.jwtToken;
+        Cookies.set("jwtToken", token, { expires: 1 });
+        setPopupVisible(false);
+      } else {
+        console.error("No Ethereum wallet detected");
+      }
+    } catch (error) {
+      console.error("Error signing the message:", error);
+    }
+  };
+  
+  useEffect(() => {
+    const prevAddress = Cookies.get("prevAddress");
+    if (!prevAddress) {
+      Cookies.set("prevAddress", address);
+    } else if (address !== prevAddress) {
+      Cookies.remove("jwtToken");
+      Cookies.set("prevAddress", address);
+    }
+  }, []);
+  
+  useEffect(() => {
+    if (location.pathname === "/dataset-marketplace/single-dataset") {
+      const jwtToken = Cookies.get("jwtToken");
+      console.log(jwtToken)
+      if(!address){
+        setPopupVisible(false);
+       
+      }
+      else if (!jwtToken) {
+        setPopupVisible(true);
+      }
+    } else {
+      setPopupVisible(false);
+    }
+  }, [location,address]);
+  
+  const hidePopup = () => {
+    setPopupVisible(false);
+  };
+  const popupBg = isPopupVisible ? "popup-background" : "";
   return (
+    <>
+    <div className={`${popupBg}`} atyle={{overflow: isPopupVisible ? 'hidden' : 'auto',}}>
     <div className="d-flex flex-md-row flex-column">
       <div className="py-3 col-md-7 col-lg-8">
         <div className="py-3">
@@ -403,6 +480,14 @@ function SingleDataset() {
         </div>
       </div>
     </div>
+    </div>
+    { isPopupVisible && <ComputationPopup
+              isVisible={isPopupVisible}
+              signMessage={signMessage}
+              hidePopup={hidePopup}
+            />
+   }
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import "../../styles/model/SingleModel.css";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
@@ -10,6 +10,10 @@ import { PulseLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { recoverShards, recoverKey } from "@lighthouse-web3/kavach";
+import Cookies from "js-cookie";
+import { authorizationInstance } from "../Contract";
+import ComputationPopup from "../../pages/ComputationPopUp";
+import "../../styles/computation/ComputationPopup.css";
 
 function SingleModel() {
   const { address } = useAccount();
@@ -17,7 +21,18 @@ function SingleModel() {
   // console.log(location.state.data);
   const model = location.state ? location.state.data : "";
   const [btnloading, setbtnloading] = useState(false);
+  const [isPopupVisible, setPopupVisible] = useState(false); // Initialize to true to always show initially
+  const popupRef = useRef(null);
+
+  
+
+  useEffect(() => {
+    if(!address){
+      setPopupVisible(false);
+    }
+  }, [address]);
 // console.log(model);
+
   const handleDownload = async () => {
     try {
       const response = await axios.get(
@@ -218,10 +233,83 @@ function SingleModel() {
       // console.log("Error in buying dataset: ", e.reason);
     }
   };
+  useEffect(() => {
+    if (isPopupVisible) {
+      window.scrollTo(0,0);
+      document.body.style.overflow = "hidden"; // Disable scrolling on body
+    } else {
+      document.body.style.overflow = "auto"; // Enable scrolling on body
+    }
+  
+    return () => {
+      document.body.style.overflow = "auto"; // Make sure scrolling is enabled when component is unmounted
+    };
+  }, [isPopupVisible]);
+  
+const signMessage = async () => {
+  try {
+    if (window.ethereum) {
+      await window.ethereum.request({ method: "eth_requestAccounts" }); // Prompt user to connect their wallet
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const messageBytes = ethers.utils.toUtf8Bytes(
+        process.env.REACT_APP_MSG_TO_SIGN
+      );
+      const sign = await signer.signMessage(messageBytes);
 
-  return (
-    <div className="d-flex flex-md-row flex-column">
-      <div className="py-3 col-md-7 col-lg-8">
+      const res = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/de-computation`,
+        {
+          address,
+          sign,
+        }
+      );
+      const token = res.data.jwtToken;
+      // console.log(token)
+      Cookies.set("jwtToken", token, { expires: 1 });
+      setPopupVisible(false);
+    } else {
+      console.error("No Ethereum wallet detected");
+    }
+  } catch (error) {
+    console.error("Error signing the message:", error);
+  }
+};
+
+useEffect(() => {
+  const prevAddress = Cookies.get("prevAddress");
+  if (!prevAddress) {
+    Cookies.set("prevAddress", address);
+  } else if (address !== prevAddress) {
+    Cookies.remove("jwtToken");
+    Cookies.set("prevAddress", address);
+  }
+}, []);
+
+useEffect(() => {
+  if (location.pathname === "/model-marketplace/single-model") {
+    const jwtToken = Cookies.get("jwtToken");
+    if(!address){
+      setPopupVisible(false)
+    }
+    else if (!jwtToken) {
+      setPopupVisible(true);
+    }
+  } else {
+    setPopupVisible(false);
+  }
+}, [location,address]);
+
+const hidePopup = () => {
+  setPopupVisible(false);
+};
+const popupBg = isPopupVisible ? "popup-background" : "";
+
+  return (<>
+   
+   <div className={`${popupBg}`}>
+    <div className={`d-flex flex-md-row flex-column `}>
+      <div className={"py-3 col-md-7 col-lg-8"}>
         <div className="py-4 mx-3 my-2 single-model-heading-container">
           <div className="px-5 py-1 d-flex single-model-head">{model[0]}</div>
           <div className="px-5 py-1 d-flex single-model-subhead">
@@ -255,6 +343,7 @@ function SingleModel() {
           </div>
         </div>
       </div>
+      
       <div className="col-md-5 col-lg-4">
         <div className="py-5 single-model-details">
           {model.isPublic || model.isPrivate ? (
@@ -311,11 +400,22 @@ function SingleModel() {
               ""
             )}
 
+     
             <ToastContainer />
           </div>
         </div>
       </div>
-    </div>
+      </div>
+  
+      </div>
+      
+   { isPopupVisible && <ComputationPopup
+              isVisible={isPopupVisible}
+              signMessage={signMessage}
+              hidePopup={hidePopup}
+            />
+   }
+    </>
   );
 }
 
