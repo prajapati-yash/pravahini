@@ -4,6 +4,9 @@ import Sidebar from '../components/sidebar/Sidebar';
 import SingleModel from '../components/model/SingleModel';
 import Footer from '../components/footer/Footer';
 import Comment from './Comment';
+import '../styles/model/IndividualModel.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 
 function IndividualModel() {
   return (
@@ -12,10 +15,8 @@ function IndividualModel() {
       <div className="app">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-lg-3">
-              <Sidebar />
-            </div>
-            <div className="col-lg-9 px-0">
+          
+            <div className="container-fluid ps-4 ps-md-5 rightPadding">
               <SingleModel />  
               <Comment/>
             </div>

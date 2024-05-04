@@ -28,7 +28,7 @@ function Comment() {
     const visibleComments = showAll ? singleData : singleData.slice(0, showCount);
 
     const dataset = location.state ? location.state.data : "";
-    const DatasetId = dataset.length > 11 && dataset[11] && dataset[11]._hex
+    const DatasetId = dataset.length >= 11 && dataset[11] && dataset[11]._hex
   ? parseInt(dataset[11]._hex, 16)
   : null;
 
@@ -191,7 +191,7 @@ function Comment() {
 
     return (
         <>
-            <div style={{ background: '#D7E6FD', border: '2px solid white', borderRadius: '50px', marginRight: "50px" }}>
+            <div style={{ background: '#D7E6FD', border: '2px solid white', borderRadius: '50px', marginRight: "25px" ,marginTop:"50px"}}>
                 <CommentSection
                 className="react-responsive-modal-modal"
 

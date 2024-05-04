@@ -1,4 +1,4 @@
-import React, { useState, useEffect ,useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../../styles/dataset/SingleDataset.css";
 import axios from "axios";
 import csvfile from "../../dummyData/data.csv";
@@ -19,6 +19,8 @@ import ComputationPopup from "../../pages/ComputationPopUp.js";
 // import Chartss from "./barchart.js";
 import Count from "./count.js";
 import Cookies from "js-cookie";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 
 
 function SingleDataset() {
@@ -31,9 +33,9 @@ function SingleDataset() {
   const [btnloading, setbtnloading] = useState(false);
   const [displayedRows, setDisplayedRows] = useState(10);
   const [isPopupVisible, setPopupVisible] = useState(false); // Initialize to true to always show initially
-
+  const navigate=useNavigate();
   const popupRef = useRef(null);
-  
+
   const handleViewMore = () => {
     setDisplayedRows(displayedRows + 10);
   };
@@ -61,16 +63,16 @@ function SingleDataset() {
       const headers = rows[0].split(",").map((header) => header.trim());
       // console.log(headers)----first row
       const parsedData = rows
-      .slice(1)
-      .filter((row) => row.trim() !== "")
-      .map((row) => {
-        const values = row.split(",").map((value) => value.trim());
-        const rowData = {};
-        headers.forEach((header, index) => {
-          rowData[header] = values[index];
+        .slice(1)
+        .filter((row) => row.trim() !== "")
+        .map((row) => {
+          const values = row.split(",").map((value) => value.trim());
+          const rowData = {};
+          headers.forEach((header, index) => {
+            rowData[header] = values[index];
+          });
+          return rowData;
         });
-        return rowData;
-      });
       // console.log(parsedData)
       // setData(parsedData[0]);
       // console.log(data)
@@ -83,7 +85,7 @@ function SingleDataset() {
       return { rowCount: parsedData.length, columnNames: headers };
     } catch (error) {
       console.error("Error fetching CSV file:", error);
-      return { rowCount: 0, columnNames: [] }; 
+      return { rowCount: 0, columnNames: [] };
     }
   };
 
@@ -193,17 +195,29 @@ function SingleDataset() {
         }
         const con = await datasetInstance();
         // const price = parseInt(dataset[2]._hex, 16);
-        const price=dataset.length > 11 && dataset[11] && dataset[11]._hex
-        ? parseInt(dataset[2]._hex, 16)
-        : null;
-        const tx = await con.purchaseDataset(parseInt(dataset[11]._hex, 16), {
-          value: ethers.utils.parseEther(price.toString()),
-        });
+        // const price=dataset.length > 11 && dataset[11] && dataset[11]._hex
+        // ? parseInt(dataset[2]._hex, 16)
+        // : null;
+        // const tx = await con.purchaseDataset(parseInt(dataset[11]._hex, 16), {
+        //   value: ethers.utils.parseEther(price.toString()),
+        // });
+
+        const price = dataset.length > 11 && dataset[11] && dataset[11]._hex
+          ? parseInt(dataset[2]._hex, 16) === 0
+            ? "0"
+            : parseInt(dataset[2]._hex, 16)
+          : null;
+
+        const tx = price !== null
+          ? await con.purchaseDataset(parseInt(dataset[11]._hex, 16), {
+            value: ethers.utils.parseEther(price.toString()),
+          })
+          : null;
 
         // console.log(tx);
         await tx.wait();
         setbtnloading(false);
-       
+
 
         const status = await con.getPurchaseStatus(
           parseInt(dataset[11]._hex, 16),
@@ -255,17 +269,17 @@ function SingleDataset() {
 
   useEffect(() => {
     if (isPopupVisible) {
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
       document.body.style.overflow = "hidden"; // Disable scrolling on body
     } else {
       document.body.style.overflow = "auto"; // Enable scrolling on body
     }
-  
+
     return () => {
       document.body.style.overflow = "auto"; // Make sure scrolling is enabled when component is unmounted
     };
   }, [isPopupVisible]);
-  
+
   const signMessage = async () => {
     try {
       if (window.ethereum) {
@@ -276,7 +290,7 @@ function SingleDataset() {
           process.env.REACT_APP_MSG_TO_SIGN
         );
         const sign = await signer.signMessage(messageBytes);
-  
+
         const res = await axios.post(
           `${process.env.REACT_APP_BACKEND_URL}/de-computation`,
           {
@@ -294,24 +308,40 @@ function SingleDataset() {
       console.error("Error signing the message:", error);
     }
   };
-  
+
+  // useEffect(() => {
+  //   const prevAddress = Cookies.get("prevAddress");
+  //   console.log("prevAdd",prevAddress);
+  //   if (!prevAddress) {
+  //     Cookies.set("prevAddress", address);
+  //   }else if(address !== prevAddress) {
+  //     Cookies.remove("jwtToken");
+  //     Cookies.set("prevAddress", address);
+  //   }
+  // }, []);
   useEffect(() => {
     const prevAddress = Cookies.get("prevAddress");
-    if (!prevAddress) {
-      Cookies.set("prevAddress", address);
-    } else if (address !== prevAddress) {
-      Cookies.remove("jwtToken");
-      Cookies.set("prevAddress", address);
-    }
-  }, []);
-  
+    const handleAddressChange = () => {
+      if (prevAddress !== address) {
+        Cookies.remove("jwtToken");
+        Cookies.set("prevAddress", address);
+      }
+    };
+
+    handleAddressChange();
+
+    window.addEventListener("addressChanged", handleAddressChange);
+    return () => {
+      window.removeEventListener("addressChanged", handleAddressChange);
+    };
+  }, [address]);
   useEffect(() => {
     if (location.pathname === "/dataset-marketplace/single-dataset") {
       const jwtToken = Cookies.get("jwtToken");
       console.log(jwtToken)
-      if(!address){
+      if (!address) {
         setPopupVisible(false);
-       
+
       }
       else if (!jwtToken) {
         setPopupVisible(true);
@@ -319,174 +349,185 @@ function SingleDataset() {
     } else {
       setPopupVisible(false);
     }
-  }, [location,address]);
-  
+  }, [location, address]);
+
   const hidePopup = () => {
     setPopupVisible(false);
   };
   const popupBg = isPopupVisible ? "popup-background" : "";
+  const handleBackClick = () => {
+    navigate('/dataset-marketplace'); // Navigate to the '/previous-route' path
+  };
   return (
     <>
-    <div className={`${popupBg}`} atyle={{overflow: isPopupVisible ? 'hidden' : 'auto',}}>
-    <div className="d-flex flex-md-row flex-column">
-      <div className="py-3 col-md-7 col-lg-8">
-        <div className="py-3">
-          <div className="single-dataset-head">{dataset[0]}</div>
-          <div className="single-dataset-subhead">{dataset[1]}</div>
-        </div>
+      <div className={`${popupBg}`} >
+      <div className="col-lg-1 back" onClick={handleBackClick}>
+              <FontAwesomeIcon icon={faArrowLeftLong} />
+              &nbsp;
+              &nbsp;
+              <span>Back</span>            
+              </div>
+        <div className="d-flex flex-md-row flex-column">
+          <div className="py-3 col-md-8 col-lg-9">
+            <div className="py-3">
+              <div className="single-dataset-head">{dataset[0]}</div>
+              <div className="single-dataset-subhead">{dataset[1]}</div>
+            </div>
 
-        <div>
-          <Chartss />
-        </div>
-        
-        <div className="py-4">
-          {tableRows.length > 0 && (
-            <div className="single-dataset-table">
-              <div className="table-responsive">
-                <table className="table table-striped">
-                  <thead className="dataset-table-head">
-                    <tr>
-                      {tableHeaders.map((header, index) => (
-                        <th key={index}>{header}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {/* {tableRows.map((row, rowIndex) => (
+            <div>
+              <Chartss />
+            </div>
+
+            <div className="py-4">
+              {tableRows.length > 0 && (
+                <div className="single-dataset-table" style={{width:"90vw"}}>
+                  <div className="table-responsive">
+                    <table className="table table-striped">
+                      <thead className="dataset-table-head">
+                        <tr>
+                          {tableHeaders.map((header, index) => (
+                            <th key={index}>{header}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* {tableRows.map((row, rowIndex) => (
                       <tr key={rowIndex} className="dataset-table-body">
                         {tableHeaders.map((header, colIndex) => (
                           <td key={colIndex}>{row[header]}</td>
                         ))}
                       </tr>
                     ))} */}
-                     {tableRows.slice(0, displayedRows).map((row, rowIndex) => (
-                    <tr key={rowIndex} className="dataset-table-body">
-                      {tableHeaders.map((header, colIndex) => (
-                        <td key={colIndex}>{row[header]}</td>
-                      ))}
-                    </tr>
-                  ))}
-{/* allready commented */}
-                    {/* {tableRows.map((row, rowIndex) => (
+                        {tableRows.slice(0, displayedRows).map((row, rowIndex) => (
+                          <tr key={rowIndex} className="dataset-table-body">
+                            {tableHeaders.map((header, colIndex) => (
+                              <td key={colIndex}>{row[header]}</td>
+                            ))}
+                          </tr>
+                        ))}
+                        {/* allready commented */}
+                        {/* {tableRows.map((row, rowIndex) => (
                           <tr key={rowIndex} className='dataset-table-body'>
                             {row.map((value, colIndex) => (
                               <td key={colIndex}>{value}</td>
                             ))}
                           </tr>
                       ))} */}
-                  </tbody>
-                </table>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {tableRows.length > displayedRows && (
+                <button className="button-more" onClick={handleViewMore}>
+                  View More
+                </button>
+              )}
+
+              {displayedRows > 10 && (
+                <button className="button-less" onClick={handleViewLess}>
+                  View Less
+                </button>
+              )}
+            </div>
+          </div>
+          <div className="col-md-4 col-lg-3 ">
+            <div className="py-5 single-dataset-details">
+
+              <div className="count-row">
+                <Count />
+                <p>It contains data about the </p>
+                <ul>
+                  {tableHeaders.map((header, index) => (
+                    <React.Fragment key={index}>
+                      <li>{header}</li>
+                      {index !== tableHeaders.length - 1 && <span>, </span>}
+                    </React.Fragment>
+                  ))}
+                </ul>
+
               </div>
-            </div>
-          )}
+              {dataset.isPublic || dataset.isPrivate ? (
+                <div className="py-sm-4 py-3">
+                  <button
+                    type="submit"
+                    className="py-2 px-5 btn single-dataset-download"
+                    onClick={handleDownload}
+                    disabled={dataset[10]}
+                  >
+                    Download
+                  </button>
+                </div>
+              ) : (
+                ""
+              )}
 
-          {tableRows.length > displayedRows && (
-          <button className="button-more" onClick={handleViewMore}>
-            View More
-          </button>
-        )}
-
-        {displayedRows > 10 && (
-          <button className="button-less" onClick={handleViewLess}>
-            View Less
-          </button>
-        )}
-        </div>
-      </div>
-      <div className="col-md-5 col-lg-4">
-        <div className="py-5 single-dataset-details">
-
-          <div className="count-row">
-            <Count />
-            <p>It contains data about the </p>
-            <ul>
-              {tableHeaders.map((header, index) => (
-                <React.Fragment key={index}>
-                <li>{header}</li>
-                {index !== tableHeaders.length - 1 && <span>, </span>}
-                </React.Fragment>
-              ))}
-            </ul>
-
-            </div>
-          {dataset.isPublic || dataset.isPrivate ? (
-            <div className="py-sm-5 py-4">
-              <button
-                type="submit"
-                className="py-2 px-5 btn single-dataset-download"
-                onClick={handleDownload}
-                disabled={dataset[10]}
-              >
-                Download
-              </button>
-            </div>
-          ) : (
-            ""
-          )}
-
-          <div className="pt-sm-4 pt-2 px-md-5 single-dataset-content">
-            <div className="py-3">
-              <div className="single-dataset-details-head">Category</div>
-              <div className="single-dataset-details-value">{dataset[7]}</div>
-            </div>
-            {/* <div className="py-3">
+              <div className="pt-sm-4 pt-2 px-md-5 single-dataset-content">
+                <div className="py-3">
+                  <div className="single-dataset-details-head">Category</div>
+                  <div className="single-dataset-details-value">{dataset[7]}</div>
+                </div>
+                {/* <div className="py-3">
               <div className="single-dataset-details-head">Attributes</div>
               <div className="single-dataset-details-value">Value</div>
             </div> */}
-            <div className="py-3">
-              <div className="single-dataset-details-head">
-                Price Of Dataset (in BTT)
-              </div>
-              <div className="single-dataset-details-value">
-                {parseInt(dataset[2]._hex, 16)}
+                <div className="py-3">
+                  <div className="single-dataset-details-head">
+                    Price Of Dataset (in BTT)
+                  </div>
+                  <div className="single-dataset-details-value">
+                    {parseInt(dataset[2]._hex, 16) === 0
+                      ? "0"
+                      : parseInt(dataset[2]._hex, 16)}
+                  </div>
+                </div>
+
+                <div className="py-3">
+                  <button
+                    type="submit"
+                    className="px-5 btn single-dataset-license"
+                    onClick={handleLicenseDownload}
+                  >
+                    License
+                  </button>
+                </div>
+
+                {/* <div>Dataset Id:-{parseInt(dataset[11]._hex, 16)}</div> */}
+
+                {dataset.isForSale ? (
+                  <div className="py-4">
+                    <button
+                      type="submit"
+                      className="btn rounded-pill my-2 py-sm-3 px-sm-5 dataset-buy-btn"
+                      disabled={!dataset[10]}
+                      onClick={handleBuyDataset}
+                    >
+                      {btnloading ? (
+                        <>
+                          <PulseLoader color="#fff" size={12} />
+                        </>
+                      ) : (
+                        <>Buy Now</>
+                      )}
+                    </button>
+                  </div>
+                ) : (
+                  ""
+                )}
+
+                <ToastContainer />
               </div>
             </div>
-
-            <div className="py-3">
-              <button
-                type="submit"
-                className="px-5 btn single-dataset-license"
-                onClick={handleLicenseDownload}
-              >
-                License
-              </button>
-            </div>
-
-            {/* <div>Dataset Id:-{parseInt(dataset[11]._hex, 16)}</div> */}
-
-            {dataset.isForSale ? (
-              <div className="py-4">
-                <button
-                  type="submit"
-                  className="btn rounded-pill my-2 py-sm-3 px-sm-5 dataset-buy-btn"
-                  disabled={!dataset[10]}
-                  onClick={handleBuyDataset}
-                >
-                  {btnloading ? (
-                    <>
-                      <PulseLoader color="#fff" size={12} />
-                    </>
-                  ) : (
-                    <>Buy Now</>
-                  )}
-                </button>
-              </div>
-            ) : (
-              ""
-            )}
-
-            <ToastContainer />
           </div>
         </div>
       </div>
-    </div>
-    </div>
-    { isPopupVisible && <ComputationPopup
-              isVisible={isPopupVisible}
-              signMessage={signMessage}
-              hidePopup={hidePopup}
-            />
-   }
+      {isPopupVisible && <ComputationPopup
+        isVisible={isPopupVisible}
+        signMessage={signMessage}
+        hidePopup={hidePopup}
+      />
+      }
     </>
   );
 }

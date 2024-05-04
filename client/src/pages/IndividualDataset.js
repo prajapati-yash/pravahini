@@ -14,10 +14,10 @@ function IndividualDataset() {
       <div className="app">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-lg-3">
-              <Sidebar />
-            </div>
-            <div className="col-lg-9 px-0">
+              {/* <div className="col-lg-3">
+                <Sidebar />
+              </div> */}
+            <div className="container-fluid  ps-4 ps-md-5 rightPadding">
               <SingleDataset />  
              
               <Comment/>
