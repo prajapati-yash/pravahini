@@ -10,6 +10,7 @@ import name from "../../assets/registration/name.png";
 import occupation from "../../assets/registration/occupation.png";
 import organization from "../../assets/registration/organization.png";
 import location from "../../assets/registration/location.png";
+import email_icon from "../../assets/registration/email_icon.png";
 import registerImg from "../../assets/registration/registration-bg.png";
 import { PulseLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
@@ -308,7 +309,7 @@ const createUserAccount = async () => {
                   id="form-data"
                   name="form-data"
                   className="py-md-1 py-sm-1 input-form-data"
-                  placeholder="Enter your occupation"
+                  placeholder="Enter your organization"
                   value={formData.userOrganization}
                   onChange={(e) => {
                     setFormData({
@@ -337,7 +338,7 @@ const createUserAccount = async () => {
                   id="form-data"
                   name="form-data"
                   className="py-md-1 py-sm-1 input-form-data"
-                  placeholder="Enter your occupation"
+                  placeholder="Enter your location"
                   value={formData.userLocation}
                   onChange={(e) => {
                     setFormData({
@@ -350,7 +351,7 @@ const createUserAccount = async () => {
             </div>
             <div className="d-flex flex-column flex-lg-row py-2 py-sm-2 py-md-3 register-input-component">
               <div className="d-flex col-6 col-xl-4 register-input-text-component">
-                <img className="col-2 register-input-img" src={location} />
+                <img className="col-2 register-input-img" src={email_icon} />
                 <div className="col-lg-5 col-xl-4 px-sm-4 px-3 register-input-text">
                   Email
                   <span style={{ color: "#FFB800", fontSize: "1.2rem" }}>

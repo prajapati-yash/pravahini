@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../../styles/dataset/CreateDataset.css";
 import upload from "../../assets/registration/upload.png";
 import Navbar from "../navbar/Navbar";
@@ -12,12 +12,15 @@ import { PulseLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DATASET_ADDRESS } from "../Contract";
+import axios from "axios";
 
 function CreateDataset() {
   const navigate = useNavigate();
   const [btnloading, setbtnloading] = useState(false);
   const [selectedOption, setSelectedOption] = useState("free");
   const [showText, setShowText] = useState(false);
+  const [plagiarismCheckProgress, setPlagiarismCheckProgress] = useState(0);
+  const [plagiarismCheckStatus, setPlagiarismCheckStatus] = useState("");
 
   const handleMouseEnter1 = () => {
     setShowText(true);
@@ -81,8 +84,13 @@ function CreateDataset() {
     fileInputRefLicense.current.click();
   };
 
+  // Similarity Checking for dataset
+  const [similarityResults, setSimilarityResults] = useState([]);
+  const [file, setFile] = useState(null);
+
   const handleFileChangeDataset = (event) => {
     const selectedFile = event.target.files[0];
+    setFile(selectedFile);
     if (selectedFile) {
       const reader = new FileReader();
 
@@ -267,62 +275,188 @@ function CreateDataset() {
     }
   };
 
-  const createUserDataset = async () => {
+  const [minHammingDistance, setMinHammingDistance] = useState(0);
+  const [hashes, setHashes] = useState([]);
+  const [fileHash, setFileHash] = useState("");
+
+  const getHashes = async () => {
     try {
-      toast.info("Process is in Progress", {
-        position: "top-left",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-      setbtnloading(true);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/hashes/hashesValue`
+      );
+      // console.log(response.data.hashes)
+      setHashes(response.data.hashes);
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
 
-      const { image, dataset, demoDataset, license } = await uploadData();
+  console.log(hashes);
 
-      const { ethereum } = window;
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        if (!provider) {
-          console.log("Metamask is not installed, please install!");
-        }
-        const con = await datasetInstance();
-
-        const tx = await con.createDataset(
-          createDataset.datasetTitle,
-          createDataset.datasetDescription,
-          createDataset.datasetPrice,
-          license,
-          dataset,
-          demoDataset,
-          image,
-          createDataset.datasetCategory,
-          isPublic,
-          isPrivate,
-          isForSale
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await getHashes();
+        setPlagiarismCheckProgress(25); // Set progress to 25% after fetching hashes
+        setPlagiarismCheckStatus(
+          "Plagiarism checking is in progress. Please wait..."
         );
 
-        // console.log(tx);
-        await tx.wait();
-        setbtnloading(false);
-        navigate("/dataset-marketplace");
+        const findMinDistance = async () => {
+          try {
+            setPlagiarismCheckProgress(50); // Set progress to 50% before comparing hashes
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            hashes.forEach((hash) => {
+              formData.append("static_hashes", hash);
+            });
+
+            const response = await axios.post(
+              `${process.env.REACT_APP_API_URL}/compare-hash`,
+              formData
+            );
+            setSimilarityResults(response.data);
+            console.log(response.data);
+            const minDistance =
+              response.data.length > 0
+                ? Math.min(
+                    ...response.data.map((result) => result.hamming_distance)
+                  )
+                : 0;
+            setMinHammingDistance(minDistance);
+            setFileHash(response.data[0]["file_hash"]);
+
+            // Simulate progress from 50% to 75%
+            setPlagiarismCheckProgress(75);
+            if (minDistance <= 0.5) {
+              let HammingDistance = minDistance * 100;
+              let fixedHammingDistance = HammingDistance.toFixed(2);
+              setPlagiarismCheckStatus(
+                `Apologies, but your file has a ${100 - fixedHammingDistance} %  similarity with existing dataset, and thus cannot be uploaded to Pravahini`
+              );
+            } else {
+              setPlagiarismCheckStatus(
+                "Fantastic! Your file is not a duplicate. You're all set to create a dataset that will be uploaded to our platform Pravahini"
+              );
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            setPlagiarismCheckProgress(100); // Set progress to 100% in case of error
+            setPlagiarismCheckStatus(
+              "Please add correct file that contains the data"
+            );
+          }
+        };
+
+        if (file) {
+          await findMinDistance();
+          // Simulate progress from 75% to 100%
+          setPlagiarismCheckProgress(100); // Set progress to 100% after completing plagiarism check
+        } else {
+          setPlagiarismCheckProgress(0); // Reset progress to 0% if no file is selected
+          setPlagiarismCheckStatus("");
+        }
+      } catch (error) {
+        console.log("Error:", error);
+        setPlagiarismCheckProgress(100); // Set progress to 100% in case of error
+        setPlagiarismCheckStatus(
+          "Please add correct file that contains the data"
+        );
       }
-    } catch (e) {
-      setbtnloading(false);
-      toast.info(e.reason, {
-        position: "top-left",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-      console.log("Error in creating a dataset: ", e);
+    };
+
+    fetchData();
+  }, [file]);
+
+  const sendFileHash = async (fileHash) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/hashes/hashesValue`,
+        { hash: fileHash }
+      );
+      console.log(response.data);
+      // Handle the response data as needed
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const createUserDataset = async () => {
+    if (minHammingDistance > 0.5) {
+      try {
+        await sendFileHash(fileHash);
+
+        toast.info("Process is in Progress", {
+          position: "top-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        setbtnloading(true);
+
+        const { image, dataset, demoDataset, license } = await uploadData();
+
+        const { ethereum } = window;
+        if (ethereum) {
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          if (!provider) {
+            console.log("Metamask is not installed, please install!");
+          }
+          const con = await datasetInstance();
+
+          const tx = await con.createDataset(
+            createDataset.datasetTitle,
+            createDataset.datasetDescription,
+            createDataset.datasetPrice,
+            license,
+            dataset,
+            demoDataset,
+            image,
+            createDataset.datasetCategory,
+            isPublic,
+            isPrivate,
+            isForSale
+          );
+
+          // console.log(tx);
+          await tx.wait();
+
+          setbtnloading(false);
+          navigate("/dataset-marketplace");
+        }
+      } catch (e) {
+        setbtnloading(false);
+        toast.info(e.reason, {
+          position: "top-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        console.log("Error in creating a dataset: ", e);
+      }
+    } else {
+      console.log("Similar dataset already exists");
+    }
+  };
+
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "Fantastic! Your file is not a duplicate. You're all set to create a dataset that will be uploaded to our platform Pravahini":
+        return "not-plagiarized";
+      case "Please add correct file that contains the data":
+        return "error";
+      default:
+        return "plagiarized";
     }
   };
 
@@ -533,6 +667,39 @@ function CreateDataset() {
               </div>
             </div>
 
+            {/* to show the progress bar */}
+            {file && (
+              <>
+                <div className="progress">
+                  <div
+                    className="progress-bar"
+                    role="progressbar"
+                    style={{
+                      width: `${plagiarismCheckProgress}%`,
+                      backgroundColor:
+                        plagiarismCheckProgress === 100 ? "orange" : "blue",
+                    }}
+                    aria-valuenow={plagiarismCheckProgress}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  >
+                    {plagiarismCheckProgress}%
+                  </div>
+                </div>
+
+                {/* Render plagiarism check status */}
+                {plagiarismCheckStatus && (
+                  <div
+                    className={`plagiarism-check-status ${getStatusClass(
+                      plagiarismCheckStatus
+                    )}`}
+                  >
+                    {plagiarismCheckStatus}
+                  </div>
+                )}
+              </>
+            )}
+
             <div
               className="d-flex py-2 flex-column"
               onClick={handleDemoDatasetClick}
@@ -658,6 +825,9 @@ function CreateDataset() {
                 type="submit"
                 className="btn rounded-pill my-2 py-sm-2 px-sm-5 px-4 create-dataset-btn"
                 onClick={createUserDataset}
+                disabled={
+                  plagiarismCheckProgress < 100 || minHammingDistance <= 0.5
+                }
               >
                 {btnloading ? (
                   <>

@@ -120,6 +120,27 @@
   padding-left: 1.5rem;
 }
 
+.plagiarism-check-status {
+  background-color: white;
+  margin-top: 12px;
+  text-align: left;
+  padding: 10px;
+  border-radius: 0.75rem;
+}
+
+.plagiarism-check-status.plagiarized {
+  color: red;
+}
+
+.plagiarism-check-status.not-plagiarized {
+  color: rgb(4, 238, 4);
+}
+
+.plagiarism-check-status.error {
+  color: rgb(82, 54, 2);
+}
+
+
 @media only screen and (max-width: 1200px) {
   .upload-dataset-icon,
   .upload-demo-dataset-icon,
