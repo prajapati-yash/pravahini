@@ -12,7 +12,6 @@ import { ClipLoader } from "react-spinners";
 import { useAccount } from "wagmi";
 import { authorizationInstance } from "../Contract";
 
-
 function DatasetDashboard() {
   const [activeComponent, setActiveComponent] = useState("allDatasets");
   const [searchQuery, setSearchQuery] = useState("");
@@ -23,7 +22,7 @@ function DatasetDashboard() {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { address } = useAccount();
 
-  useEffect(()=>{
+  useEffect(() => {
     const verifyUserAccount = async () => {
       try {
         const { ethereum } = window;
@@ -33,25 +32,27 @@ function DatasetDashboard() {
           const messageBytes = ethers.utils.toUtf8Bytes(
             process.env.REACT_APP_MSG_TO_SIGN
           );
-          if(address){
-
-            if(!Cookies.get("jwtToken")){
-            const sign = await signer.signMessage(messageBytes);
-            const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/de-computation`, {
-              address,
-              sign,
-            });
-            const token = res.data.jwtToken;
-            Cookies.set("jwtToken", token, { expires: 1 });
+          if (address) {
+            if (!Cookies.get("jwtToken")) {
+              const sign = await signer.signMessage(messageBytes);
+              const res = await axios.post(
+                `${process.env.REACT_APP_BACKEND_URL}/de-computation`,
+                {
+                  address,
+                  sign,
+                }
+              );
+              const token = res.data.jwtToken;
+              Cookies.set("jwtToken", token, { expires: 1 });
             }
             const con = await authorizationInstance();
             const verifyTx = await con.isRegistered(address);
             // result = verifyTx
-            console.log("verify",verifyTx);
+            console.log("verify", verifyTx);
             // console.log(con);
             return verifyTx;
           }
-        }else {
+        } else {
           console.log("Metamask is not installed, please install!");
         }
       } catch (error) {
@@ -59,8 +60,7 @@ function DatasetDashboard() {
       }
     };
     verifyUserAccount();
-  },[navigate, address]);
-
+  }, [navigate, address]);
 
   const handleAllDatasetClick = (e) => {
     e.preventDefault();
@@ -382,43 +382,48 @@ function DatasetDashboard() {
                 <ClipLoader color="#4250ff" />
               </div>
             ) : filteredDatasets.length > 0 ? (
-              filteredDatasets.map((item, key) => (
-                <div
-                  className="col-xxl-3 col-md-5 col-sm-7 col-11 mx-1 mb-5 all-datasets-component"
-                  index={key}
-                >
-                  <div className="all-dataset-img-div">
-                    <img
-                      src={`https://gateway.lighthouse.storage/ipfs/${item.uploadImage}`}
-                      className="all-dataset-img"
-                    ></img>
-                  </div>
-                  <div className="all-dataset-details">
-                    <div className="all-dataset-title">{item.title}</div>
-                    <div className="all-dataset-desc">{item.description}</div>
-                    <div className="all-dataset-badge">
-                      {item.isPublic
-                        ? "Free"
-                        : item.isForSale
-                        ? "Paid"
-                        : "Private"}
+              filteredDatasets.map((item, key) => {
+                // Skip rendering when key is 2
+                if (key === 2) {
+                  return null;
+                }
+
+                return (
+                  <div
+                    className="col-xxl-3 col-md-5 col-sm-7 col-11 mx-1 mb-5 all-datasets-component"
+                    key={key}
+                  >
+                    <div className="all-dataset-img-div">
+                      <img
+                        src={`https://gateway.lighthouse.storage/ipfs/${item.uploadImage}`}
+                        className="all-dataset-img"
+                        alt="Dataset"
+                      ></img>
                     </div>
-                    <div
-                      className="all-dataset-btn"
-                      onClick={() =>{
-                        navigate("/dataset-marketplace/single-dataset", {
-                          state: { data: item },
-                        }
-                      )
-                      
-                      }
-                      }
-                    >
-                      View More &gt;
+                    <div className="all-dataset-details">
+                      <div className="all-dataset-title">{item.title}</div>
+                      <div className="all-dataset-desc">{item.description}</div>
+                      <div className="all-dataset-badge">
+                        {item.isPublic
+                          ? "Free"
+                          : item.isForSale
+                          ? "Paid"
+                          : "Private"}
+                      </div>
+                      <div
+                        className="all-dataset-btn"
+                        onClick={() => {
+                          navigate("/dataset-marketplace/single-dataset", {
+                            state: { data: item },
+                          });
+                        }}
+                      >
+                        View More &gt;
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <div>No Datasets Available</div>
             )}
