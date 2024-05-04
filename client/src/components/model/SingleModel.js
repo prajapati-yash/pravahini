@@ -1,4 +1,5 @@
 import React, { useState, useEffect,useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../styles/model/SingleModel.css";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
@@ -14,23 +15,26 @@ import Cookies from "js-cookie";
 import { authorizationInstance } from "../Contract";
 import ComputationPopup from "../../pages/ComputationPopUp";
 import "../../styles/computation/ComputationPopup.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 
 function SingleModel() {
   const { address } = useAccount();
   const location = useLocation();
   // console.log(location.state.data);
   const model = location.state ? location.state.data : "";
+
   const [btnloading, setbtnloading] = useState(false);
   const [isPopupVisible, setPopupVisible] = useState(false); // Initialize to true to always show initially
   const popupRef = useRef(null);
-
+  const navigate = useNavigate();
   
 
-  useEffect(() => {
-    if(!address){
-      setPopupVisible(false);
-    }
-  }, [address]);
+  // useEffect(() => {
+  //   if(!address){
+  //     setPopupVisible(false);
+  //   }
+  // }, [address]);
 // console.log(model);
 
   const handleDownload = async () => {
@@ -52,7 +56,6 @@ function SingleModel() {
       const fileExtension = contentTypeHeader.split("/").pop();
 
       const blobURL = URL.createObjectURL(blob);
-
       const link = document.createElement("a");
       link.href = blobURL;
       link.download = `modelArchive.${fileExtension}`;
@@ -172,11 +175,28 @@ function SingleModel() {
           console.log("Metamask is not installed, please install!");
         }
         const con = await modelInstance();
-        const price = parseInt(model[4]._hex, 16);
-        // console.log("Ether value: ", ethers.utils.parseEther(price.toString()));
-        const tx = await con.purchaseModel(parseInt(model[11]._hex, 16), {
-          value: ethers.utils.parseEther(price.toString()),
-        });
+        // const price = parseInt(model[4]._hex, 16);
+        // console.log(model);
+        // // console.log("Ether value: ", ethers.utils.parseEther(price.toString()));
+        // const tx = model[11] && await con.purchaseModel(parseInt(model[11]._hex, 16), {
+        //   value: ethers.utils.parseEther(price.toString()),
+        // });
+        const price = model.length > 4 && model[4] && model[4]._hex
+  ? parseInt(model[4]._hex, 16) === 0
+    ? "0"
+    : parseInt(model[4]._hex, 16)
+  : null;
+
+const tx = price !== null
+  ? await con.purchaseModel(
+      model.length > 11 && model[11] && model[11]._hex
+        ? parseInt(model[11]._hex, 16)
+        : null,
+      {
+        value: ethers.utils.parseEther(price.toString()),
+      }
+    )
+  : null;
 
         // console.log(tx);
         await tx.wait();
@@ -265,7 +285,7 @@ const signMessage = async () => {
         }
       );
       const token = res.data.jwtToken;
-      // console.log(token)
+      console.log("token",token)
       Cookies.set("jwtToken", token, { expires: 1 });
       setPopupVisible(false);
     } else {
@@ -276,23 +296,40 @@ const signMessage = async () => {
   }
 };
 
+// useEffect(() => {
+//   const prevAddress = Cookies.get("prevAddress");
+//   if (!prevAddress) {
+//     Cookies.set("prevAddress", address);
+//   } else if (address !== prevAddress) {
+//     Cookies.remove("jwtToken");
+//     Cookies.set("prevAddress", address);
+//   }
+// }, []);
 useEffect(() => {
   const prevAddress = Cookies.get("prevAddress");
-  if (!prevAddress) {
-    Cookies.set("prevAddress", address);
-  } else if (address !== prevAddress) {
-    Cookies.remove("jwtToken");
-    Cookies.set("prevAddress", address);
-  }
-}, []);
+  const handleAddressChange = () => {
+    if (prevAddress !== address) {
+      Cookies.remove("jwtToken");
+      Cookies.set("prevAddress", address);
+    }
+  };
+
+  handleAddressChange();
+
+  window.addEventListener("addressChanged", handleAddressChange);
+  return () => {
+    window.removeEventListener("addressChanged", handleAddressChange);
+  };
+}, [address]);
 
 useEffect(() => {
   if (location.pathname === "/model-marketplace/single-model") {
     const jwtToken = Cookies.get("jwtToken");
+    console.log(jwtToken)
     if(!address){
-      setPopupVisible(false)
+      setPopupVisible(false);
     }
-    else if (!jwtToken) {
+    else if(!jwtToken) {
       setPopupVisible(true);
     }
   } else {
@@ -304,12 +341,20 @@ const hidePopup = () => {
   setPopupVisible(false);
 };
 const popupBg = isPopupVisible ? "popup-background" : "";
-
+const handleBackClick = () => {
+  navigate('/model-marketplace'); // Navigate to the '/previous-route' path
+};
   return (<>
    
    <div className={`${popupBg}`}>
+   <div className="col-lg-1 back" onClick={handleBackClick}>
+              <FontAwesomeIcon icon={faArrowLeftLong} />
+              &nbsp;
+              &nbsp;
+              <span>Back</span>            
+              </div>
     <div className={`d-flex flex-md-row flex-column `}>
-      <div className={"py-3 col-md-7 col-lg-8"}>
+      <div className={"py-3 col-md-8 col-lg-9"}>
         <div className="py-4 mx-3 my-2 single-model-heading-container">
           <div className="px-5 py-1 d-flex single-model-head">{model[0]}</div>
           <div className="px-5 py-1 d-flex single-model-subhead">
@@ -344,7 +389,7 @@ const popupBg = isPopupVisible ? "popup-background" : "";
         </div>
       </div>
       
-      <div className="col-md-5 col-lg-4">
+      <div className="col-md-4 col-lg-3 ">
         <div className="py-5 single-model-details">
           {model.isPublic || model.isPrivate ? (
             <div className="py-sm-5 py-4">
@@ -361,7 +406,7 @@ const popupBg = isPopupVisible ? "popup-background" : "";
             ""
           )}
 
-          <div className="pt-sm-4 pt-2 px-md-5 single-model-content">
+          <div className="pt-sm-4 pt-2 px-md-3 single-model-content">
             <div className="py-3">
               <div className="single-model-details-head">Category</div>
               <div className="single-model-details-value">{model[2]}</div>
@@ -376,7 +421,8 @@ const popupBg = isPopupVisible ? "popup-background" : "";
                 Price of Model (in BTT)
               </div>
               <div className="single-model-details-value">
-                {parseInt(model[4]._hex, 16)}
+                {console.log(model)}
+                {parseInt(model[4]._hex, 16) === 0  ? "0" : parseInt(model[4]._hex, 16)}
               </div>
             </div>
             {model.isForSale ? (

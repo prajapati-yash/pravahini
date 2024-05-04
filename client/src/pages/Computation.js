@@ -78,6 +78,7 @@ function Computation() {
   useEffect(() => {
     if (location.pathname === "/de-computation") {
       const jwtToken = Cookies.get("jwtToken");
+      console.log(jwtToken)
       if (!jwtToken) {
         setPopupVisible(true);
       }

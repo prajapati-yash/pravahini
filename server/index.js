@@ -49,6 +49,8 @@ app.post("/de-computation", async (req, res) => {
       };
       const jwtToken = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "1d" });
       res.json({ jwtToken });
+      // window.dispatchEvent(new Event("addressChanged"));
+
     } else {
       // Invalid signature
       res.status(401).json({ message: "Invalid signature" });
