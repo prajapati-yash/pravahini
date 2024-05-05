@@ -80,6 +80,9 @@ function DatasetDashboard() {
     setActiveComponent("paidDatasets");
 
     const filtered = allDatasets.filter((dataset) => {
+      if(parseInt(dataset[11]._hex,16)==2){
+        return null;
+      }
       return dataset.isForSale;
     });
 
@@ -102,6 +105,10 @@ function DatasetDashboard() {
     setActiveComponent("drugs&med");
 
     const filtered = allDatasets.filter((dataset) => {
+      // console.log(parseInt(dataset[11]._hex,16));
+      if(parseInt(dataset[11]._hex,16)==2){
+        return null;
+      }
       return dataset.category === "Drugs and Medicine";
     });
     setFilteredDatasets(filtered);
@@ -382,9 +389,10 @@ function DatasetDashboard() {
                 <ClipLoader color="#4250ff" />
               </div>
             ) : filteredDatasets.length > 0 ? (
-              filteredDatasets.map((item, key) => {
+              filteredDatasets.map((item, key) => { 
+                
                 // Skip rendering when key is 2
-                if (key === 2) {
+                if (parseInt(item[11]._hex,16) === 2) {
                   return null;
                 }
 
