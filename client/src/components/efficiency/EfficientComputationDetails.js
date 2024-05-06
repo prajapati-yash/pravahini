@@ -28,13 +28,13 @@ function EfficientComputationDetails() {
     const newBtnLoadingArray = [...btnloadingArray];
     newBtnLoadingArray[index] = true;
     setBtnLoadingArray(newBtnLoadingArray);
-    const apiURL = `${process.env.REACT_APP_BACKEND_URL}/container1/get-job-status/${jobId}`;
+    const apiURL = `${process.env.REACT_APP_BACKEND_URL}/container1/get-job-status/:${jobId}`;
 
     axios
       .get(apiURL, tokenHeaders)
       .then((response) => {
         const { state } = response.data;
-
+        
         setJobStatus(state);
 
         // Update the job status in the database
@@ -138,12 +138,41 @@ function EfficientComputationDetails() {
       setUserJobs(userJobs);
     } catch (error) {
       console.error("Error fetching user jobs:", error);
+      
     }
   };
-
   useEffect(() => {
     fetchUserJobs();
   }, []);
+
+
+ 
+  // useEffect(() => {
+  //   let emailSent = false;
+  //   let jobCompleted = false; 
+  //   const fetchStatus = async () => {
+  //     if (!jobCompleted) {
+  //     const response = await axios.get(
+  //       `http://localhost:5500/container1/get-job-status/:2cc75caf-ca61-4ebf-85e8-a247b24e5af6`,
+  //       tokenHeaders
+  //     );
+  
+  //     if (response.data.state === "Completed") {
+  //       if(!emailSent){
+  //         console.log("Job completed");
+  //         emailSent = true;
+  //         jobCompleted = true;
+  //       }
+  //     }
+  //   }
+  //   };
+  
+  //   const intervalId = setInterval(fetchStatus, 1000); // Check the API every 5 seconds (adjust the interval as needed)
+  //   fetchStatus(); // Call fetchStatus immediately
+  
+  //   return () => clearInterval(intervalId); // Clean up the interval on component unmount
+  // }, []);
+  
 
   const pollForUpdates = async () => {
     while (true) {

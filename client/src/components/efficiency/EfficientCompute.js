@@ -42,12 +42,14 @@ function EfficientCompute() {
     setDatasetUrls(newUrls);
   };
 
-  const handleExecute = () => {
+  const handleExecute = async () => {
     if (!address) {
       console.log("Wallet Address is required!");
     } else {
       console.log("Started Execution...");
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/register?address=${address}` );
 
+      console.log(response.data.Email);
       toast.info("Your Job is computing", {
         position: "top-left",
         autoClose: 5000,
@@ -65,6 +67,7 @@ function EfficientCompute() {
       setCid("");
       const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/container1/execute`;
       const requestData = {
+        Email:response.data.Email,
         notebookUrl: notebookUrl,
         inputs: datasetUrls.map((url) => ({ url: url })),
       };
