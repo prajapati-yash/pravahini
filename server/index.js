@@ -12,6 +12,7 @@ const jwt = require("jsonwebtoken");
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 const MSG_TO_SIGN = process.env.MSG_TO_SIGN;
+const hashRoutes = require('./routes/hashRoutes');
 
 app.use(cors());
 app.use(express.json());
@@ -32,7 +33,7 @@ app.use(
   expressJwt({
     secret: JWT_SECRET_KEY,
     algorithms: ["HS256"],
-  }).unless({ path: ["/", "/de-computation","/user/register","/dataset/comments","/model/comments"] })
+  }).unless({ path: ["/", "/de-computation","/user/register","/dataset/comments","/model/comments","/hashes/hashesValue"] })
 );
 
 app.post("/de-computation", async (req, res) => {
@@ -84,6 +85,8 @@ app.use('/advanceJobs',containerRoutes);
 app.use("/dataset", endpoint);
 app.use("/model", endpoint);
 app.use("/user", userDetail);
+
+app.use("/hashes", hashRoutes);
 
 
 app.get("/", (req, res) => {
