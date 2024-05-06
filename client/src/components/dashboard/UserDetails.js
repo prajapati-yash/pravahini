@@ -21,7 +21,7 @@ function UserDetails() {
   const [occupation, setOccupation] = useState();
   const [organization, setOrganization] = useState();
   const [location, setLocation] = useState();
-  const [Email,setEmail]=useState();
+  const [Email,setEmail]=useState("");
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [newEmail, setNewEmail] = useState("");
   const [showButtons, setShowButtons] = useState(false);
@@ -141,7 +141,7 @@ function UserDetails() {
           const address = await signer.getAddress();
           // console.log("address",address);
           //get request to get email from mongodb with address
-          const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/register?address=${address}` );
+         
           const con = await authorizationInstance();
           const userData = await con.getUser(address);
   
@@ -152,7 +152,7 @@ function UserDetails() {
           setLocation(userData[3]);
           setImg(userData[4]);
           // console.log("response",response.data.Email);
-          setEmail(response.data.Email);//set email here
+          
           return userData;
         }
       }
@@ -162,8 +162,21 @@ function UserDetails() {
   };
 
   useEffect(() => {
+    const userEmail = async () => {
+      try{
 
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/register?address=${address}`);
+        if(response){
+          setEmail(response.data.Email);//set email here
+        }else{
+          setEmail("");
+        }
+      }catch(error){
+console.log(error)
+      }
+    }
     getUserAccountDetails();
+    userEmail()
     setIsPageLoading(false);
   }, []);
 

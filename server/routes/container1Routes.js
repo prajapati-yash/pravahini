@@ -20,7 +20,7 @@ nodemailer.createTransport(
         service: 'gmail',
         auth: {
             user: 'oggyyy420@gmail.com',
-            pass: "icmq yokz qrzo ggzr"
+            pass: process.env.GMAIL_KEY
         }
     }
 );
