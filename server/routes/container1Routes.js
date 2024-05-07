@@ -132,7 +132,9 @@ router.delete('/delete-job/:id', async(req, res) =>{
 
   router.get('/get-job-status/:jobId', (req, res) => {
     const jobId = req.params;
-    console.log(jobId)
+    const emailId = req.query.emailId;
+    // console.log("body",emailId);
+    // console.log(jobId)
     const output = jobId.jobId.replace(/:/g, '');
     const jobListCommand = `bacalhau list --id-filter=${output} --output json`;
     const jobListExecution = spawnSync('bash', ['-c', jobListCommand]);
@@ -153,7 +155,7 @@ router.delete('/delete-job/:id', async(req, res) =>{
                   
                   let mailDetails = {
                     from: 'oggyyy420@gmail.com',
-                    to: 'vinitpithadiya@gmail.com',
+                    to: `${emailId}`,
                     subject: 'Mission Accomplished: Your Decentralized Job is Complete',
                     text: `Congratulations! 🎉
 
@@ -258,7 +260,7 @@ Team Pravahini (प्रवाहिनी) 🤖
 let mailDetails = {
   from: 'oggyyy420@gmail.com',
   to: Email,
-  subject: 'Buckle Up! Your Decentralized Computation is Underwa ',
+  subject: 'Buckle Up! Your Decentralized Computation is Underway ',
   text: `Greetings from Pravahini (प्रवाहिनी) 🎉
 
   We hope this email finds you well. We're excited to share that your decentralized computation job has been successfully initiated on our platform. Your Job ID is ${jobId}.

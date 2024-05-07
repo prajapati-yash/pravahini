@@ -42,8 +42,8 @@ function Comment() {
 //comment store
     const sendUserDataToBackend = async (userData) => {
         try {
+            console.log(userData)   
             let response;
-            // console.log(userData)
             if (window.location.pathname === "/model-marketplace/single-model") {
                 response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/model/comment`,userData,tokenHeaders);
             } else {
@@ -59,7 +59,7 @@ function Comment() {
     const postReply = async (newReply) => {
         // console.log(data.repliedToCommentId);
        
-
+        console.log("replyy Token Headers",tokenHeaders);
         if (window.location.pathname === "/model-marketplace/single-model") {
             axios.put(`${process.env.REACT_APP_BACKEND_URL}/model/comment/reply`, newReply,tokenHeaders).then(response => {
                 // Handle the response from the server
@@ -84,16 +84,16 @@ function Comment() {
 
 //delete
     const handleDeleteComment = async (commentId) => {
-        // console.log("CommentId",commentId)
+        console.log("CommentId",commentId)
         try {
             // Make a DELETE request to your backend API
-            // console.log("Token Headers",tokenHeaders);
+            console.log("Token Headers",tokenHeaders);
             let response;
             if (window.location.pathname === "/model-marketplace/single-model") {
+                response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/model/comment/delete`,{data:{commentId}},tokenHeaders);
                 
-                response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/model/comment/delete`,commentId,tokenHeaders);
-
             } else {
+                console.log("avtar",commentId)
                 // console.log("CMt",commentId)
                 response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/dataset/comment/delete`, {
                     data: { commentId },
@@ -210,7 +210,7 @@ function Comment() {
                     onReplyAction={(data) => { postReply(data) }}
                     currentData={(data) => { console.log("Data", data); }}
                     onDeleteAction={handleDeleteComment}
-                    onEditAction={handleEditComment}
+                    onEditAction={handleEditComment()}
                     overlayStyle={{
                         color: 'black'
                     }}

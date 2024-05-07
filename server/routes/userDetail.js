@@ -31,15 +31,17 @@ router.post('/register', async (req, res) => {
 // PUT request to update an existing user
 router.put('/register', async (req, res) => {
   try {
-    const { address,userData, Email } = req.body;
-    const updatedUser = await userDetailSchema.findOneAndUpdate(
-      {address},
-      { Email },
-      { new: true }
+    const { address, userData, Email } = req.body;
+    const updatedUser = await userDetailSchema.updateOne(
+      { address },
+      { $set: { userData, Email } },
+      { upsert: true, new: true }
     );
+
     if (!updatedUser) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'Something went wrong' });
     }
+
     res.json(updatedUser);
   } catch (error) {
     res.status(400).json({ error: error.message });

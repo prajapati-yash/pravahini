@@ -117,7 +117,7 @@ router.delete('/comment/delete', async (req, res) => {
     let result;
     let collection;
     const {commentId}  = req.body;
-    // console.log("var cid",commentId)
+    console.log("var cid",commentId)
 
     // console.log("coment Id", req.body);
    

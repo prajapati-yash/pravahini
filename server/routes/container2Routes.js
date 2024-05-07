@@ -5,8 +5,19 @@ const { spawnSync } = require("child_process");
 const container2Model = require("../models/advanceJobs");
 const dockerImage = process.env.CONTAINER_2_DOCKER_IMAGE;
 const timeout = process.env.TIMEOUT;
+const nodemailer = require("nodemailer");
 const waitTimeout = process.env.WAIT_TIMEOUT_SECS;
 
+let mailTransporter =
+nodemailer.createTransport(
+    {
+        service: 'gmail',
+        auth: {
+            user: 'oggyyy420@gmail.com',
+            pass: process.env.GMAIL_KEY
+        }
+    }
+);
 router.post("/save-job", async (req, res) => {
   const { walletAddress, jobId, cid, timeStamp, jobStatus } = req.body;
 
@@ -102,6 +113,7 @@ router.delete("/delete-job/:jobId", async (req, res) => {
 
   router.get("/get-job-status/:jobId", (req, res) => {
     const jobId = req.params;
+    const emailId = req.query.emailId;
     const output = jobId.jobId.replace(/:/g, "");
     const jobListCommand = `bacalhau list --id-filter=${output} --output json`;
     const jobListExecution = spawnSync("bash", ["-c", jobListCommand]);
@@ -118,6 +130,39 @@ router.delete("/delete-job/:jobId", async (req, res) => {
             state = "In Progress";
 
             res.json({ state });
+           } else if(state==="Completed"){
+                  
+              let mailDetails = {
+                from: 'oggyyy420@gmail.com',
+                to: `${emailId}`,
+                subject: 'Mission Accomplished: Your Decentralized Job is Complete',
+                text: `Congratulations! 🎉
+
+                We're thrilled to inform you that your decentralized computation job with Job ID ${jobId.jobId} has been successfully completed. 🥳
+                
+                The results are now available for you to access on our platform, Pravahini.
+                
+                If you have any further questions or require assistance, our support team is always ready to help. 💪
+                
+                Thank you for choosing our platform for your decentralized computation needs. We look forward to serving you again in the future. 🙌
+                
+Best regards,
+Team Pravahini (प्रवाहिनी) 🤖
+                `
+              };
+
+              mailTransporter
+                .sendMail(mailDetails,
+                  function (err, data) {
+                    if (err) {
+                      console.log('Error Occurs');
+                    } else {
+                      console.log('Email sent successfully');
+                    }
+                  });
+              
+            res.json({ state });
+            
           } else {
             res.json({ state });
           }
@@ -156,15 +201,48 @@ router.delete("/delete-job/:jobId", async (req, res) => {
   });
 
   router.post("/execute", (req, res) => {
-    const { notebookUrl, inputs } = req.body;
+    const { notebookUrl, inputs,Email } = req.body;
     const notebookFileName = getFileNameFromUrl(notebookUrl);
     const outputFileName = generateOutputFileName(notebookUrl);
+
     const inputArgs = inputs
       .map((input) => `-i src=${input.url},dst=/inputs/data/`)
       .join(" ");
     const jobCommand = `bacalhau docker run --wait=false --id-only --timeout ${timeout} --wait-timeout-secs ${waitTimeout} -w /inputs -i src=${notebookUrl},dst=/inputs/notebook/ ${inputArgs} ${dockerImage} -- jupyter nbconvert --execute --to notebook --output /outputs/${outputFileName} /inputs/notebook/${notebookFileName}`;
     const jobExecution = spawnSync("bash", ["-c", jobCommand]);
     const jobId = jobExecution.stdout.toString().trim();
+
+let mailDetails = {
+      from: 'oggyyy420@gmail.com',
+      to: Email,
+      subject: 'Buckle Up! Your Decentralized Computation is Underway ',
+      text: `Greetings from Pravahini (प्रवाहिनी) 🎉
+    
+  We hope this email finds you well. We're excited to share that your decentralized computation job has been successfully initiated on our platform. Your Job ID is ${jobId}.
+      
+  We ensures that your datasets and scripts are processed securely and efficiently. 💻
+      
+  Thank you for choosing our platform for your decentralized computation needs. If you have any questions or concerns, please don't hesitate to reach out to our support team. 🙌
+
+  Happy computing! 🚀
+Best regards,
+Team Pravahini (प्रवाहिनी) `
+    };    
+        
+    
+        if(jobId){
+          console.log(jobId)
+          mailTransporter
+          .sendMail(mailDetails,
+              function (err, data) {
+                  if (err) {
+                      console.log('Error Occurs');
+                  } else {
+                      console.log('Email sent successfully');
+                  }
+              });
+        }
+      
     res.json({ jobId });
   });
 

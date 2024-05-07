@@ -166,10 +166,10 @@ const createUserAccount = async () => {
         await tx.wait();
         setbtnloading(false);
 
-//cannot get formData.userImage (CID)
+        //cannot get formData.userImage (CID)
         const data = [formData.userName,formData.userOccupation,formData.userOrganization,formData.userLocation,cid];
         const userObject = {
-          _id: address,
+          address: address,
           userData: data,
           Email: formData.userEmail,
         };
