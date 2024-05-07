@@ -132,7 +132,7 @@ function CreateModel() {
   const progressCallback = (progressData) => {
     let percentageDone =
       100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
-    console.log(percentageDone);
+    // console.log(percentageDone);
   };
 
   const uploadData = async () => {
@@ -239,16 +239,16 @@ function CreateModel() {
       });
       setbtnloading(true);
 
-      console.log(isPublic);
-      console.log(isPrivate);
-      console.log(isForSale);
+      // console.log(isPublic);
+      // console.log(isPrivate);
+      // console.log(isForSale);
 
       console.log("Create Dataset data: ", createModel);
 
       const { model, license, document } = await uploadData();
-      console.log("cid model: ", model);
-      console.log("cid license: ", license);
-      console.log("cid document: ", document);
+      // console.log("cid model: ", model);
+      // console.log("cid license: ", license);
+      // console.log("cid document: ", document);
 
       const { ethereum } = window;
       if (ethereum) {
@@ -272,7 +272,7 @@ function CreateModel() {
           isForSale
         );
 
-        console.log(tx);
+        // console.log(tx);
         await tx.wait();
         setbtnloading(false);
         navigate("/model-marketplace");

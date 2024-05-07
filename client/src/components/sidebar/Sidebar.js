@@ -45,7 +45,7 @@ function Sidebar() {
         const con = await authorizationInstance();
         const verifyTx = await con.isRegistered(address);
         // result = verifyTx
-        console.log(verifyTx);
+        // console.log(verifyTx);
         // console.log(con);
         return verifyTx;
       }
@@ -57,7 +57,7 @@ function Sidebar() {
   const handleDatasetClick = async () => {
     if (address) {
       const test = await verifyUserAccount();
-      console.log("Test", test);
+      // console.log("Test", test);
       if (test) {
         navigate("/dataset-marketplace/create-dataset");
       } else {
@@ -71,7 +71,7 @@ function Sidebar() {
   const handleModelClick = async () => {
     if (address) {
       const test = await verifyUserAccount();
-      console.log("Test", test);
+      // console.log("Test", test);
       if (test) {
         navigate("/model-marketplace/create-model");
       } else {
@@ -87,7 +87,7 @@ function Sidebar() {
     // window.location.reload();
     if (address) {
       const test = await verifyUserAccount();
-      console.log("Test", test);
+      // console.log("Test", test);
       if (test) {
         // window.location.reload();
         navigate("/user-dashboard");
@@ -103,7 +103,7 @@ function Sidebar() {
   const handleCompClick = async () => {
     if (address) {
       const test = await verifyUserAccount();
-      console.log("Test", test);
+      // console.log("Test", test);
       if (test) {
         navigate("/de-computation");
       } else {

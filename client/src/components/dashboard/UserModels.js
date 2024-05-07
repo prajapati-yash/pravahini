@@ -23,7 +23,7 @@ function UserModels() {
         const con = await modelInstance();
         const getDatasetDetails = await con.getAllModelsOfUser();
         setAllUserModels(getDatasetDetails);
-        console.log(allUserModels);
+        // console.log(allUserModels);
       }
     } catch (error) {
       console.log(error);

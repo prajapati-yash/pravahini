@@ -12,6 +12,7 @@ const jwt = require("jsonwebtoken");
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 const MSG_TO_SIGN = process.env.MSG_TO_SIGN;
+const hashRoutes = require('./routes/hashRoutes');
 
 app.use(cors());
 app.use(express.json());
@@ -32,13 +33,13 @@ app.use(
   expressJwt({
     secret: JWT_SECRET_KEY,
     algorithms: ["HS256"],
-  }).unless({ path: ["/", "/de-computation"] })
+  }).unless({ path: ["/", "/de-computation","/user/register","/dataset/comments","/model/comments","/hashes/hashesValue","/model/comment/delete","/dataset/comment/delete"] })
 );
 
 app.post("/de-computation", async (req, res) => {
   try {
     const { address, sign } = req.body;
-    console.log("Signature ", sign);
+    // console.log("Signature ", sign);
     const recoveredAddress = await ethers.utils.verifyMessage(
       MSG_TO_SIGN,
       sign
@@ -49,6 +50,8 @@ app.post("/de-computation", async (req, res) => {
       };
       const jwtToken = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "1d" });
       res.json({ jwtToken });
+      // window.dispatchEvent(new Event("addressChanged"));
+
     } else {
       // Invalid signature
       res.status(401).json({ message: "Invalid signature" });
@@ -69,12 +72,23 @@ app.use((err, req, res, next) => {
 
 const container1Router = require("./routes/container1Routes");
 const container2Router = require("./routes/container2Routes");
+const containerRoutes =require("./routes/containerRoutes");
+const endpoint = require("./routes/datasetComment");
+const userDetail = require("./routes/userDetail");
 
 app.use("/container1", container1Router);
 app.use("/container2", container2Router);
-// app.use('/',(req,res)=>{
-//   res.send('Welcome to our Pravahini DAPP!')
-// })
+
+app.use('/efficientComputing',containerRoutes);
+app.use('/advanceJobs',containerRoutes);
+
+app.use("/dataset", endpoint);
+app.use("/model", endpoint);
+app.use("/user", userDetail);
+
+app.use("/hashes", hashRoutes);
+
+
 app.get("/", (req, res) => {
   res.send("Welcome to our Pravahini DAPP!");
 });

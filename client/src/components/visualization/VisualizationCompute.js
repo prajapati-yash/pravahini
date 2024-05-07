@@ -42,11 +42,12 @@ function VisualizationCompute() {
     setDatasetUrls(newUrls);
   };
 
-  const handleExecute = () => {
+  const handleExecute =async() => {
     if (!address) {
       console.log("Wallet Address is required!");
     } else {
       console.log("Started Execution...");
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/register?address=${address}` )
 
       toast.info("Your Job is computing", {
         position: "top-left",
@@ -65,6 +66,7 @@ function VisualizationCompute() {
       setCid("");
       const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/container2/execute`;
       const requestData = {
+        Email:response.data.Email,
         notebookUrl: notebookUrl,
         inputs: datasetUrls.map((url) => ({ url: url })),
       };
@@ -236,7 +238,7 @@ function VisualizationCompute() {
               </div>
             </div>
 
-            <div className="d-flex py-2 align-items-center">
+            {/* <div className="d-flex py-2 align-items-center">
               <div className="visualization-compute-cid">cid:</div>
               <div className="px-3">
                 {showButton ? (
@@ -258,7 +260,7 @@ function VisualizationCompute() {
             <div className="cid-info">
               *CID will be generated after your job is computed. You can track
               your job status from the below table.
-            </div>
+            </div> */}
           </div>
         </div>
         <ToastContainer />

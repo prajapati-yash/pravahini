@@ -24,7 +24,7 @@ function SubscribedModels() {
         const con = await modelInstance();
         const getDatasetDetails = await con.getAllModelsSubscriptionOfUser();
         setAllSubscribedModels(getDatasetDetails);
-        console.log(allSubscribedModels);
+        // console.log(allSubscribedModels);
       }
     } catch (error) {
       console.log(error);

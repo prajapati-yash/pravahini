@@ -23,7 +23,7 @@ function SubscribedDatasets() {
         const con = await datasetInstance();
         const getDatasetDetails = await con.getAllDatasetsSubscriptionOfUser();
         setAllSubscribedDatasets(getDatasetDetails);
-        console.log(allSubscribedDatasets);
+        // console.log(allSubscribedDatasets);
       }
     } catch (error) {
       console.log(error);

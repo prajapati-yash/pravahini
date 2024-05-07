@@ -42,12 +42,12 @@ function EfficientCompute() {
     setDatasetUrls(newUrls);
   };
 
-  const handleExecute = () => {
+  const handleExecute = async () => {
     if (!address) {
       console.log("Wallet Address is required!");
     } else {
       console.log("Started Execution...");
-
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/register?address=${address}` )
       toast.info("Your Job is computing", {
         position: "top-left",
         autoClose: 5000,
@@ -65,6 +65,7 @@ function EfficientCompute() {
       setCid("");
       const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/container1/execute`;
       const requestData = {
+        Email:response.data.Email,
         notebookUrl: notebookUrl,
         inputs: datasetUrls.map((url) => ({ url: url })),
       };
@@ -112,14 +113,14 @@ function EfficientCompute() {
     console.log("Getting CID of this Job Id!");
     setcidloading(true);
     const apiURL = `${process.env.REACT_APP_BACKEND_URL}/container1/get-cid/:${jobId}`;
-    console.log(jobId);
+    // console.log(jobId);
 
     axios
       .get(apiURL, tokenHeaders)
       .then((response) => {
         const { cid } = response.data;
         setCid(cid);
-        console.log(`CID for current ${jobId} is `, cid);
+        // console.log(`CID for current ${jobId} is `, cid);
         setcidloading(false);
         setShowButton(false);
         try {
@@ -235,7 +236,7 @@ function EfficientCompute() {
               </div>
             </div>
 
-            <div className="d-flex py-2 align-items-center">
+            {/* <div className="d-flex py-2 align-items-center">
               <div className="visualization-compute-cid">cid:</div>
               <div className="px-3">
                 {showButton ? (
@@ -253,11 +254,11 @@ function EfficientCompute() {
                   cid
                 )}
               </div>
-            </div>
-            <div className="cid-info">
+            </div> */}
+            {/* <div className="cid-info">
               *CID will be generated after your job is computed. You can track
               your job status from the below table.
-            </div>
+            </div> */}
           </div>
         </div>
         <ToastContainer />

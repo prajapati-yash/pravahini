@@ -6,7 +6,39 @@ const container1Model = require("../models/efficientComputing");
 const dockerImage = process.env.CONTAINER_1_DOCKER_IMAGE;
 const timeout = process.env.TIMEOUT;
 const waitTimeout = process.env.WAIT_TIMEOUT_SECS;
+const fs = require('fs');
+const { exec } = require('child_process');
+const path = require('path')
+const archiver = require('archiver');
+const nodemailer = require("nodemailer");
+const cron = require('node-cron');
+const axios = require('axios');
 
+let mailTransporter =
+nodemailer.createTransport(
+    {
+        service: 'gmail',
+        auth: {
+            user: 'oggyyy420@gmail.com',
+            pass: process.env.GMAIL_KEY
+        }
+    }
+);
+
+
+
+// cron.schedule('*/10 * * * * *', async () => {
+//   try {
+//       // Make an API call to fetch data
+//       const response = await axios.get(`http://localhost:5500/get-job-status/`);
+//       const data = response;
+
+//       // Process the data or save it to a file/database
+//       console.log(data);
+//   } catch (error) {
+//       console.error('Failed to fetch data:', error.message);
+//   }
+// });
 
 router.post("/save-job", async (req, res) => {
     const { walletAddress, jobId, cid, timeStamp, jobStatus } = req.body;
@@ -98,13 +130,16 @@ router.delete('/delete-job/:id', async(req, res) =>{
     }
   })
 
-
   router.get('/get-job-status/:jobId', (req, res) => {
     const jobId = req.params;
+    const emailId = req.query.emailId;
+    // console.log("body",emailId);
+    // console.log(jobId)
     const output = jobId.jobId.replace(/:/g, '');
     const jobListCommand = `bacalhau list --id-filter=${output} --output json`;
     const jobListExecution = spawnSync('bash', ['-c', jobListCommand]);
-  
+
+    
     if (jobListExecution.status === 0) {
         const jobListOutput = jobListExecution.stdout.toString().trim();
   
@@ -112,12 +147,44 @@ router.delete('/delete-job/:id', async(req, res) =>{
             const jobList = JSON.parse(jobListOutput);
             if (Array.isArray(jobList) && jobList.length > 0) {
                 let state = jobList[0].State.State;
-                console.log("State", state)
+                // console.log("State", state)
                 if(state === "New"){
                   state = "In Progress";
                   res.json({ state });
-                }else{
+                }else if(state==="Completed"){
+                  
+                  let mailDetails = {
+                    from: 'oggyyy420@gmail.com',
+                    to: `${emailId}`,
+                    subject: 'Mission Accomplished: Your Decentralized Job is Complete',
+                    text: `Congratulations! 🎉
+
+                    We're thrilled to inform you that your decentralized computation job with Job ID ${jobId.jobId} has been successfully completed. 🥳
+                    
+                    The results are now available for you to access on our platform, Pravahini.
+                    
+                    If you have any further questions or require assistance, our support team is always ready to help. 💪
+                    
+                    Thank you for choosing our platform for your decentralized computation needs. We look forward to serving you again in the future. 🙌
+                    
+Best regards,
+Team Pravahini (प्रवाहिनी) 🤖
+                    `
+                  };
+
+                  mailTransporter
+                    .sendMail(mailDetails,
+                      function (err, data) {
+                        if (err) {
+                          console.log('Error Occurs');
+                        } else {
+                          console.log('Email sent successfully');
+                        }
+                      });
+                  
                 res.json({ state });
+                }else{
+                  res.json({ state });
                 }
             } else {
                 res.status(404).json({ error: 'Job not found' });
@@ -131,36 +198,95 @@ router.delete('/delete-job/:id', async(req, res) =>{
   }); 
   
   router.get('/get-cid/:jobId', (req,res) => {
+    
     const jobId = req.params;
     const output = jobId.jobId.replace(/:/g, '');
-    const jobInfoCommand = `bacalhau describe ${output}`;
-    const jobInfoExecution = spawnSync('bash', ['-c', jobInfoCommand]);
-  
-    if (jobInfoExecution.status === 0) {
-      const jobInfo = jobInfoExecution.stdout.toString().trim();
-      const cidRegex = /PublishedResults:[\s\S]*?CID:\s*(\S+)/;
-      const match = jobInfo.match(cidRegex);
-      if (match && match.length > 1) {
-        const cid = match[1];
-        jobIdToDownload = jobId;
-        res.json({cid, jobInfo});
-      } else {
-        res.status(500).json({ error: 'CID not found in jobInfo' });
-      }
-    } else {
-      res.status(500).json({ error: 'Failed to get job information' });
-    }
-  })
+    // const jobInfoCommand = `bacalhau describe ${output}`;
+    // const jobInfoCommand = `bacalhau get ${output}`;
+    // const results = "result"
+    // if (!fs.existsSync(results)) {
+    //   fs.mkdirSync(results, { recursive: true });
+    // }
 
-  router.post('/execute', (req, res) => {
+    // Construct the bacalhau command
+    const bacalhauCommand = `bacalhau get ${output}`;
+    exec(bacalhauCommand, (error, stdout, stderr) => {
+      if (error) {
+      //  console.error(`exec error: ${error}`);
+        return;
+      }
+      console.log(`stdout: ${stdout}`);
+      console.error(`stderr: ${stderr}`);
+      
+      
+     
+  });
+     
+    });
+
+
+    // const jobInfoExecution = spawnSync('bash', ['-c', bacalhauCommand]);
+    
+    // if (jobInfoExecution.status === 0) {
+    //   const jobInfo = jobInfoExecution.stdout.toString().trim();
+    //   console.log(jobInfo);
+    //   const cidRegex = /PublishedResults:[\s\S]*?CID:\s*(\S+)/;
+    //   const match = jobInfo.match(cidRegex);
+     
+    //   if (match && match.length > 1) {
+    //     const cid = match[1];
+    //     jobIdToDownload = jobId;
+    //     res.json({cid, jobInfo});
+    //   } else {
+    //     res.status(500).json({ error: 'CID not found in jobInfo' });
+    //   }
+    // } else {
+    //   res.status(500).json({ error: 'Failed to get job information' });
+    // }
+
+
+
+  router.post('/execute',async (req, res) => {
     try{
-    const { notebookUrl, inputs } = req.body;
+    const { notebookUrl, inputs ,Email } = req.body;
     const notebookFileName = getFileNameFromUrl(notebookUrl);
     const outputFileName = generateOutputFileName(notebookUrl);  
     const inputArgs = inputs.map(input => `-i src=${input.url},dst=/inputs/data/`).join(' ');
     const jobCommand = `bacalhau docker run --wait=false --id-only --timeout ${timeout} --wait-timeout-secs ${waitTimeout} -w /inputs -i src=${notebookUrl},dst=/inputs/notebook/ ${inputArgs} ${dockerImage} -- jupyter nbconvert --execute --to notebook --output /outputs/${outputFileName} /inputs/notebook/${notebookFileName}`;
     const jobExecution = spawnSync('bash', ['-c', jobCommand]);
-    const jobId = jobExecution.stdout.toString().trim();    
+    const jobId = jobExecution.stdout.toString().trim();      
+ 
+    
+let mailDetails = {
+  from: 'oggyyy420@gmail.com',
+  to: Email,
+  subject: 'Buckle Up! Your Decentralized Computation is Underway ',
+  text: `Greetings from Pravahini (प्रवाहिनी) 🎉
+
+  We hope this email finds you well. We're excited to share that your decentralized computation job has been successfully initiated on our platform. Your Job ID is ${jobId}.
+  
+  We ensures that your datasets and scripts are processed securely and efficiently. 💻
+  
+  Thank you for choosing our platform for your decentralized computation needs. If you have any questions or concerns, please don't hesitate to reach out to our support team. 🙌
+  
+  Happy computing! 🚀
+  Best regards,
+  Team Pravahini (प्रवाहिनी) `
+};
+
+
+    if(jobId){
+      console.log(jobId)
+      mailTransporter
+      .sendMail(mailDetails,
+          function (err, data) {
+              if (err) {
+                  console.log('Error Occurs');
+              } else {
+                  console.log('Email sent successfully');
+              }
+          });
+    }
     res.status(200).json({jobId})
     }catch(error){
       res.status(400).json({error: error.message})
