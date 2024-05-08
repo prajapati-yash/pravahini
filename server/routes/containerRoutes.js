@@ -9,6 +9,7 @@ const dockerImage2 = process.env.CONTAINER_2_DOCKER_IMAGE;
 const timeout = process.env.TIMEOUT;
 const waitTimeout = process.env.WAIT_TIMEOUT_SECS;
 
+
 // Created Dynamic Routes
 router.post("/save-job", async (req, res) => {
     const { walletAddress, jobId, cid, timeStamp, jobStatus } = req.body;
@@ -39,6 +40,7 @@ if (req.originalUrl == '/efficientComputing/save-job'){
       res.status(500).json({ error: "An error occurred while saving the job." });
     }
   });
+
 
   // List of all the jobs by the user
   router.get('/user-jobs', async (req, res) => {
@@ -115,6 +117,7 @@ if (req.originalUrl == '/efficientComputing/save-job'){
     }
   });
 
+
 // Delete the job from the Database 
 router.delete('/delete-job/:id', async(req, res) =>{
     const {id} = req.params;
@@ -138,6 +141,7 @@ router.delete('/delete-job/:id', async(req, res) =>{
   
     }
   })
+
 
 // Check the job status
   router.get('/get-job-status/:jobId', (req, res) => {
@@ -193,6 +197,7 @@ router.delete('/delete-job/:id', async(req, res) =>{
       res.status(500).json({ error: 'Failed to get job information' });
     }
   })
+
 // Execution of the Containers
   router.post('/execute', (req, res) => {
     try{
