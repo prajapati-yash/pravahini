@@ -210,7 +210,7 @@ function Comment() {
                     onReplyAction={(data) => { postReply(data) }}
                     currentData={(data) => { console.log("Data", data); }}
                     onDeleteAction={handleDeleteComment}
-                    onEditAction={handleEditComment()}
+                    onEditAction={handleEditComment}
                     overlayStyle={{
                         color: 'black'
                     }}
