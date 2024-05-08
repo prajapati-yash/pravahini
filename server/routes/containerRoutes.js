@@ -10,6 +10,7 @@ const timeout = process.env.TIMEOUT;
 const waitTimeout = process.env.WAIT_TIMEOUT_SECS;
 
 
+// Created Dynamic Routes
 router.post("/save-job", async (req, res) => {
     const { walletAddress, jobId, cid, timeStamp, jobStatus } = req.body;
     try {
@@ -40,6 +41,8 @@ if (req.originalUrl == '/efficientComputing/save-job'){
     }
   });
 
+
+  // List of all the jobs by the user
   router.get('/user-jobs', async (req, res) => {
     try {
       const walletAddress = req.query.walletAddress; 
@@ -114,7 +117,8 @@ if (req.originalUrl == '/efficientComputing/save-job'){
     }
   });
 
-  
+
+// Delete the job from the Database 
 router.delete('/delete-job/:id', async(req, res) =>{
     const {id} = req.params;
   
@@ -139,6 +143,7 @@ router.delete('/delete-job/:id', async(req, res) =>{
   })
 
 
+// Check the job status
   router.get('/get-job-status/:jobId', (req, res) => {
     const jobId = req.params;
     const output = jobId.jobId.replace(/:/g, '');
@@ -170,6 +175,7 @@ router.delete('/delete-job/:id', async(req, res) =>{
     }
   }); 
   
+  // Get the CID of the Job
   router.get('/get-cid/:jobId', (req,res) => {
     const jobId = req.params;
     const output = jobId.jobId.replace(/:/g, '');
@@ -192,6 +198,7 @@ router.delete('/delete-job/:id', async(req, res) =>{
     }
   })
 
+// Execution of the Containers
   router.post('/execute', (req, res) => {
     try{
     const { notebookUrl, inputs } = req.body;
