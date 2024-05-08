@@ -346,7 +346,7 @@ const Chartss = () => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Brush dataKey={xAxisColumn} height={30} stroke="#8884d8" endIndex={10} />
+            <Brush dataKey={xAxisColumn} height={30} stroke="#8884d8" endIndex={Math.min(10, filteredRows2.length) - 1} />
 
             {LineColumns.map((header, index) => (
               <Line
