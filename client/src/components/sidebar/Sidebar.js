@@ -82,7 +82,6 @@ function Sidebar() {
     }
   };
 
-
   const handleDashboardClick = async () => {
     // window.location.reload();
     if (address) {
@@ -250,6 +249,29 @@ function Sidebar() {
                 width={20}
               />
               Model Marketplace
+            </NavLink>
+          </li>
+          <li className="nav-item py-2">
+            <NavLink
+              className={`nav-link sidebar-content align-items-center ${
+                currentPath.includes("/code-editor") ? "activeStyle" : ""
+              }`}
+              to='/code-editor'
+              onClick={()=>handleItemClick("ide")}
+            >
+              <img
+                className="sidebar-image"
+                src={computation1}
+                height={20}
+                width={20}
+              />
+              <img
+                className="sidebar-image-hover"
+                src={computation2}
+                height={20}
+                width={20}
+              />
+              Code Editor
             </NavLink>
           </li>
           <li className="nav-item py-2">

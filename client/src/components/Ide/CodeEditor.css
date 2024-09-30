@@ -1,0 +1,65 @@
+.code-editor {
+    backdrop-filter: blur(1px) saturate(180%);
+    -webkit-backdrop-filter: blur(8px) saturate(180%);
+    background-color: rgb(39,40,34);
+    /* background-color: rgba(17, 25, 40, 0.75); */
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+.lan_options {
+    display: flex;
+    background-color: rgb(56, 56, 56);
+    border: none;
+    border-radius: 5px;
+    width: 110px;
+    height: 30px;
+    font-size: 16px;
+    color: white;
+    padding-left: 7px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.reverse-terminal {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* background-color: rgba(0, 0, 0, 0.8); */
+  padding: 10px;
+  border-radius: 5px;
+  width: 70vw;
+  height: 300px; /* Fixed height for the terminal output */
+  margin-top: 10px;
+  margin-left: 10px;
+  overflow-y: auto; /* Allow vertical scroll if the output is long */
+  /* color: white; */
+  transition: height 0.3s ease; /* Smooth transition for opening/closing */
+  scroll-behavior: smooth;
+}
+
+
+.output-container {
+    font-size: 16px;
+    height: 300px; /* Adjust the output height as desired */
+    width: 100%;
+    overflow-y: auto;
+    /* background-color: rgb(25, 25, 25); */
+    padding: 10px;
+    border-radius: 5px;
+    color: balck;
+    border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+.output-container::-webkit-scrollbar {
+    width: 4px; /* Width of the scrollbar */
+  }
+  
+  .output-container::-webkit-scrollbar-thumb {
+    background-color: rgba(231, 231, 231, 0.6); /* Color of the scrollbar thumb */
+    border-radius: 10px; /* Rounded corners for the scrollbar thumb */
+  }
+  
+  .output-container::-webkit-scrollbar-track {
+    background-color: rgba(17, 25, 40, 0.75); /* Color of the scrollbar track */
+  }
