@@ -119,6 +119,13 @@
   color: #ffb800;
   padding-left: 1.5rem;
 }
+.info-text2 {
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #00ff1e;
+  padding-left: 1.5rem;
+}
 
 .plagiarism-check-status {
   background-color: white;

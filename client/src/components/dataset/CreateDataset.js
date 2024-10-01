@@ -21,6 +21,8 @@ function CreateDataset() {
   const [showText, setShowText] = useState(false);
   const [plagiarismCheckProgress, setPlagiarismCheckProgress] = useState(0);
   const [plagiarismCheckStatus, setPlagiarismCheckStatus] = useState("");
+  const [predictedCategory, setPredictedCategory] = useState('');
+  const [predictedMessage, setPredictedMessage] = useState("");
 
   const handleMouseEnter1 = () => {
     setShowText(true);
@@ -88,7 +90,7 @@ function CreateDataset() {
   const [similarityResults, setSimilarityResults] = useState([]);
   const [file, setFile] = useState(null);
 
-  const handleFileChangeDataset = (event) => {
+  const handleFileChangeDataset = async (event) => {
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
     if (selectedFile) {
@@ -104,6 +106,42 @@ function CreateDataset() {
 
       reader.readAsDataURL(selectedFile);
       setSelectedFileNameDataset(selectedFile.name);
+
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+      formData.append('description', createDataset.datasetDescription);
+
+      try {
+        const response = await axios.post(`http://127.0.0.1:5000/predict-category`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log("Response", response)
+        const category = response.data.predicted_category;
+        console.log("Predicted Category:", category); // Log the predicted category
+        if (category) {
+          console.log("Setting predicted category:", category); // Log the category being set
+          setPredictedCategory(category);
+          setCreateDataset((prev) => {
+              const updatedDataset = {
+                  ...prev,
+                  datasetCategory: category,
+              };
+              console.log("Updated createDataset:", updatedDataset); // Log the updated state
+              setPredictedMessage("This category is predicted by our model. Please change it, if it's not accurate!");
+              return updatedDataset;
+          });
+      } else {
+          console.error("Predicted category is empty"); // Log error if category is empty
+      }
+      
+  
+        toast.success("Predicted the Category of Dataset, change it if it's not accurate.");
+      } catch (error) {
+        console.error("Error predicting category:", error);
+        toast.error("Error predicting category.");
+      }
     }
   };
 
@@ -516,10 +554,14 @@ function CreateDataset() {
               </div>
             </div>
 
-            <div className="py-3">
-              <div className="d-flex justify-content-flex-start create-dataset-head">
+            <div className="pt-1 pb-3">
+            <div className="d-flex flex-column align-items-start create-dataset-head">
                 Categories *
+                <span className={predictedMessage?"info-text2":"info-text"} style={{fontSize:"0.9rem", paddingLeft:"0"}}>{predictedMessage || "Category will be updated by our ML Model, once you upload the Dataset."}</span>
               </div>
+
+
+
               <div className="">
                 <select
                   id="category"
@@ -558,7 +600,7 @@ function CreateDataset() {
                 </select>
               </div>
             </div>
-
+          
             <div className="py-3">
               <div className="d-flex justify-content-flex-start create-dataset-head">
                 Dataset For*
@@ -640,8 +682,8 @@ function CreateDataset() {
                     src={upload}
                     id="upload-dataset"
                   ></img>
-                </div>
-                <div className="upload-dataset-text">Upload Dataset *</div>
+                </div> 
+<div className="upload-dataset-text">Upload Dataset *</div>
                 <input
                   type="file"
                   id="upload-dataset-file"
