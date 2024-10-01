@@ -11,6 +11,8 @@ import model1 from "../../assets/sidebar/model-black.png";
 import model2 from "../../assets/sidebar/model-white.png";
 import computation1 from "../../assets/sidebar/computation-black.png";
 import computation2 from "../../assets/sidebar/computation-white.png";
+import codeEditor1 from "../../assets/sidebar/code-editor-black.png";
+import codeEditor2 from "../../assets/sidebar/code-editor-white.png";
 import { authorizationInstance } from "../Contract";
 import { useAccount } from "wagmi";
 import { ethers } from "ethers";
@@ -81,7 +83,6 @@ function Sidebar() {
       openConnectModal();
     }
   };
-
 
   const handleDashboardClick = async () => {
     // window.location.reload();
@@ -250,6 +251,29 @@ function Sidebar() {
                 width={20}
               />
               Model Marketplace
+            </NavLink>
+          </li>
+          <li className="nav-item py-2">
+            <NavLink
+              className={`nav-link sidebar-content align-items-center ${
+                currentPath.includes("/code-editor") ? "activeStyle" : ""
+              }`}
+              to='/code-editor'
+              onClick={()=>handleItemClick("ide")}
+            >
+              <img
+                className="sidebar-image"
+                src={codeEditor1}
+                height={20}
+                width={20}
+              />
+              <img
+                className="sidebar-image-hover"
+                src={codeEditor2}
+                height={20}
+                width={20}
+              />
+              Code Editor
             </NavLink>
           </li>
           <li className="nav-item py-2">

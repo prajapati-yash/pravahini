@@ -237,7 +237,7 @@ function Navbar() {
                   Decentralized Computation
                 </NavLink>
               </li>
-
+             
               <li className="nav-item py-2">
                 <ConnectButton />
               </li>
