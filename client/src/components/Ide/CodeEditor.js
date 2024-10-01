@@ -21,6 +21,7 @@ function CodeEditor() {
   const [code, setCode] = useState('');
   const [output, setOutput] = useState('');
   const [lanNumber, setLanNumber] = useState('5');
+  const [loading, setLoading] = useState(false);
   const editorRef = useRef(null);
 
   useEffect(() => {
@@ -100,15 +101,19 @@ function CodeEditor() {
       data: encodedParams,
     };
     try {
+      setLoading(true);
       const response = await axios.request(options);
-      if (response.data.Result) {
+      console.log(response.data);
+      if (response.data?.Result) {
         setOutput(response.data.Result);
       } else if (response.data.Errors) {
         setOutput(response.data.Errors);
       } else {
         setOutput('No output or errors available.');
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error(error);
       setOutput('Error occurred during code execution.');
     }
@@ -125,10 +130,14 @@ function CodeEditor() {
           <option value="c" className='opt'>C</option>
           <option value="java" className='opt'>Java</option> 
         </select>
+        <button className='button pulse' onClick={handleRun}>Run</button>
+        <div>
+
+        </div>
         </div>
         <AceEditor
           mode={selectedLanguage.toLowerCase()}
-          theme="monokai"
+          theme="chrome"
           name="code-editor"
           editorProps={{ $blockScrolling: true }}
           style={{ height: '63vh', width: '70vw', borderRadius: '5px'}}
@@ -136,15 +145,18 @@ function CodeEditor() {
           onChange={handleCodeChange}
           value={code}
           ref={editorRef}
+          className='ace-editor'
         />      
+
       </div>
       
         <div className={`reverse-terminal ${terminalOpen ? 'open' : ''}`} >
           <p onClick={handleTerminalClick}>Output</p>
-          <button className='run' onClick={handleRun}>Run</button>
+          <div className='button-center'>
+          </div>
           {terminalOpen && (
             <div className='output-container'>
-              <pre className='output'>{output}</pre>
+              {loading ?(  <div className="loader"></div> ):(<pre className='output'>{output}</pre>)}
             </div>
           )}
         </div>    

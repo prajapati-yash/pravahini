@@ -11,6 +11,8 @@ import model1 from "../../assets/sidebar/model-black.png";
 import model2 from "../../assets/sidebar/model-white.png";
 import computation1 from "../../assets/sidebar/computation-black.png";
 import computation2 from "../../assets/sidebar/computation-white.png";
+import codeEditor1 from "../../assets/sidebar/code-editor-black.png";
+import codeEditor2 from "../../assets/sidebar/code-editor-white.png";
 import { authorizationInstance } from "../Contract";
 import { useAccount } from "wagmi";
 import { ethers } from "ethers";
@@ -261,13 +263,13 @@ function Sidebar() {
             >
               <img
                 className="sidebar-image"
-                src={computation1}
+                src={codeEditor1}
                 height={20}
                 width={20}
               />
               <img
                 className="sidebar-image-hover"
-                src={computation2}
+                src={codeEditor2}
                 height={20}
                 width={20}
               />

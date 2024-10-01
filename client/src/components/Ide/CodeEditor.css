@@ -1,12 +1,14 @@
 .code-editor {
     backdrop-filter: blur(1px) saturate(180%);
     -webkit-backdrop-filter: blur(8px) saturate(180%);
-    background-color: rgb(39,40,34);
-    /* background-color: rgba(17, 25, 40, 0.75); */
     border-radius: 5px;
-    border: 1px solid rgba(255, 255, 255, 0.125);
+    border: 1px solid black ;
+    width: 46vw;
 }
-
+.code-container{
+  display: flex;
+  justify-content: space-between;
+}
 .lan_options {
     display: flex;
     background-color: rgb(56, 56, 56);
@@ -20,35 +22,50 @@
     margin-left: 10px;
     margin-bottom: 10px;
     margin-top: 10px;
+    margin-right: 60%; /* Add some space between select and button */
+
 }
+.ace-editor{
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none;
+  box-sizing: border-box;
+  background: linear-gradient(45deg, #a1c6f9, #d5e9ff); /* Soft gradient to blend with site */
+  color: #202020; /* Very dark gray for clear contrast */
+  width: 45vw !important;
+}
+.custom-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* This will push items to opposite ends */
+  width: 100%; /* Ensure the container takes full width */
+}
+
 .reverse-terminal {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  /* background-color: rgba(0, 0, 0, 0.8); */
   padding: 10px;
   border-radius: 5px;
   width: 70vw;
-  height: 300px; /* Fixed height for the terminal output */
-  margin-top: 10px;
+  background-color: white;
   margin-left: 10px;
+  height: 70vh;
   overflow-y: auto; /* Allow vertical scroll if the output is long */
-  /* color: white; */
   transition: height 0.3s ease; /* Smooth transition for opening/closing */
   scroll-behavior: smooth;
+  border: 1px solid black;
 }
-
 
 .output-container {
     font-size: 16px;
-    height: 300px; /* Adjust the output height as desired */
     width: 100%;
     overflow-y: auto;
-    /* background-color: rgb(25, 25, 25); */
-    padding: 10px;
     border-radius: 5px;
-    color: balck;
-    border: 1px solid rgba(255, 255, 255, 0.125);
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .output-container::-webkit-scrollbar {
@@ -56,10 +73,54 @@
   }
   
   .output-container::-webkit-scrollbar-thumb {
-    background-color: rgba(231, 231, 231, 0.6); /* Color of the scrollbar thumb */
     border-radius: 10px; /* Rounded corners for the scrollbar thumb */
   }
   
   .output-container::-webkit-scrollbar-track {
-    background-color: rgba(17, 25, 40, 0.75); /* Color of the scrollbar track */
+    background-color: rgba(17, 25, 40, 0.75); 
   }
+  .button {
+    background-color: blue; 
+    border: none;
+    color: white;
+    width: 10%;
+    padding: 4px 22px;
+    text-align: center;
+    justify-content: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px #202020; /* Adds a soft shadow */
+    transition: background-color 0.3s, transform 0.2s; /* Adds smooth hover effect */
+}
+.button:hover {
+  transform: scale(1.01); /* Slightly enlarges the button on hover */
+}
+
+.button-center {
+  display: flex;
+  justify-content:end;
+  margin-top: 10px;
+}
+.output{
+  background-color: white;
+}
+
+.loader {
+
+  width: 50px;
+  height: 10px;
+  background-color: lightblue;
+  overflow: hidden;
+  position: relative;
+
+}
+
+/* Smooth spinning animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
