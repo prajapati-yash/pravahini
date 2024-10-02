@@ -13,6 +13,8 @@ import computation1 from "../../assets/sidebar/computation-black.png";
 import computation2 from "../../assets/sidebar/computation-white.png";
 import codeEditor1 from "../../assets/sidebar/code-editor-black.png";
 import codeEditor2 from "../../assets/sidebar/code-editor-white.png";
+import aiAgents1 from "../../assets/sidebar/ai-agent-black.png";
+import aiAgents2 from "../../assets/sidebar/ai-agent-white.png";
 import { authorizationInstance } from "../Contract";
 import { useAccount } from "wagmi";
 import { ethers } from "ethers";
@@ -256,20 +258,20 @@ function Sidebar() {
           {/* <li className="nav-item py-2">
             <NavLink
               className={`nav-link sidebar-content align-items-center ${
-                currentPath.includes("/ai-agents") ? "activeStyle" : ""
+                currentPath.includes("/ai-agents-marketplace") ? "activeStyle" : ""
               }`}
-              to='/ai-agents'
+              to='/ai-agents-marketplace'
               onClick={()=>handleItemClick("ai-agents")}
             >
               <img
                 className="sidebar-image"
-                src={codeEditor1}
+                src={aiAgents1}
                 height={20}
                 width={20}
               />
               <img
                 className="sidebar-image-hover"
-                src={codeEditor2}
+                src={aiAgents2}
                 height={20}
                 width={20}
               />

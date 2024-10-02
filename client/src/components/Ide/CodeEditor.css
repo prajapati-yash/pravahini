@@ -79,6 +79,28 @@
   .output-container::-webkit-scrollbar-track {
     background-color: rgba(17, 25, 40, 0.75); 
   }
+  .output-title h1 {
+    text-align: center;
+        font-size:30px; font-weight:300; color:#222; letter-spacing:1px;
+        text-transform: uppercase;
+    
+        display: grid;
+        grid-template-columns: 1fr max-content 1fr;
+        grid-template-rows: 27px 0;
+        grid-gap: 20px;
+        align-items: center;
+    }
+    
+    .output-title h1:after,.output-title h1:before {
+        content: " ";
+        display: block;
+        border-bottom: 1px solid blue;
+        border-top: 1px solid blue;
+        height: 5px;
+        z-index: 1;
+      background-color:#f8f8f8;
+    }
+    
   .button {
     background-color: blue; 
     border: none;

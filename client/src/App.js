@@ -37,7 +37,8 @@ function App() {
           <Route path="/model-marketplace/*" element={<Model/>}></Route>
           <Route path="/model-marketplace/create-model" element={<ModelForm/>}></Route>
           <Route path="/model-marketplace/single-model" element={<IndividualModel/>}></Route>
-          <Route path="/ai-agents" element={<AiAgents/>}></Route>
+          <Route path="/ai-agents-marketplace" element={<AiAgents/>}></Route>
+          <Route path="/ai-agents-marketplace/create-ai-agent" element={<AiAgents/>}></Route>
           <Route path="/code-editor" element={<Ide/>}></Route>
           <Route path="/de-computation" element={<Computation/>}></Route>
           <Route path="/de-computation/*" element={<Computation/>}></Route>

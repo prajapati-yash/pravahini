@@ -285,7 +285,9 @@ if __name__ == "__main__":
       </div>
       
         <div className={`reverse-terminal ${terminalOpen ? 'open' : ''}`} >
-          <p onClick={handleTerminalClick}>Output</p>
+          <div className='output-title'>
+          <h1  onClick={handleTerminalClick}>Output</h1>
+          </div>
           <div className='button-center'>
           </div>
           {terminalOpen && (

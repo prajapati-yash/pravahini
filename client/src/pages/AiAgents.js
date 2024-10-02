@@ -2,6 +2,7 @@ import React from 'react'
 import Sidebar from '../components/sidebar/Sidebar'
 import Navbar from '../components/navbar/Navbar'
 import Footer from '../components/footer/Footer'
+import AiAgentComponent from '../components/aiAgent/AiAgentComponent'
 
 function AiAgents() {
   return (
@@ -14,7 +15,7 @@ function AiAgents() {
               <Sidebar />
             </div>
             <div className="col-lg-9">
-                
+                <AiAgentComponent/>
             </div>
           </div>
         </div>
