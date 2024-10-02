@@ -15,7 +15,7 @@ contract AIAgentMarketplace{
         bool isPublic;
         bool isPrivate;
         bool isForSale;
-        uint256 modelId;
+        uint256 AIAgentId;
     }
 
     UserAuthorization public auth;
@@ -28,7 +28,7 @@ contract AIAgentMarketplace{
         _;
     }
 
-    // Function to create Model
+    // Function to create AI Agent
     mapping(uint256 => AIAgent) private agents;
     uint256 private nextAIAgentId;
     uint256[] private allAIAgentIds;
@@ -42,7 +42,7 @@ contract AIAgentMarketplace{
     // Mapping of Address with the datasetId 
     mapping(address => uint256[]) private userAIAgentSubscriptions;
 
-    // Mapping of purchased model with specific model Id and user address 
+    // Mapping of purchased AIAgent with specific AIAgent Id and user address 
     mapping (address => mapping(uint256 => bool)) private purchaseMapping;
 
     function createAIAgent (
@@ -73,63 +73,63 @@ contract AIAgentMarketplace{
             AIAgentId
         );
 
-        // Set the modelOwner as the creator of the Model
+        // Set the AIAgentOwner as the creator of the AI Agent
         AIAgentOwners[AIAgentId] = msg.sender;
 
-        // Owners to Model Mapping
+        // Owners to AI Agent Mapping
         ownersToAIAgentMapping[msg.sender].push(AIAgentId);
 
-        // Add the Model Id to the all Models array
+        // Add the AI Agent Id to the all AI Agents array
         allAIAgentIds.push(AIAgentId);
 
-        // Increment the next model Id
+        // Increment the next AIAgent Id
         nextAIAgentId++;
     }   
 
     // Only owner Modifier
     modifier onlyAIAgentOwner(uint256 AIAgentId){
-        require(AIAgentOwners[AIAgentId]==msg.sender,"You're not the owner of this model");
+        require(AIAgentOwners[AIAgentId]==msg.sender,"You're not the owner of this AIAgent");
         _;
     }
 
 
-    // Function create Model Public 
+    // Function create AI Agent Public 
 
     function setAIAgentPublic(uint256 AIAgentId) public onlyAIAgentOwner(AIAgentId){
         AIAgent storage agent = agents[AIAgentId];
-        agent.isPublic = true; //Set Model Public as true
+        agent.isPublic = true; //Set AI Agent Public as true
         agent.isPrivate = false;
         agent.isForSale = false;
-        agent.AIAgentPrice = 0; //Set Model Pice to zero
+        agent.AIAgentPrice = 0; //Set AI Agent Pice to zero
     }
 
     function setAIAgentPrivate(uint256 AIAgentId) public onlyAIAgentOwner(AIAgentId){
         AIAgent storage agent = agents[AIAgentId];
         agent.isPublic = false;
-        agent.isPrivate = true; // Set Model Private as true
+        agent.isPrivate = true; // Set AI Agent Private as true
         agent.isForSale = false;
-        agent.AIAgentPrice = 0; //Set the Model Price to Zero
+        agent.AIAgentPrice = 0; //Set the AI Agent Price to Zero
     } 
 
     function setAIAgentForSale(uint256 AIAgentId, uint256 _price) public onlyAIAgentOwner(AIAgentId){
         AIAgent storage agent = agents[AIAgentId];
         agent.isPublic = false;
         agent.isPrivate = false;
-        agent.isForSale = true; //Set Model for Sale as true
-        agent.AIAgentPrice = _price; //Set the Model Price as per the input of the user
+        agent.isForSale = true; //Set AI Agent for Sale as true
+        agent.AIAgentPrice = _price; //Set the AI Agent Price as per the input of the user
     }
 
-    // Event to indicate the Model purchase
+    // Event to indicate the AI Agent purchase
     event AIAgentPurchased(uint256 indexed AIAgentId, address indexed buyer, address indexed owner, uint256 price);
 
     function  purchaseAIAgent(uint256 AIAgentId) public payable onlyAuthorized{
         AIAgent storage agent = agents[AIAgentId];
-        require(agent.isForSale,"Model is not for Sale");   
+        require(agent.isForSale,"AI Agent is not for Sale");   
         
 
-         // Transfer payment to the Model owner
+         // Transfer payment to the AI Agent owner
         address ownerAddress = AIAgentOwners[AIAgentId];
-        require(ownerAddress != msg.sender,"You are the owner of this Model, so you can't buy this model.");
+        require(ownerAddress != msg.sender,"You are the owner of this AI Agent, so you can't buy this AIAgent.");
         require(msg.value  >= agent.AIAgentPrice, "Insufficient Amount");
 
          // Check if the user has already bought this dataset
