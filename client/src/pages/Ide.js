@@ -16,7 +16,7 @@ function Ide() {
             <div className="col-lg-2">
               <Sidebar />
             </div>
-            <div className="col-lg-9">
+            <div className="col-lg-10">
                 <CodeEditor />
             </div>
           </div>

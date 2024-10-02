@@ -11,10 +11,10 @@ function Model() {
       <div className="app">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-lg-3">
+            <div className="col-lg-2">
               <Sidebar />
             </div>
-            <div className="col-lg-9">
+            <div className="col-lg-10">
               <ModelDashboard />
             </div>
           </div>

@@ -3,7 +3,7 @@
     -webkit-backdrop-filter: blur(8px) saturate(180%);
     border-radius: 5px;
     border: 1px solid black ;
-    width: 46vw;
+    width: 50vw;
 }
 .code-container{
   display: flex;
@@ -32,7 +32,7 @@
   box-sizing: border-box;
   background: linear-gradient(45deg, #a1c6f9, #d5e9ff); /* Soft gradient to blend with site */
   color: #202020; /* Very dark gray for clear contrast */
-  width: 45vw !important;
+  width: 49vw !important;
 }
 .custom-select {
   display: flex;

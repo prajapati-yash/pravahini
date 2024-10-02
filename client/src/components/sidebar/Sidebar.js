@@ -253,13 +253,36 @@ function Sidebar() {
               Model Marketplace
             </NavLink>
           </li>
+          {/* <li className="nav-item py-2">
+            <NavLink
+              className={`nav-link sidebar-content align-items-center ${
+                currentPath.includes("/ai-agents") ? "activeStyle" : ""
+              }`}
+              to='/ai-agents'
+              onClick={()=>handleItemClick("ai-agents")}
+            >
+              <img
+                className="sidebar-image"
+                src={codeEditor1}
+                height={20}
+                width={20}
+              />
+              <img
+                className="sidebar-image-hover"
+                src={codeEditor2}
+                height={20}
+                width={20}
+              />
+              AI Agents
+            </NavLink>
+          </li> */}
           <li className="nav-item py-2">
             <NavLink
               className={`nav-link sidebar-content align-items-center ${
                 currentPath.includes("/code-editor") ? "activeStyle" : ""
               }`}
               to='/code-editor'
-              onClick={()=>handleItemClick("ide")}
+              onClick={()=>handleItemClick("code-editor")}
             >
               <img
                 className="sidebar-image"
