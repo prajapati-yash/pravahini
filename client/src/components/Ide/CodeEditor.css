@@ -1,0 +1,148 @@
+.code-editor {
+    backdrop-filter: blur(1px) saturate(180%);
+    -webkit-backdrop-filter: blur(8px) saturate(180%);
+    border-radius: 5px;
+    border: 1px solid black ;
+    width: 50vw;
+}
+.code-container{
+  display: flex;
+  justify-content: space-between;
+}
+.lan_options {
+    display: flex;
+    background-color: rgb(56, 56, 56);
+    border: none;
+    border-radius: 5px;
+    width: 110px;
+    height: 30px;
+    font-size: 16px;
+    color: white;
+    padding-left: 7px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-right: 60%; /* Add some space between select and button */
+
+}
+.ace-editor{
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none;
+  box-sizing: border-box;
+  background: linear-gradient(45deg, #a1c6f9, #d5e9ff); /* Soft gradient to blend with site */
+  color: #202020; /* Very dark gray for clear contrast */
+  width: 49vw !important;
+}
+.custom-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* This will push items to opposite ends */
+  width: 100%; /* Ensure the container takes full width */
+}
+
+.reverse-terminal {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 10px;
+  border-radius: 5px;
+  width: 70vw;
+  background-color: white;
+  margin-left: 10px;
+  height: 70vh;
+  overflow-y: auto; /* Allow vertical scroll if the output is long */
+  transition: height 0.3s ease; /* Smooth transition for opening/closing */
+  scroll-behavior: smooth;
+  border: 1px solid black;
+}
+
+.output-container {
+    font-size: 16px;
+    width: 100%;
+    overflow-y: auto;
+    border-radius: 5px;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.output-container::-webkit-scrollbar {
+    width: 4px; /* Width of the scrollbar */
+  }
+  
+  .output-container::-webkit-scrollbar-thumb {
+    border-radius: 10px; /* Rounded corners for the scrollbar thumb */
+  }
+  
+  .output-container::-webkit-scrollbar-track {
+    background-color: rgba(17, 25, 40, 0.75); 
+  }
+  .output-title h1 {
+    text-align: center;
+        font-size:30px; font-weight:300; color:#222; letter-spacing:1px;
+        text-transform: uppercase;
+    
+        display: grid;
+        grid-template-columns: 1fr max-content 1fr;
+        grid-template-rows: 27px 0;
+        grid-gap: 20px;
+        align-items: center;
+    }
+    
+    .output-title h1:after,.output-title h1:before {
+        content: " ";
+        display: block;
+        border-bottom: 1px solid blue;
+        border-top: 1px solid blue;
+        height: 5px;
+        z-index: 1;
+      background-color:#f8f8f8;
+    }
+    
+  .button {
+    background-color: blue; 
+    border: none;
+    color: white;
+    width: 10%;
+    padding: 4px 22px;
+    text-align: center;
+    justify-content: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px #202020; /* Adds a soft shadow */
+    transition: background-color 0.3s, transform 0.2s; /* Adds smooth hover effect */
+}
+.button:hover {
+  transform: scale(1.01); /* Slightly enlarges the button on hover */
+}
+
+.button-center {
+  display: flex;
+  justify-content:end;
+  margin-top: 10px;
+}
+.output{
+  background-color: white;
+}
+
+.loader {
+
+  width: 50px;
+  height: 10px;
+  background-color: lightblue;
+  overflow: hidden;
+  position: relative;
+
+}
+
+/* Smooth spinning animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

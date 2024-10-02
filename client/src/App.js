@@ -11,8 +11,10 @@ import IndividualModel from "./pages/IndividualModel";
 import Computation from "./pages/Computation";
 import Visualization from "./pages/Visualization";
 import EfficientComputation from "./pages/EfficientComputation";
+import AiAgents from "./pages/AiAgents";
 import { useState } from "react";
 import "./App.css";
+import Ide from "./pages/Ide";
 
 
 
@@ -35,6 +37,9 @@ function App() {
           <Route path="/model-marketplace/*" element={<Model/>}></Route>
           <Route path="/model-marketplace/create-model" element={<ModelForm/>}></Route>
           <Route path="/model-marketplace/single-model" element={<IndividualModel/>}></Route>
+          <Route path="/ai-agents-marketplace" element={<AiAgents/>}></Route>
+          <Route path="/ai-agents-marketplace/create-ai-agent" element={<AiAgents/>}></Route>
+          <Route path="/code-editor" element={<Ide/>}></Route>
           <Route path="/de-computation" element={<Computation/>}></Route>
           <Route path="/de-computation/*" element={<Computation/>}></Route>
           <Route path="/de-computation/advanced-visualization-computing" element={<Visualization/>}></Route>

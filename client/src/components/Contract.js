@@ -2,12 +2,14 @@ import { ethers } from "ethers";
 import userAuthorizationABI from "../contracts/artifacts/UserAuthorizationABI.json";
 import datasetMarketplaceABI from "../contracts/artifacts/DatasetMarketplaceABI.json";
 import modelMarketplaceABI from "../contracts/artifacts/ModelMarketplaceABI.json";
+import AiAgentMarketplaceABI from "../contracts/artifacts/AIAgentMarketplaceABI.json";
 
 // BTTC Testnet Addresses
 
-// AUTHORIZATION_ADDRESS = 0x0F5e3C75D595cCa37556fA3a4554FbFA45aF05fC
+// export const AUTHORIZATION_ADDRESS = "0x0F5e3C75D595cCa37556fA3a4554FbFA45aF05fC";
 // DATASET_ADDRESS = 0x24d6E3AFd3afE716045ebB1A1B24d93eeEE76291
 // MODEL_ADDRESS = 0xFd3c306578C4bd70Ef9f3752d2B1C9b97858E82f
+export const AIAgentMarketplace_address= "0x19422a468dE908E1A653d8A061324935a69093E5";
 
 export const AUTHORIZATION_ADDRESS =
   "0xd6bF2cC4F53Fbe71E88288Cd661a31D62AA7237c";
@@ -69,3 +71,20 @@ export const modelInstance = async () => {
     console.log("error");
   }
 };
+
+export const AiAgentInstance = async () => {
+  const { ethereum } = window;
+  if (ethereum) {
+    const provider = new ethers.providers.Web3Provider(ethereum);
+    const signer = provider.getSigner();
+    if (!provider) {
+      console.log("Metamask is not installed, please install!");
+    }
+    const con = new ethers.Contract(AIAgentMarketplace_address, AiAgentMarketplaceABI, signer);
+    // console.log(con);
+    return con;
+  } else {
+    console.log("error");
+  }
+};
+
