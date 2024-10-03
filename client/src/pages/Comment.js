@@ -46,8 +46,10 @@ function Comment() {
             let response;
             if (window.location.pathname === "/model-marketplace/single-model") {
                 response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/model/comment`,userData,tokenHeaders);
-            } else {
+            } else if((window.location.pathname === "/dataset-marketplace/single-dataset")){
                 response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/dataset/comment`, userData,tokenHeaders);
+            }else{
+                response= await axios.put(`${process.env.REACT_APP_BACKEND_URL}/ai-agent/comment`, userData,tokenHeaders);
             }
             console.log('User data saved successfully');
         } catch (error) {

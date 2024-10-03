@@ -6,13 +6,13 @@ import AiAgentMarketplaceABI from "../contracts/artifacts/AIAgentMarketplaceABI.
 
 // BTTC Testnet Addresses
 
-// export const AUTHORIZATION_ADDRESS = "0x0F5e3C75D595cCa37556fA3a4554FbFA45aF05fC";
+export const AUTHORIZATION_ADDRESS = "0x0F5e3C75D595cCa37556fA3a4554FbFA45aF05fC";
 // DATASET_ADDRESS = 0x24d6E3AFd3afE716045ebB1A1B24d93eeEE76291
 // MODEL_ADDRESS = 0xFd3c306578C4bd70Ef9f3752d2B1C9b97858E82f
-export const AIAgentMarketplace_address= "0x19422a468dE908E1A653d8A061324935a69093E5";
+export const AIAgentMarketplace_address= "0x922c78ebF13a5dE4FB76b44d7b95f12fFE301B0f";
 
-export const AUTHORIZATION_ADDRESS =
-  "0xd6bF2cC4F53Fbe71E88288Cd661a31D62AA7237c";
+// export const AUTHORIZATION_ADDRESS =
+//   "0xd6bF2cC4F53Fbe71E88288Cd661a31D62AA7237c";
 export const DATASET_ADDRESS = "0xd25B5d65970006D5941C2715538421373F3F9b70";
 export const MODEL_ADDRESS = "0x6de831c3A1d963439A1E54c66ec7E5db204E29a9";
 
@@ -81,7 +81,7 @@ export const AiAgentInstance = async () => {
       console.log("Metamask is not installed, please install!");
     }
     const con = new ethers.Contract(AIAgentMarketplace_address, AiAgentMarketplaceABI, signer);
-    // console.log(con);
+    console.log(con);
     return con;
   } else {
     console.log("error");

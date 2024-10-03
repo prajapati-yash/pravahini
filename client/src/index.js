@@ -58,7 +58,7 @@ const BTTMainChain = {
 };
 
 const { chains, publicClient } = configureChains(
-  [BTTMainChain],
+  [BTTMainChain, BTTChain],
   [
     jsonRpcProvider({
       rpc: (chain) => ({ http: "https://rpc.bt.io/" }),

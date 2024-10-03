@@ -5,7 +5,7 @@ import img from "../../assets/dataset/filter.png";
 import img1 from "../../assets/home/security.png";
 import "../../styles/dataset/DatasetDashboard.css";
 import { ethers } from "ethers";
-import { datasetInstance } from "../Contract";
+import { AiAgentInstance } from "../Contract";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { ClipLoader } from "react-spinners";
@@ -79,11 +79,11 @@ function AiAgentComponent() {
     e.preventDefault();
     setActiveComponent("paidDatasets");
 
-    const filtered = allDatasets.filter((dataset) => {
-      if(parseInt(dataset[11]._hex,16)==2){
+    const filtered = allDatasets.filter((AIAgent) => {
+      if(parseInt(AIAgent[10]._hex,16)==2){
         return null;
       }
-      return dataset.isForSale;
+      return AIAgent.isForSale;
     });
 
     setFilteredDatasets(filtered);
@@ -93,53 +93,53 @@ function AiAgentComponent() {
     e.preventDefault();
     setActiveComponent("publicDatasets");
 
-    const filtered = allDatasets.filter((dataset) => {
-      return dataset.isPublic;
+    const filtered = allDatasets.filter((AIAgent) => {
+      return AIAgent.isPublic;
     });
 
     setFilteredDatasets(filtered);
   };
 
-  const handleMedicineDatasets = (e) => {
+  const handlebuisnessAIAgent = (e) => {
     e.preventDefault();
-    setActiveComponent("drugs&med");
+    setActiveComponent("b&p");
 
-    const filtered = allDatasets.filter((dataset) => {
+    const filtered = allDatasets.filter((AIAgent) => {
       // console.log(parseInt(dataset[11]._hex,16));
-      if(parseInt(dataset[11]._hex,16)==2){
+      if(parseInt(AIAgent[10]._hex,16)==2){
         return null;
       }
-      return dataset.category === "Drugs and Medicine";
+      return AIAgent.category === "Business & Productivity";
     });
     setFilteredDatasets(filtered);
   };
 
-  const handleEducationDatasets = (e) => {
+  const handleCreativeAIAgent = (e) => {
     e.preventDefault();
-    setActiveComponent("education");
+    setActiveComponent("c&c");
 
-    const filtered = allDatasets.filter((dataset) => {
-      return dataset.category === "Education";
+    const filtered = allDatasets.filter((AIAgent) => {
+      return AIAgent.category === "Creative & Content Solutions";
     });
     setFilteredDatasets(filtered);
   };
 
-  const handleNatureDatasets = (e) => {
+  const handleTechnicalAIAgent = (e) => {
     e.preventDefault();
-    setActiveComponent("earth&nature");
+    setActiveComponent("t&i");
 
-    const filtered = allDatasets.filter((dataset) => {
-      return dataset.category === "Earth and Nature";
+    const filtered = allDatasets.filter((AIAgent) => {
+      return AIAgent.category === "Technical & IT Services";
     });
     setFilteredDatasets(filtered);
   };
 
-  const handleTechDatasets = (e) => {
+  const handlePersonalAIAgent = (e) => {
     e.preventDefault();
-    setActiveComponent("sci&tech");
+    setActiveComponent("p&p");
 
-    const filtered = allDatasets.filter((dataset) => {
-      return dataset.category === "Science and Technology";
+    const filtered = allDatasets.filter((AIAgent) => {
+      return AIAgent.category === "Personal & Professional Assistance";
     });
     setFilteredDatasets(filtered);
   };
@@ -157,13 +157,14 @@ function AiAgentComponent() {
 
   const allData = async () => {
     try {
-      const con = await datasetInstance();
-      const getDatasetDetails = await con.getAllDatasets();
-
-      const filteredDatasets = getDatasetDetails.filter((dataset) => {
-        return dataset.isPublic || dataset.isForSale;
+      const con = await AiAgentInstance();
+      console.log(con);
+      const getAIAgentsDetails = await con.getAllAIAgents();
+console.log(getAIAgentsDetails);  
+      const filteredAIAgents = getAIAgentsDetails.filter((AIAgent) => {
+        return AIAgent.isPublic || AIAgent.isForSale;
       });
-      setAllDatasets(filteredDatasets);
+      setAllDatasets(filteredAIAgents);
     } catch (error) {
       console.log(error);
     }
@@ -200,7 +201,7 @@ function AiAgentComponent() {
             <button
               type="submit"
               className="btn rounded-pill my-1 py-sm-2 px-sm-3 dash-create-dataset-btn"
-              onClick={() => navigate("/dataset-marketplace/create-ai-agent")}
+              onClick={() => navigate("/ai-agents-marketplace/create-ai-agent")}
             >
               Upload AI Agent
             </button>
@@ -277,18 +278,18 @@ function AiAgentComponent() {
           <button
             type="button"
             className={`mx-sm-3 mx-2 med-dataset-dash-btn ${
-              activeComponent === "drugs&med" ? "active-button" : ""
+              activeComponent === "b&p" ? "active-button" : ""
             }`}
-            onClick={handleMedicineDatasets}
+            onClick={handlebuisnessAIAgent}
           >
              Business & Productivity
           </button>
           <button
             type="button"
             className={`mx-sm-3 mx-2 edu-dataset-dash-btn ${
-              activeComponent === "education" ? "active-button" : ""
+              activeComponent === "c&c" ? "active-button" : ""
             }`}
-            onClick={handleEducationDatasets}
+            onClick={handleCreativeAIAgent}
           >
             Creative & Content Solutions
           </button>
@@ -297,16 +298,16 @@ function AiAgentComponent() {
             className={`mx-sm-3 mx-2 ear-dataset-dash-btn ${
               activeComponent === "earth&nature" ? "active-button" : ""
             }`}
-            onClick={handleNatureDatasets}
+            onClick={handleTechnicalAIAgent}
           >
             Technical & IT Services
           </button>
           <button
             type="button"
             className={`mx-sm-3 mx-2 sci-dataset-dash-btn ${
-              activeComponent === "sci&tech" ? "active-button" : ""
+              activeComponent === "p&p" ? "active-button" : ""
             }`}
-            onClick={handleTechDatasets}
+            onClick={handlePersonalAIAgent}
           >
             Personal & Professional Assistance
           </button>
@@ -339,41 +340,41 @@ function AiAgentComponent() {
               <li>
                 <a
                   className={`dropdown-item ${
-                    activeComponent === "drugs&med" ? "active-button" : ""
+                    activeComponent === "b&p" ? "active-button" : ""
                   }`}
-                  onClick={handleMedicineDatasets}
+                  onClick={handlebuisnessAIAgent}
                 >
-                  Drugs and Medicines
+                  Business & Productivity
                 </a>
               </li>
               <li>
                 <a
                   className={`dropdown-item  ${
-                    activeComponent === "education" ? "active-button" : ""
+                    activeComponent === "c&c" ? "active-button" : ""
                   }`}
-                  onClick={handleEducationDatasets}
+                  onClick={handleCreativeAIAgent}
                 >
-                  Education
+                  Creative & Content Solutions
                 </a>
               </li>
               <li>
                 <a
                   className={`dropdown-item ${
-                    activeComponent === "earth&nature" ? "active-button" : ""
+                    activeComponent === "t&i" ? "active-button" : ""
                   }`}
-                  onClick={handleNatureDatasets}
+                  onClick={handleTechnicalAIAgent}
                 >
-                  Earth and Nature
+                  Technical & IT Services
                 </a>
               </li>
               <li>
                 <a
                   className={`dropdown-item ${
-                    activeComponent === "sci&tech" ? "active-button" : ""
+                    activeComponent === "p&p" ? "active-button" : ""
                   }`}
-                  onClick={handleTechDatasets}
+                  onClick={handlePersonalAIAgent}
                 >
-                  Science and Technology
+                  Personal & Professional Assistance
                 </a>
               </li>
             </ul>
@@ -390,9 +391,9 @@ function AiAgentComponent() {
               </div>
             ) : filteredDatasets.length > 0 ? (
               filteredDatasets.map((item, key) => { 
-                
+                console.log(item);
                 // Skip rendering when key is 2
-                if (parseInt(item[11]._hex,16) === 2) {
+                if (parseInt(item[10]._hex,16) === 2) {
                   return null;
                 }
 
@@ -421,7 +422,7 @@ function AiAgentComponent() {
                       <div
                         className="all-dataset-btn"
                         onClick={() => {
-                          navigate("/dataset-marketplace/single-dataset", {
+                          navigate("/ai-agents-marketplace/single-ai-agent", {
                             state: { data: item },
                           });
                         }}

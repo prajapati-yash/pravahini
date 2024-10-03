@@ -255,7 +255,7 @@ function Sidebar() {
               Model Marketplace
             </NavLink>
           </li>
-          {/* <li className="nav-item py-2">
+          <li className="nav-item py-2">
             <NavLink
               className={`nav-link sidebar-content align-items-center ${
                 currentPath.includes("/ai-agents-marketplace") ? "activeStyle" : ""
@@ -277,7 +277,7 @@ function Sidebar() {
               />
               AI Agents
             </NavLink>
-          </li> */}
+          </li>
           <li className="nav-item py-2">
             <NavLink
               className={`nav-link sidebar-content align-items-center ${
