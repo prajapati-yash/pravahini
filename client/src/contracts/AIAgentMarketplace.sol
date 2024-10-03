@@ -11,6 +11,7 @@ contract AIAgentMarketplace{
         uint256 AIAgentPrice;
         string uploadLicense;
         string uploadAIAgent;
+        string uploadImage;
         string uploadUsageDocumentation;
         bool isPublic;
         bool isPrivate;
@@ -52,6 +53,7 @@ contract AIAgentMarketplace{
         uint256 _AIAgentPrice,
         string memory _uploadLicense,
         string memory _uploadAIAgent,
+        string memory _uploadImage,
         string memory _uploadUsageDocumentation,
         bool _isPublic,
         bool _isPrivate,
@@ -66,6 +68,7 @@ contract AIAgentMarketplace{
             _AIAgentPrice,
             _uploadLicense,
             _uploadAIAgent,
+            _uploadImage,
             _uploadUsageDocumentation,
             _isPublic,
             _isPrivate,
