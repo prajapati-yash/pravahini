@@ -71,9 +71,18 @@ function Comment() {
                     // Handle any errors
                     console.error(error);
                 });
-        } else {
+        } else if(window.location.pathname === "/dataset-marketplace/single-dataset"){
            
             axios.put(`${process.env.REACT_APP_BACKEND_URL}/dataset/comment/reply`, newReply,tokenHeaders).then(response => {
+                // Handle the response from the server
+                // console.log(response.data);
+            })
+                .catch(error => {
+                    // Handle any errors
+                    console.error(error);
+                });
+        }else{
+            axios.put(`${process.env.REACT_APP_BACKEND_URL}/ai-agent/comment/reply`, newReply,tokenHeaders).then(response => {
                 // Handle the response from the server
                 // console.log(response.data);
             })
@@ -94,10 +103,14 @@ function Comment() {
             if (window.location.pathname === "/model-marketplace/single-model") {
                 response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/model/comment/delete`,{data:{commentId}},tokenHeaders);
                 
-            } else {
+            } else if(window.location.pathname === "/dataset-marketplace/single-dataset"){
                 console.log("avtar",commentId)
                 // console.log("CMt",commentId)
                 response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/dataset/comment/delete`, {
+                    data: { commentId },
+                },tokenHeaders);
+            }else{
+                response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/ai-agent/comment/delete`, {
                     data: { commentId },
                 },tokenHeaders);
             }
@@ -118,8 +131,10 @@ function Comment() {
             // Make a PUT request to your backend API
             if (window.location.pathname === "/model-marketplace/single-model") {
                 response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/model/comment/edit`, data,tokenHeaders);
-            } else {
+            } else if(window.location.pathname === "/dataset-marketplace/single-dataset"){
                 response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/dataset/comment/edit`, data,tokenHeaders);
+            }else{
+                response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/ai-agent/comment/edit`, data,tokenHeaders);
             }
 
             // console.log(response.data.message);
@@ -138,9 +153,13 @@ function Comment() {
                     response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/dataset/comments`);
                     setComments(response.data);
                    
-                } else {
+                } else if(window.location.pathname === "/model-marketplace/single-model"){
                     response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/model/comments`);
                     // console.log(response.data)
+                    setComments(response.data);
+                }else{
+                    response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/ai-agent/comments`);
+                    console.log(response.data)
                     setComments(response.data);
                 }
             } catch (error) {

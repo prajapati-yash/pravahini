@@ -3,7 +3,7 @@ import upload from "../../assets/registration/upload.png";
 import "../../styles/model/CreateModel.css";
 import { ethers } from "ethers";
 // import { MODEL_ADDRESS, modelInstance } from "../Contract";
-import {AIAgentMarketplace_address, AiAgentInstance} from "../Contract";
+import { AIAgentMarketplace_address, AiAgentInstance } from "../Contract";
 import lighthouse from "@lighthouse-web3/sdk";
 import { useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
@@ -15,11 +15,18 @@ function CreateAIAgent() {
   const [btnloading, setbtnloading] = useState(false);
 
   const [selectedOption, setSelectedOption] = useState("free");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
+  const categoryDescriptions = {
+    "Business & Productivity": "Task Automation, Data Analysis, Project Management, Finance & Accounting, Marketing & Sales",
+    "Creative & Content Solutions": "Graphic Design, Video Editing, Writing & Editing, Social Media Management, Customer Engagement",
+    "Technical & IT Services": "Cybersecurity, Software Development, Cloud & Infrastructure Management, AI & Machine Learning Models, Data Management",
+    "Personal & Professional Assistance": "Virtual Assistants, Healthcare & Wellness, Education & Learning, Real Estate & Property, Legal & Compliance"
+  };
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
     if (e.target.value === "free" || e.target.value === "private") {
-        setCreateAIAgent({
+      setCreateAIAgent({
         ...createAIAgent,
         AIAgentPrice: 0,
       });
@@ -37,16 +44,37 @@ function CreateAIAgent() {
     AIAgentCategory: "",
     AIAgentPrice: 0,
     AIAgentUpload: "",
+    AIAgentImage: "",
     AIAgentLicense: "",
     AIAgentDocumentation: "",
+    AIAgentKeyFeatures: "",
+    AIAgentUseCase: "",
   });
-
+  const saveToDatabase = async (aiAgentId) => {
+    try {
+      const response = await axios.post('/api/ai-agents', {
+        aiAgentId,
+        keyFeatures: createAIAgent.AIAgentKeyFeatures,
+        useCase: createAIAgent.AIAgentUseCase
+      });
+      console.log('Saved to database:', response.data);
+    } catch (error) {
+      console.error('Error saving to database:', error);
+      toast.error('Failed to save additional data to database');
+    }
+  };
   const fileInputRefModel = useRef(null);
   const [selectedFileNameModel, setSelectedFileNameModel] = useState("");
 
   const fileInputRefLicense = useRef(null);
   const [selectedFileNameLicense, setSelectedFileNameLicense] = useState("");
 
+  const fileInputRefDatasetImg = useRef(null);
+  const [selectedFileNameDatasetImg, setSelectedFileNameDatasetImg] =
+    useState("");
+  const handleDatasetImgClick = () => {
+    fileInputRefDatasetImg.current.click();
+  };
   const fileInputRefModelDoc = useRef(null);
   const [selectedFileNameModelDoc, setSelectedFileNameModelDoc] = useState("");
 
@@ -79,7 +107,23 @@ function CreateAIAgent() {
       setSelectedFileNameModel(selectedFile.name);
     }
   };
+  const handleFileChangeDatasetImg = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      const reader = new FileReader();
 
+      reader.onloadend = () => {
+        const fileData = reader.result;
+        setCreateAIAgent({
+          ...createAIAgent,
+          AIAgentImage: fileData,
+        });
+      };
+
+      reader.readAsDataURL(selectedFile);
+      setSelectedFileNameDatasetImg(selectedFile.name);
+    }
+  };
   const handleFileChangeLicense = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
@@ -138,18 +182,24 @@ function CreateAIAgent() {
   const uploadData = async () => {
     try {
       const uploadAIAgent = document.getElementById("upload-ai-agent-file");
+      const uploadAIAgentImage = document.getElementById("aiagent-image-file");
       const uploadLicense = document.getElementById("ai-agent-license-file");
       const uploadDocument = document.getElementById("ai-agent-doc-file");
-console.log("uploadAIAgent: ", uploadAIAgent.files, "uploadLicense: ", uploadLicense.files, "uploadDocument: ", uploadDocument.files);
+      console.log(
+        "uploadAIAgent: ",
+        uploadAIAgent.files,
+        "uploadLicense: ",
+        uploadLicense.files,
+        "uploadDocument: ",
+        uploadDocument.files
+      );
 
       let AIAgentCid = "";
 
       if (isForSale) {
-        console.log("Paid Dataset....");
-
         const sig = await encryptionSignature();
         const outputModel = await lighthouse.uploadEncrypted(
-            uploadAIAgent.files,
+          uploadAIAgent.files,
           process.env.REACT_APP_LIGHTHOUSE_API_KEY,
           sig.publicKey,
           sig.signedMessage,
@@ -162,7 +212,7 @@ console.log("uploadAIAgent: ", uploadAIAgent.files, "uploadLicense: ", uploadLic
         // Conditions to add
         const conditions = [
           {
-            id: 1029,
+            id: 1,
             chain: "BTTC",
             method: "getPurchaseStatus",
             standardContractType: "Custom",
@@ -186,9 +236,7 @@ console.log("uploadAIAgent: ", uploadAIAgent.files, "uploadLicense: ", uploadLic
           conditions,
           aggregator
         );
-
       } else {
-
         const outputModel = await lighthouse.upload(
           uploadAIAgent.files,
           process.env.REACT_APP_LIGHTHOUSE_API_KEY,
@@ -197,7 +245,7 @@ console.log("uploadAIAgent: ", uploadAIAgent.files, "uploadLicense: ", uploadLic
         );
         AIAgentCid = outputModel.data.Hash;
         console.log("AIAgentCid: ", AIAgentCid);
-        }
+      }
       const outputLicense = await lighthouse.upload(
         uploadLicense.files,
         process.env.REACT_APP_LIGHTHOUSE_API_KEY,
@@ -205,6 +253,12 @@ console.log("uploadAIAgent: ", uploadAIAgent.files, "uploadLicense: ", uploadLic
         progressCallback
       );
 
+      const outputImage = await lighthouse.upload(
+        uploadAIAgentImage.files,
+        process.env.REACT_APP_LIGHTHOUSE_API_KEY,
+        false,
+        progressCallback
+      );
       const outputDocument = await lighthouse.upload(
         uploadDocument.files,
         process.env.REACT_APP_LIGHTHOUSE_API_KEY,
@@ -212,11 +266,12 @@ console.log("uploadAIAgent: ", uploadAIAgent.files, "uploadLicense: ", uploadLic
         progressCallback
       );
       return {
-        model: AIAgentCid,
+        AIAgent: AIAgentCid,
+        AIAgentImage: outputImage.data.Hash,
         license: outputLicense.data.Hash,
         document: outputDocument.data.Hash,
-      };  
-   } catch (e) {
+      };
+    } catch (e) {
       console.log(e);
     }
   };
@@ -241,11 +296,7 @@ console.log("uploadAIAgent: ", uploadAIAgent.files, "uploadLicense: ", uploadLic
 
       console.log("Create Dataset data: ", createAIAgent);
 
-      const { model, license, document } = await uploadData();
-      console.log("cid model: ", model);
-      // console.log("cid model: ", model);
-      // console.log("cid license: ", license);
-      // console.log("cid document: ", document);
+      const { AIAgent, AIAgentImage, license, document } = await uploadData();
 
       const { ethereum } = window;
       if (ethereum) {
@@ -255,22 +306,28 @@ console.log("uploadAIAgent: ", uploadAIAgent.files, "uploadLicense: ", uploadLic
         }
 
         const con = await AiAgentInstance();
-console.log("con: ", con);
+        console.log("con: ", con);
         const tx = await con.createAIAgent(
-            createAIAgent.AIAgentTitle,
-            createAIAgent.AIAgentDescription,
-            createAIAgent.AIAgentCategory,
-            createAIAgent.AIAgentPrice,
+          createAIAgent.AIAgentTitle,
+          createAIAgent.AIAgentDescription,
+          createAIAgent.AIAgentCategory,
+          createAIAgent.AIAgentPrice,
           license,
-          model,
+          AIAgent,
+          AIAgentImage,
           document,
           isPublic,
           isPrivate,
           isForSale
         );
 
-        console.log(tx);
-        await tx.wait();
+         // Get the AI Agent ID from the transaction receipt or event
+         const receipt = await tx.wait();
+         const aiAgentCreatedEvent = receipt.events.find(event => event.event === 'AIAgentCreated');
+         const aiAgentId = aiAgentCreatedEvent.args.aiAgentId.toString();
+ 
+         // Save additional data to the database
+         await saveToDatabase(aiAgentId);
         setbtnloading(false);
         navigate("/ai-agents-marketplace");
       }
@@ -286,7 +343,7 @@ console.log("con: ", con);
         progress: undefined,
         theme: "light",
       });
-      console.log("Error in creating a dataset: ", e);
+      console.log("Error in creating a aiagent: ", e);
     }
   };
 
@@ -294,7 +351,9 @@ console.log("con: ", con);
     <div>
       <div className="d-flex py-3 px-md-5 px-sm-4 px-sm-3 justify-content-center">
         <div className="col-lg-11 col-10 py-4 create-model-main-container">
-          <div className="py-sm-4 py-3 create-model-heading">Create AI Agent</div>
+          <div className="py-sm-4 py-3 create-model-heading">
+            Create AI Agent
+          </div>
           <div className="create-model-content py-2">
             <div className="py-2">
               <div className="d-flex justify-content-flex-start create-model-head">
@@ -360,6 +419,7 @@ console.log("con: ", con);
                       ...createAIAgent,
                       AIAgentCategory: e.target.value,
                     });
+                    setSelectedCategory(e.target.value);
                   }}
                   defaultValue=""
                   required
@@ -367,14 +427,23 @@ console.log("con: ", con);
                   <option value="" disabled>
                     Select Category
                   </option>
-                  <option value="Business & Productivity" className="model-dropdown">
-                  Business & Productivity
+                  <option
+                    value="Business & Productivity"
+                    className="model-dropdown"
+                  >
+                    Business & Productivity
                   </option>
-                  <option value="Creative & Content Solutions" className="model-dropdown">
-                  Creative & Content Solutions
+                  <option
+                    value="Creative & Content Solutions"
+                    className="model-dropdown"
+                  >
+                    Creative & Content Solutions
                   </option>
-                  <option value="Technical & IT Services" className="model-dropdown">
-                  Technical & IT Services
+                  <option
+                    value="Technical & IT Services"
+                    className="model-dropdown"
+                  >
+                    Technical & IT Services
                   </option>
                   <option
                     value="Personal & Professional Assistance"
@@ -384,8 +453,13 @@ console.log("con: ", con);
                   </option>
                 </select>
               </div>
+              {selectedCategory && (
+                <div className="mt-2 text-white	 ">
+                  {categoryDescriptions[selectedCategory]}
+                </div>
+              )}
             </div>
-{/* 
+            {/* 
             <div className="py-3">
               <div className="d-flex justify-content-flex-start create-model-head">
                 Tags/keywords *
@@ -409,6 +483,51 @@ console.log("con: ", con);
               </div>
             </div> */}
 
+<div className="py-3">
+              <div className="d-flex justify-content-flex-start create-model-head">
+                Key Features *
+              </div>
+              <div className="">
+                <textarea
+                  type="text"
+                  id="AIAgentKeyFeatures"
+                  name="AIAgentKeyFeatures"
+                  className="py-md-1 py-sm-1 model-input-form-data"
+                  placeholder="Enter AI Agent Key Features"
+                  value={createAIAgent.AIAgentKeyFeatures}
+                  onChange={(e) => {
+                    setCreateAIAgent({
+                      ...createAIAgent,
+                      AIAgentKeyFeatures: e.target.value,
+                    });
+                  }}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="py-3">
+              <div className="d-flex justify-content-flex-start create-model-head">
+                Use Case *
+              </div>
+              <div className="">
+                <textarea
+                  type="text"
+                  id="AIAgentUseCase"
+                  name="AIAgentUseCase"
+                  className="py-md-1 py-sm-1 model-input-form-data"
+                  placeholder="Enter AI Agent Use Case"
+                  value={createAIAgent.AIAgentUseCase}
+                  onChange={(e) => {
+                    setCreateAIAgent({
+                      ...createAIAgent,
+                      AIAgentUseCase: e.target.value,
+                    });
+                  }}
+                  required
+                />
+              </div>
+            </div>
             <div className="py-3">
               <div className="d-flex justify-content-flex-start create-dataset-head">
                 AI Agent For*
@@ -456,7 +575,7 @@ console.log("con: ", con);
 
             <div className="py-3">
               <div className="d-flex justify-content-flex-start create-model-head">
-              AI Agent Price (in BTT) *
+                AI Agent Price (in BTT) *
               </div>
               <div className="">
                 <input
@@ -495,7 +614,7 @@ console.log("con: ", con);
                   ref={fileInputRefModel}
                   style={{ display: "none" }}
                   onChange={handleFileChangeModel}
-                //   accept=".tar.gz"
+                  //   accept=".tar.gz"
                   required
                 ></input>
               </div>
@@ -503,7 +622,7 @@ console.log("con: ", con);
                 <div className="col-1"></div>
                 <div className="row">
                   <span className="info-text">
-                    Upload the ML-Model (.tar.gz).
+                    Upload the AI-Agent (.tar.gz).
                   </span>
                   {selectedFileNameModel && (
                     <div className="d-flex model-selected-file-text">
@@ -513,7 +632,45 @@ console.log("con: ", con);
                 </div>
               </div>
             </div>
-
+            <div
+              className="d-flex py-2 flex-column"
+              onClick={handleDatasetImgClick}
+            >
+              <div className="d-flex dataset-upload-image">
+                <div className="col-1">
+                  <img
+                    className="dataset-upload-image-icon"
+                    src={upload}
+                    id="dataset-upload-image"
+                  ></img>
+                </div>
+                <div className="dataset-image-text">
+                  Upload AI Agent Image *
+                </div>
+                <input
+                  type="file"
+                  id="aiagent-image-file"
+                  ref={fileInputRefDatasetImg}
+                  style={{ display: "none" }}
+                  onChange={handleFileChangeDatasetImg}
+                  accept=".jpeg, .png, .jpg"
+                  required
+                ></input>
+              </div>
+              <div className="d-flex dataset-image-selected-file">
+                <div className="col-1"></div>
+                <div className="row">
+                  <span className="info-text">
+                    Upload the image (.jpeg, .jpg, .png) of your AI Agent cover.
+                  </span>
+                  {selectedFileNameDatasetImg && (
+                    <div className="d-flex dataset-selected-file-text">
+                      File: {selectedFileNameDatasetImg}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
             <div
               className="d-flex py-2 flex-column "
               onClick={handleLicenseClick}
@@ -526,7 +683,9 @@ console.log("con: ", con);
                     id="model-upload-license"
                   ></img>
                 </div>
-                <div className="model-license-text">Upload AI Agent License *</div>
+                <div className="model-license-text">
+                  Upload AI Agent License *
+                </div>
                 <input
                   type="file"
                   id="ai-agent-license-file"
@@ -542,7 +701,7 @@ console.log("con: ", con);
                 <div className="row">
                   <span className="info-text">
                     Upload the license (.pdf) which contains the terms and
-                    conditions of the ML-Model.
+                    conditions of the AI Agent.
                   </span>
                   {selectedFileNameLicense && (
                     <div className="d-flex model-selected-file-text">
@@ -582,8 +741,8 @@ console.log("con: ", con);
                 <div className="col-1"></div>
                 <div className="row">
                   <span className="info-text">
-                    Upload the documentation (.pdf) which contains
-                    guidelines of using your Model.
+                    Upload the documentation (.pdf) which contains guidelines of
+                    using your AI Agent.
                   </span>
                   {selectedFileNameModelDoc && (
                     <div className="d-flex model-selected-file-text">

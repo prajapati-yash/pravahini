@@ -17,6 +17,7 @@ import ComputationPopup from "../../pages/ComputationPopUp";
 import "../../styles/computation/ComputationPopup.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
+import RatingSystem from './RatingSystem'; 
 
 function SingleAIAgent() {
   const { address } = useAccount();
@@ -27,7 +28,52 @@ function SingleAIAgent() {
   const [isPopupVisible, setPopupVisible] = useState(false); // Initialize to true to always show initially
   const popupRef = useRef(null);
   const navigate = useNavigate();
-  
+  const [rating, setRating] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
+  const [ratingCount, setRatingCount] = useState(0);
+  const [userRating, setUserRating] = useState(null); 
+  useEffect(() => {
+    const fetchRatingData = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/rating/get-ai-agent-rating/${parseInt(AIAgent[11]._hex,16)}`, {
+          params: {
+            userId: address // Pass the user address as a query parameter
+          }
+        });
+                setAverageRating(response.data.averageRating);
+        setRatingCount(response.data.ratingCount);
+        setUserRating(response.data.userRating);
+      } catch (error) {
+        console.error('Error fetching rating data:', error);
+      }
+    };
+
+    fetchRatingData();
+  }, [AIAgent]);
+
+  const handleRatingSubmit = (newRating) => {
+    setUserRating(newRating);
+    // Optionally, you can update the average rating and count here
+    // or refetch the rating data from the server
+  };
+  useEffect(() => {
+    const fetchRating = async () => {
+      try {
+        console.log(AIAgent[11]._hex);
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/rating/get-ai-agent-rating/${parseInt(AIAgent[11]._hex,16)}`);
+        console.log(response);
+        setRating(response.data.rating);
+      } catch (error) {
+        console.error('Error fetching rating:', error);
+      }
+    };
+
+    fetchRating();
+  }, [AIAgent]);
+
+  const handleRatingChange = (newRating) => {
+    setRating(newRating);
+  };
 
   // useEffect(() => {
   //   if(!address){
@@ -387,9 +433,20 @@ const handleBackClick = () => {
           </div>
         </div>
       </div>
-      
       <div className="col-md-4 col-lg-3 ">
         <div className="py-5 single-model-details">
+      <div className="py-3">
+              <div className="single-model-details-head">Rating</div>
+              {console.log("user rating",userRating)}
+              <RatingSystem
+                aiAgentId={parseInt(AIAgent[11]._hex,16)}
+                averageRating={averageRating}
+                ratingCount={ratingCount}
+                userRating={userRating}
+                userAddress={address}
+                onRatingSubmit={handleRatingSubmit}
+              />
+            </div>
           {AIAgent.isPublic || AIAgent.isPrivate ? (
             <div className="py-sm-5 py-4">
               <button
@@ -404,7 +461,7 @@ const handleBackClick = () => {
           ) : (
             ""
           )}
-
+       
           <div className="pt-sm-4 pt-2 px-md-3 single-model-content">
             <div className="py-3">
               <div className="single-model-details-head">Category</div>

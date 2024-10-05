@@ -29,13 +29,29 @@ mongoose
     console.log(e);
   });
 
-app.use(
-  expressJwt({
-    secret: JWT_SECRET_KEY,
-    algorithms: ["HS256"],
-  }).unless({ path: ["/", "/de-computation","/user/register","/dataset/comments","/model/comments","/hashes/hashesValue","/model/comment/delete","/dataset/comment/delete"] })
-);
-
+  app.use(
+    expressJwt({
+      secret: JWT_SECRET_KEY,
+      algorithms: ["HS256"],
+    }).unless(function(req) {
+      const path = req.originalUrl || req.url;
+      return [
+        "/",
+        "/de-computation",
+        "/rating/rate-ai-agent",
+        "/user/register",
+        "/dataset/comments",
+        "/model/comments",
+        "/ai-agent/comments",
+        '/ai-agent/comment/reply',
+        'ai-agent/comment/delete',
+        "/hashes/hashesValue",
+        "/model/comment/delete",
+        "/dataset/comment/delete"
+      ].includes(path) || path.startsWith("/add-data/ai-agents");
+    })
+  );
+  
 app.post("/de-computation", async (req, res) => {
   try {
     const { address, sign } = req.body;
@@ -75,6 +91,8 @@ const container2Router = require("./routes/container2Routes");
 const containerRoutes =require("./routes/containerRoutes");
 const endpoint = require("./routes/datasetComment");
 const userDetail = require("./routes/userDetail");
+const UserRating = require("./routes/rating");
+// const AIAgent = require("./routes/AIAgentDetail");
 
 app.use("/container1", container1Router);
 app.use("/container2", container2Router);
@@ -84,10 +102,13 @@ app.use('/advanceJobs',containerRoutes);
 
 app.use("/dataset", endpoint);
 app.use("/model", endpoint);
+app.use("/ai-agent", endpoint);
 app.use("/user", userDetail);
 
 app.use("/hashes", hashRoutes);
 
+app.use("/rating", UserRating);
+// app.use("/add-data",AIAgent)
 
 app.get("/", (req, res) => {
   res.send("Welcome to our Pravahini DAPP!");
