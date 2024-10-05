@@ -28,7 +28,6 @@ mongoose
   .catch((e) => {
     console.log(e);
   });
-
   app.use(
     expressJwt({
       secret: JWT_SECRET_KEY,
@@ -44,13 +43,14 @@ mongoose
         "/model/comments",
         "/ai-agent/comments",
         '/ai-agent/comment/reply',
-        'ai-agent/comment/delete',
+        '/ai-agent/comment/delete',
         "/hashes/hashesValue",
         "/model/comment/delete",
         "/dataset/comment/delete"
-      ].includes(path) || path.startsWith("/add-data/ai-agents");
+      ].includes(path) || path.startsWith("/add-data/ai-agents/") || path.startsWith("/rating/");
     })
   );
+  
   
 app.post("/de-computation", async (req, res) => {
   try {
@@ -92,7 +92,7 @@ const containerRoutes =require("./routes/containerRoutes");
 const endpoint = require("./routes/datasetComment");
 const userDetail = require("./routes/userDetail");
 const UserRating = require("./routes/rating");
-// const AIAgent = require("./routes/AIAgentDetail");
+const AIAgent = require("./routes/AIAgentDetail");
 
 app.use("/container1", container1Router);
 app.use("/container2", container2Router);
@@ -108,7 +108,7 @@ app.use("/user", userDetail);
 app.use("/hashes", hashRoutes);
 
 app.use("/rating", UserRating);
-// app.use("/add-data",AIAgent)
+app.use("/add-data",AIAgent)
 
 app.get("/", (req, res) => {
   res.send("Welcome to our Pravahini DAPP!");

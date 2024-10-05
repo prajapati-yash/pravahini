@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import axios from "axios";
 function CreateAIAgent() {
   const navigate = useNavigate();
   const [btnloading, setbtnloading] = useState(false);
@@ -18,11 +18,16 @@ function CreateAIAgent() {
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const categoryDescriptions = {
-    "Business & Productivity": "Task Automation, Data Analysis, Project Management, Finance & Accounting, Marketing & Sales",
-    "Creative & Content Solutions": "Graphic Design, Video Editing, Writing & Editing, Social Media Management, Customer Engagement",
-    "Technical & IT Services": "Cybersecurity, Software Development, Cloud & Infrastructure Management, AI & Machine Learning Models, Data Management",
-    "Personal & Professional Assistance": "Virtual Assistants, Healthcare & Wellness, Education & Learning, Real Estate & Property, Legal & Compliance"
+    "Business & Productivity": 
+      "• Task Automation\n• Data Analysis\n• Project Management\n• Finance & Accounting\n• Marketing & Sales",
+    "Creative & Content Solutions": 
+      "• Graphic Design\n• Video Editing\n• Writing & Editing\n• Social Media Management\n• Customer Engagement",
+    "Technical & IT Services": 
+      "• Cybersecurity\n• Software Development\n• Cloud & Infrastructure Management\n• AI & Machine Learning Models\n• Data Management",
+    "Personal & Professional Assistance": 
+      "• Virtual Assistants\n• Healthcare & Wellness\n• Education & Learning\n• Real Estate & Property\n• Legal & Compliance"
   };
+  
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
     if (e.target.value === "free" || e.target.value === "private") {
@@ -185,14 +190,7 @@ function CreateAIAgent() {
       const uploadAIAgentImage = document.getElementById("aiagent-image-file");
       const uploadLicense = document.getElementById("ai-agent-license-file");
       const uploadDocument = document.getElementById("ai-agent-doc-file");
-      console.log(
-        "uploadAIAgent: ",
-        uploadAIAgent.files,
-        "uploadLicense: ",
-        uploadLicense.files,
-        "uploadDocument: ",
-        uploadDocument.files
-      );
+
 
       let AIAgentCid = "";
 
@@ -244,7 +242,6 @@ function CreateAIAgent() {
           progressCallback
         );
         AIAgentCid = outputModel.data.Hash;
-        console.log("AIAgentCid: ", AIAgentCid);
       }
       const outputLicense = await lighthouse.upload(
         uploadLicense.files,
@@ -294,7 +291,6 @@ function CreateAIAgent() {
       // console.log(isPrivate);
       // console.log(isForSale);
 
-      console.log("Create Dataset data: ", createAIAgent);
 
       const { AIAgent, AIAgentImage, license, document } = await uploadData();
 
@@ -306,7 +302,6 @@ function CreateAIAgent() {
         }
 
         const con = await AiAgentInstance();
-        console.log("con: ", con);
         const tx = await con.createAIAgent(
           createAIAgent.AIAgentTitle,
           createAIAgent.AIAgentDescription,
@@ -454,9 +449,11 @@ function CreateAIAgent() {
                 </select>
               </div>
               {selectedCategory && (
-                <div className="mt-2 text-white	 ">
-                  {categoryDescriptions[selectedCategory]}
-                </div>
+               <div className="mt-2 text-white" style={{ whiteSpace: 'pre-line', textAlign: 'left' }}>
+               {categoryDescriptions[selectedCategory]}
+             </div>
+             
+             
               )}
             </div>
             {/* 

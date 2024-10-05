@@ -6,6 +6,7 @@ const  AIAgent  = require('../models/CreateAIAgent');
 // API Endpoint to create a new AI Agent
 router.post('/ai-agents', async (req, res) => {
   try {
+    console.log(req.body);  
     const { aiAgentId, keyFeatures, useCase } = req.body;
     // Create a new AI Agent document
     const newAIAgent = new AIAgent({

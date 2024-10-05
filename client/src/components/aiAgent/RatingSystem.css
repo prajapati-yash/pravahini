@@ -1,48 +1,176 @@
-/* Overlay the whole screen */
+.rating-system {
+  font-family: 'Arial', sans-serif;
+  max-width: 300px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.star-container {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.star {
+  color: #e4e5e9;
+  transition: color 0.2s ease-in-out;
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.star.interactive {
+  cursor: pointer;
+}
+
+.star.interactive:hover {
+  transform: scale(1.1);
+}
+
+.average-rating {
+  font-size: 14px;
+  color: white;
+  margin-bottom: 15px;
+}
+
+.rate-button {
+  background-color: blue;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.rate-button:hover {
+  background-color: #4250ff;;
+  transform: translateY(-2px);
+}
+
+.rate-button:active {
+  transform: translateY(0);
+}
+
 .rating-popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Ensure it is above all other content */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.rating-popup {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  max-width: 90%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.rating-popup h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.popup-star-container {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.submit-button, .close-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.submit-button {
+  background-color: #4250ff;
+  color: white;
+  margin-right: 10px;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+.submit-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submit-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.submit-button.submitting {
+  position: relative;
+  color: transparent;
+}
+
+.submit-button.submitting::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border: 4px solid transparent;
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: button-loading-spinner 1s ease infinite;
+}
+
+@keyframes button-loading-spinner {
+  from {
+    transform: rotate(0turn);
   }
-  
-  /* Styling the popup */
-  .rating-popup {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    width: 300px;
-    max-width: 90%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
+  to {
+    transform: rotate(1turn);
   }
-  
-  .rating-popup h3 {
-    margin-bottom: 20px;
-  }
-  
-  .rating-popup button {
-    margin-top: 15px;
-    padding: 10px 20px;
-    border: none;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .rating-popup button:disabled {
-    background-color: #aaa;
-  }
-  
-  .rating-popup button + button {
-    background-color: #ccc;
-    margin-left: 10px;
-  }
-  
+}
+
+.close-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.close-button:hover {
+  background-color: #d32f2f;
+  transform: translateY(-2px);
+}
+
+.close-button:active {
+  transform: translateY(0);
+}

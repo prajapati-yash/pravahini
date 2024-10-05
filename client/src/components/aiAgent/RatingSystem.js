@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import Cookies from "js-cookie";
-import './RatingSystem.css'; // Move styles to a CSS file
+import './RatingSystem.css';
 
 const RatingSystem = ({ aiAgentId, averageRating, ratingCount, userRating, userAddress, onRatingSubmit }) => {
   const [isRatingPopupOpen, setIsRatingPopupOpen] = useState(false);
   const [hoverRating, setHoverRating] = useState(0);
-  const [selectedRating, setSelectedRating] = useState(userRating || 0); // Prefill with user rating if exists
+  const [selectedRating, setSelectedRating] = useState(userRating || 0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const token = Cookies.get("jwtToken");
   const tokenHeaders = {
     headers: {
@@ -16,34 +17,48 @@ const RatingSystem = ({ aiAgentId, averageRating, ratingCount, userRating, userA
     },
   };
 
+  useEffect(() => {
+    if (isRatingPopupOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isRatingPopupOpen]);
+
   const handleRatingClick = () => {
-    setIsRatingPopupOpen(true); // Always allow opening the popup
+    setIsRatingPopupOpen(true);
   };
 
   const handleStarHover = (ratingValue) => {
-    if (!userRating) { // Only allow hover effects if user hasn't rated yet
+    if (!userRating) {
       setHoverRating(ratingValue);
     }
   };
 
   const handleStarClick = (ratingValue) => {
-    if (!userRating) { // Only allow rating click if user hasn't rated yet
+    if (!userRating) {
       setSelectedRating(ratingValue);
     }
   };
 
   const handleSubmitRating = async () => {
-    if (!userRating) {
+    if (!userRating && !isSubmitting) {
+      setIsSubmitting(true);
       try {
         await axios.post(`${process.env.REACT_APP_BACKEND_URL}/rating/rate-ai-agent`, {
           aiAgentId,
           rating: selectedRating,
           userId: userAddress,
-        });
+        }, tokenHeaders);
         onRatingSubmit(selectedRating);
         setIsRatingPopupOpen(false);
       } catch (error) {
         console.error('Error submitting rating:', error);
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
@@ -55,8 +70,7 @@ const RatingSystem = ({ aiAgentId, averageRating, ratingCount, userRating, userA
         <FontAwesomeIcon
           key={index}
           icon={faStar}
-          color={ratingValue <= rating ? "#ffc107" : "#e4e5e9"}
-          style={{ cursor: isInteractive ? 'pointer' : 'default' }}
+          className={`star ${ratingValue <= (hoverRating || rating) ? 'filled' : ''} ${isInteractive ? 'interactive' : ''}`}
           onMouseEnter={isInteractive && !userRating ? () => handleStarHover(ratingValue) : undefined}
           onMouseLeave={isInteractive && !userRating ? () => handleStarHover(0) : undefined}
           onClick={isInteractive && !userRating ? () => handleStarClick(ratingValue) : undefined}
@@ -66,21 +80,25 @@ const RatingSystem = ({ aiAgentId, averageRating, ratingCount, userRating, userA
   };
 
   return (
-    <div>
-      <div>{renderStars(averageRating)}</div>
-      <div>
+    <div className="rating-system">
+      <div className="star-container">{renderStars(averageRating)}</div>
+      <div className="average-rating">
         Average Rating: {averageRating.toFixed(1)} ({ratingCount} ratings)
       </div>
-      <button onClick={handleRatingClick}>Give Feedback</button>
+      <button className="rate-button" onClick={handleRatingClick}>Give Agent Rating</button>
       {isRatingPopupOpen && (
         <div className="rating-popup-overlay">
           <div className="rating-popup">
             <h3>{userRating ? "Your Rating" : "Rate this AI Agent"}</h3>
-            <div>{renderStars(hoverRating || selectedRating || userRating, true)}</div>
-            <button onClick={handleSubmitRating} disabled={!!userRating || !selectedRating}>
-              Submit Rating
+            <div className="popup-star-container">{renderStars(hoverRating || selectedRating || userRating, true)}</div>
+            <button 
+              className={`submit-button ${isSubmitting ? 'submitting' : ''}`} 
+              onClick={handleSubmitRating} 
+              disabled={!!userRating || !selectedRating || isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit Rating'}
             </button>
-            <button onClick={() => setIsRatingPopupOpen(false)}>Close</button>
+            <button className="close-button" onClick={() => setIsRatingPopupOpen(false)}>Close</button>
           </div>
         </div>
       )}

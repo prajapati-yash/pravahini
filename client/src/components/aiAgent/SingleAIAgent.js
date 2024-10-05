@@ -32,6 +32,9 @@ function SingleAIAgent() {
   const [averageRating, setAverageRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
   const [userRating, setUserRating] = useState(null); 
+  const [features, setFeatures] = useState([]);
+  const [useCases, setUseCases] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchRatingData = async () => {
       try {
@@ -50,6 +53,25 @@ function SingleAIAgent() {
 
     fetchRatingData();
   }, [AIAgent]);
+  
+  useEffect(() => {
+    const fetchAIAgentData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/add-data/ai-agents/${parseInt(AIAgent[11]._hex, 16)}`);
+        setFeatures(response.data.keyFeatures || []);
+        setUseCases(response.data.useCase || []);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching AI Agent data:', error);
+        setLoading(false);
+      }
+    };
+
+    // if (AIAgent && AIAgent[11]) {
+      fetchAIAgentData();
+    // }
+  }, [AIAgent]);
 
   const handleRatingSubmit = (newRating) => {
     setUserRating(newRating);
@@ -59,9 +81,7 @@ function SingleAIAgent() {
   useEffect(() => {
     const fetchRating = async () => {
       try {
-        console.log(AIAgent[11]._hex);
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/rating/get-ai-agent-rating/${parseInt(AIAgent[11]._hex,16)}`);
-        console.log(response);
         setRating(response.data.rating);
       } catch (error) {
         console.error('Error fetching rating:', error);
@@ -330,7 +350,6 @@ const signMessage = async () => {
         }
       );
       const token = res.data.jwtToken;
-      console.log("token",token)
       Cookies.set("jwtToken", token, { expires: 1 });
       setPopupVisible(false);
     } else {
@@ -370,7 +389,6 @@ useEffect(() => {
 useEffect(() => {
   if (location.pathname === "/model-marketplace/single-model") {
     const jwtToken = Cookies.get("jwtToken");
-    console.log(jwtToken)
     if(!address){
       setPopupVisible(false);
     }
@@ -418,6 +436,7 @@ const handleBackClick = () => {
                 View
               </button>
             </div>
+            
           </div>
           <div className="py-3">
             <div className="single-model-documents">Usage Documentation</div>
@@ -430,6 +449,28 @@ const handleBackClick = () => {
                 View
               </button>
             </div>
+            <div className=" my-4">
+            <h3 className="single-model-documents">Features</h3>
+    {loading ? (<p>Loading features...</p>): features.length > 0 ? ( 
+      <p className="mb-2">{features}</p>): (<p>No features available.</p>)}
+
+            <h3 className="single-model-documents">Use Cases</h3>
+            {loading ? (<p>Loading features...</p>): useCases.length > 0 ? ( 
+      <p className="mb-2">{useCases}</p>): (<p>No useCase available.</p>)}
+            {/* {loading ? (
+              <p>Loading features...</p>
+            ) : features.length > 0 ? (
+              <ul className="list-unstyled">
+                {features.map((feature, index) => (
+                  <li key={index} className="mb-2">{feature}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>No features available.</p>
+            )} */}
+          {/* </div> */}
+        </div>
+ 
           </div>
         </div>
       </div>
@@ -437,7 +478,6 @@ const handleBackClick = () => {
         <div className="py-5 single-model-details">
       <div className="py-3">
               <div className="single-model-details-head">Rating</div>
-              {console.log("user rating",userRating)}
               <RatingSystem
                 aiAgentId={parseInt(AIAgent[11]._hex,16)}
                 averageRating={averageRating}
@@ -477,11 +517,9 @@ const handleBackClick = () => {
                 Price of Model (in BTT)
               </div>
               <div className="single-model-details-value">
-                {console.log(AIAgent)}
                 {parseInt(AIAgent[4]._hex, 16) === 0  ? "0" : parseInt(AIAgent[3]._hex, 16)}
               </div>
             </div>
-            {console.log(AIAgent[8])}
             {AIAgent.isForSale ? (
               <div className="py-4">
                 <button
@@ -509,7 +547,6 @@ const handleBackClick = () => {
         </div>
       </div>
       </div>
-  
       </div>
       
    { isPopupVisible && <ComputationPopup

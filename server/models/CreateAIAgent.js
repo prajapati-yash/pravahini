@@ -4,16 +4,16 @@ const mongoose = require('mongoose');
 const CreateAiAgentSchema = new mongoose.Schema({
     aiAgentId: {
       type: String,
-      required: true,
+      // required: true,
       unique: true
     },
     keyFeatures: {
       type: String,
-      required: true
+      // required: true
     },
     useCase: {
       type: String,
-      required: true
+      // required: true
     },
     createdAt: {
       type: Date,
@@ -22,6 +22,6 @@ const CreateAiAgentSchema = new mongoose.Schema({
   });
   
   // AI Agent Model
-  const AIAgent = mongoose.model('CreateAIAgent', CreateAiAgentSchema);
+  const AIAgent = mongoose.model('AIAgentDetails', CreateAiAgentSchema);
   module.exports = AIAgent;
   
