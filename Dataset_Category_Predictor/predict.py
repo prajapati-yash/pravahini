@@ -31,7 +31,7 @@ def prepare_dataset(num_columns, columns, file_size_mb, description):
 
 # Example usage
 num_columns = 100
-columns = "City, Name, 10th%, EQ, IQ, Aptitude, Total"
+columns = "id, date, value, experiment_id, voltage, current, resistance, frequency, wavelength"
 file_size_mb = 5.2
 description = "THis is science and tech dataset"
 
