@@ -13,6 +13,11 @@ import model1 from "../../assets/sidebar/model-black.png";
 import model2 from "../../assets/sidebar/model-white.png";
 import computation1 from "../../assets/sidebar/computation-black.png";
 import computation2 from "../../assets/sidebar/computation-white.png";
+import codeEditor1 from "../../assets/sidebar/code-editor-black.png";
+import codeEditor2 from "../../assets/sidebar/code-editor-white.png";
+import aiAgents1 from "../../assets/sidebar/ai-agent-black.png";
+import aiAgents2 from "../../assets/sidebar/ai-agent-white.png";
+
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 
@@ -197,6 +202,47 @@ function Navbar() {
                   Model Marketplace
                 </NavLink>
               </li>
+              <li className="nav-item py-2 d-lg-none">
+                <NavLink
+                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
+                  to="/ai-agents-marketplace"
+                >
+                  <img
+                    className="navbar-image"
+                    src={aiAgents1}
+                    height={20}
+                    width={20}
+                  />
+                  <img
+                    className="navbar-image-hover"
+                    src={aiAgents2}
+                    height={20}
+                    width={20}
+                  />
+                    AI Agents
+                </NavLink>
+              </li>
+              <li className="nav-item py-2 d-lg-none">
+                <NavLink
+                  className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
+                  to="/code-editor"
+                >
+                  <img
+                    className="navbar-image"
+                    src={codeEditor1}
+                    height={20}
+                    width={20}
+                  />
+                  <img
+                    className="navbar-image-hover"
+                    src={codeEditor2}
+                    height={20}
+                    width={20}
+                  />
+                  Code Editor
+                </NavLink>
+              </li>
+             
               {/* <li className="nav-item py-2 d-lg-none">
                 <NavLink
                   className="nav-link navbar-content px-1 p-0 d-flex align-items-center"
