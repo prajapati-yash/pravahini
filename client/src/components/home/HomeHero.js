@@ -94,10 +94,7 @@ function HomeHero() {
           </p>
           <p className="hero-sub-text ">
 
-            Discover and access datasets for your machine learning models,
-            purchase pre-trained ML models, list your own datasets and ML models
-            for sale, and harness decentralized computing for your machine
-            learning tasks.
+          Discover and access a wide range of datasets for your machine learning models. Purchase pre-trained AI models, or list your own datasets, models, and AI agents for sale on our marketplace. Use our integrated code editor to run and test code instantly, and leverage decentralized computing to accelerate your machine learning tasks efficiently.
           </p>
         </div>
 

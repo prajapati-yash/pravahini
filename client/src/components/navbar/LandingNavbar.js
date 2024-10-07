@@ -71,6 +71,14 @@ function LandingNavbar() {
               <li className="nav-item py-2 px-lg-2">
                 <a
                   className="nav-link px-1 p-0 d-flex align-items-center"
+                  href="/ai-agents-marketplace"
+                >
+                  <span className="landing-navbar">AI Agent Marketplace</span>
+                </a>
+              </li>
+              <li className="nav-item py-2 px-lg-2">
+                <a
+                  className="nav-link px-1 p-0 d-flex align-items-center"
                   href="/dataset-marketplace"
                 >
                   <span className="landing-navbar">Dataset Marketplace</span>

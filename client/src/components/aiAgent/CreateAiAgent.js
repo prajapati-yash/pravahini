@@ -8,7 +8,7 @@ import lighthouse from "@lighthouse-web3/sdk";
 import { useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
-import axios from 'axios';
+// import axios from 'axios';
 
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
