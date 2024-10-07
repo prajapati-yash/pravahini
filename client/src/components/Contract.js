@@ -9,7 +9,7 @@ import AiAgentMarketplaceABI from "../contracts/artifacts/AIAgentMarketplaceABI.
 export const AUTHORIZATION_ADDRESS = "0x7AbC10F35319a7B67DF0EB5B864C3f3bd8005A06";
 // DATASET_ADDRESS = 0x24d6E3AFd3afE716045ebB1A1B24d93eeEE76291
 // MODEL_ADDRESS = 0xFd3c306578C4bd70Ef9f3752d2B1C9b97858E82f
-export const AIAgentMarketplace_address= "0x18d81dbacC08a089c836Df3F168945705FcCdbcE";
+export const AIAgentMarketplace_address= "0x3a2e9Aa459D85891574f6e1343fbFe487f5e43CF";
 
 // export const AUTHORIZATION_ADDRESS =
 //   "0xd6bF2cC4F53Fbe71E88288Cd661a31D62AA7237c";

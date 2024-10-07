@@ -104,7 +104,7 @@ function SingleAIAgent() {
   const handleDownload = async () => {
     try {
       const response = await axios.get(
-        `https://gateway.lighthouse.storage/ipfs/${AIAgent.uploadModel}`,
+        `https://gateway.lighthouse.storage/ipfs/${AIAgent.uploadAIAgent}`,
         { responseType: "blob" }
       );
       // console.log(response);
@@ -451,11 +451,11 @@ const handleBackClick = () => {
             <div className=" my-4">
             <h3 className="single-model-documents">Features</h3>
     {loading ? (<p>Loading features...</p>): features.length > 0 ? ( 
-      <p className="mb-2">{features}</p>): (<p>No features available.</p>)}
+      <p className="mb-2 "style={{"textAlign":"left"}}>{features}</p>): (<p>No features available.</p>)}
 
             <h3 className="single-model-documents">Use Cases</h3>
             {loading ? (<p>Loading features...</p>): useCases.length > 0 ? ( 
-      <p className="mb-2">{useCases}</p>): (<p>No useCase available.</p>)}
+      <p className="mb-2" style={{"textAlign":"left"}}>{useCases}</p>): (<p>No useCase available.</p>)}
             {/* {loading ? (
               <p>Loading features...</p>
             ) : features.length > 0 ? (

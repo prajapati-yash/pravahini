@@ -45,7 +45,8 @@ mongoose
         '/ai-agent/comment/delete',
         "/hashes/hashesValue",
         "/model/comment/delete",
-        "/dataset/comment/delete"
+        "/dataset/comment/delete",
+        "/add-data/ai-agents",
       ].includes(path) || path.startsWith("/add-data/ai-agents/") ||path.startsWith("/rating/get-ai-agent-rating/") ;
     })
   );

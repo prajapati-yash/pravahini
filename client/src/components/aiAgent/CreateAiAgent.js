@@ -57,7 +57,7 @@ function CreateAIAgent() {
   });
   const saveToDatabase = async (aiAgentId) => {
     try {
-      const response = await axios.post('/api/ai-agents', {
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/add-data/ai-agents`, {
         aiAgentId,
         keyFeatures: createAIAgent.AIAgentKeyFeatures,
         useCase: createAIAgent.AIAgentUseCase
@@ -316,15 +316,24 @@ function CreateAIAgent() {
           isForSale
         );
 
-         // Get the AI Agent ID from the transaction receipt or event
-         const receipt = await tx.wait();
-         const aiAgentCreatedEvent = receipt.events.find(event => event.event === 'AIAgentCreated');
-         const aiAgentId = aiAgentCreatedEvent.args.aiAgentId.toString();
- 
-         // Save additional data to the database
-         await saveToDatabase(aiAgentId);
-        setbtnloading(false);
-        navigate("/ai-agents-marketplace");
+        // Get the AI Agent ID from the transaction receipt or event
+        const receipt = await tx.wait();
+        console.log('Transaction receipt:', receipt);
+
+        const aiAgentCreatedEvent = receipt.events.find(event => event.event === 'AIAgentCreated');
+        console.log('AI Agent created event:', aiAgentCreatedEvent);
+
+        if (aiAgentCreatedEvent && aiAgentCreatedEvent.args && aiAgentCreatedEvent.args[0]) {
+          const aiAgentId = parseInt(aiAgentCreatedEvent.args[0]._hex,16).toString();
+          // Save additional data to the database
+            await saveToDatabase(aiAgentId);
+            setbtnloading(false);
+            navigate("/ai-agents-marketplace");
+        } else {
+            console.error('AI Agent creation event not found or malformed.');
+            setbtnloading(false);  // Stop loading in case of failure
+        }
+
       }
     } catch (e) {
       setbtnloading(false);
