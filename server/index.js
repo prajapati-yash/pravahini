@@ -37,7 +37,6 @@ mongoose
       return [
         "/",
         "/de-computation",
-        "/rating/rate-ai-agent",
         "/user/register",
         "/dataset/comments",
         "/model/comments",
@@ -47,7 +46,7 @@ mongoose
         "/hashes/hashesValue",
         "/model/comment/delete",
         "/dataset/comment/delete"
-      ].includes(path) || path.startsWith("/add-data/ai-agents/") || path.startsWith("/rating/");
+      ].includes(path) || path.startsWith("/add-data/ai-agents/") ||path.startsWith("/rating/get-ai-agent-rating/") ;
     })
   );
   

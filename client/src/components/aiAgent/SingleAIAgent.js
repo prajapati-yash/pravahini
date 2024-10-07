@@ -63,7 +63,6 @@ function SingleAIAgent() {
         setUseCases(response.data.useCase || []);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching AI Agent data:', error);
         setLoading(false);
       }
     };
@@ -89,7 +88,7 @@ function SingleAIAgent() {
     };
 
     fetchRating();
-  }, [AIAgent]);
+  }, [AIAgent,userRating  ]);
 
   const handleRatingChange = (newRating) => {
     setRating(newRating);
@@ -488,10 +487,10 @@ const handleBackClick = () => {
               />
             </div>
           {AIAgent.isPublic || AIAgent.isPrivate ? (
-            <div className="py-sm-5 py-4">
+            <div className=" py-2">
               <button
                 type="submit"
-                className="py-2 px-5 btn single-model-download"
+                className="py-1 px-5 btn single-model-download"
                 onClick={handleDownload}
                 disabled={AIAgent[9]}
               >
@@ -502,9 +501,9 @@ const handleBackClick = () => {
             ""
           )}
        
-          <div className="pt-sm-4 pt-2 px-md-3 single-model-content">
-            <div className="py-3">
-              <div className="single-model-details-head">Category</div>
+          <div className="pt-sm-4 pt-1.5 px-md-3 single-model-content">
+            <div className="py-1">
+              <div className="py-1 single-model-details-head">Category</div>
               <div className="single-model-details-value">{AIAgent[2]}</div>
             </div>
             {/* <div className="py-3">
