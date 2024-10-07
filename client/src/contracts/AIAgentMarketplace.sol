@@ -45,7 +45,21 @@ contract AIAgentMarketplace{
 
     // Mapping of purchased AIAgent with specific AIAgent Id and user address 
     mapping (address => mapping(uint256 => bool)) private purchaseMapping;
-
+     event AIAgentCreated(
+        uint256 indexed AIAgentId,
+        address indexed creator,
+        string title,
+        string description,
+        string category,
+        uint256 AIAgentPrice,
+        string uploadLicense,
+        string uploadAIAgent,
+        string uploadImage,
+        string uploadUsageDocumentation,
+        bool isPublic,
+        bool isPrivate,
+        bool isForSale
+    );
     function createAIAgent (
         string memory _title,
         string memory _description,
@@ -84,6 +98,24 @@ contract AIAgentMarketplace{
 
         // Add the AI Agent Id to the all AI Agents array
         allAIAgentIds.push(AIAgentId);
+
+        
+        // Emit the AIAgentCreated event
+        emit AIAgentCreated(
+            AIAgentId,
+            msg.sender,
+            _title,
+            _description,
+            _category,
+            _AIAgentPrice,
+            _uploadLicense,
+            _uploadAIAgent,
+            _uploadImage,
+            _uploadUsageDocumentation,
+            _isPublic,
+            _isPrivate,
+            _isForSale
+        );
 
         // Increment the next AIAgent Id
         nextAIAgentId++;
