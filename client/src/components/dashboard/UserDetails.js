@@ -3,8 +3,10 @@ import "../../styles/dashboard/UserDetails.css";
 import { useNavigate } from "react-router-dom";
 import UserDatasets from "./UserDatasets";
 import UserModels from "./UserModels";
+import UserAIAgents from "./UserAIAgents";
 import SubscribedDatasets from "./SubscribedDatasets";
 import SubscribedModels from "./SubscribedModels";
+import SubscribedAIAgents from "./SubscribedAIAgents";
 import { ethers } from "ethers";
 import { authorizationInstance } from "../Contract";
 import { useAccount } from "wagmi";
@@ -81,6 +83,12 @@ function UserDetails() {
     navigate("/user-dashboard/user-dashboard-models");
     setActiveComponent("userModels");
   };
+  const handleAIAgentClick = (e) => {
+    setShowButtons(false);
+    e.preventDefault();
+    navigate("/user-dashboard/user-dashboard-aiagents");
+    setActiveComponent("userAIAgents");
+  };
 
   const handleSubscribedDatasets = (e) => {
     e.preventDefault();
@@ -93,6 +101,12 @@ function UserDetails() {
     e.preventDefault();
     navigate("/user-dashboard/subscription/user-models");
     setActiveComponent("subscribedModels");
+  };
+  
+  const handleSubscribedAIAgents = (e) => {
+    e.preventDefault();
+    navigate("/user-dashboard/subscription/user-aiagents");
+    setActiveComponent("subscribedAIAgents");
   };
   
   const editEmail = async () => {
@@ -186,8 +200,12 @@ console.log(error)
         return <UserDatasets />;
       case "userModels":
         return <UserModels />;
+      case "userAIAgents":
+        return <UserAIAgents />;
       case "subscribedDatasets":
         return <SubscribedDatasets />;
+      case "subscribedAIAgents":
+        return <SubscribedAIAgents />;
       case "subscribedModels":
         return <SubscribedModels />;
       default:
@@ -328,6 +346,18 @@ console.log(error)
             type="button"
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"
+            title="The AI Agent that are created by user will be displayed here."
+            className={`mx-sm-3 mx-2 dashboard-model-btn ${
+              activeComponent === "userAIAgents" ? "active-button" : ""
+            }`}
+            onClick={handleAIAgentClick}
+          >
+            All AI Agents
+          </button>
+          <button
+            type="button"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
             title="The datasets or models that user have bought will be displayed here."
             className={`mx-sm-3 mx-2 dashboard-subscription-btn ${
               showButtons === true ? "active-button" : ""
@@ -357,6 +387,14 @@ console.log(error)
                 onClick={handleSubscribedModels}
               >
                 Models
+              </button>
+              <button
+                className={`my-sm-4 mx-sm-3 my-3 mx-2 px-4 py-2 subscription-model-btn ${
+                  activeComponent === "subscribedAIAgents" ? "active-button" : ""
+                }`}
+                onClick={handleSubscribedAIAgents}
+              >
+                AI Agents
               </button>
             </div>
           )}
