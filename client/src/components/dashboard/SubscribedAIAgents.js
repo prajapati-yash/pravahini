@@ -10,6 +10,7 @@ function SubscribedAIAgents() {
   const [allSubscribedDatasets, setAllSubscribedDatasets] = useState([]);
   const [isPageLoading, setIsPageLoading] = useState(true);
 
+  
   const allSubscribedData = async () => {
     try {
       const { ethereum } = window;
