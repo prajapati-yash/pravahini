@@ -8,7 +8,6 @@ import lighthouse from "@lighthouse-web3/sdk";
 import { useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
 import { ToastContainer, toast } from "react-toastify";
-import axios from 'axios';
 
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
@@ -76,11 +75,11 @@ function CreateAIAgent() {
   const fileInputRefLicense = useRef(null);
   const [selectedFileNameLicense, setSelectedFileNameLicense] = useState("");
 
-  const fileInputRefDatasetImg = useRef(null);
-  const [selectedFileNameDatasetImg, setSelectedFileNameDatasetImg] =
+  const fileInputRefAIAgentImg = useRef(null);
+  const [selectedFileNameAIAgentImg, setSelectedFileNameAIAgentImg] =
     useState("");
-  const handleDatasetImgClick = () => {
-    fileInputRefDatasetImg.current.click();
+  const handleAIAgentImgClick = () => {
+    fileInputRefAIAgentImg.current.click();
   };
   const fileInputRefModelDoc = useRef(null);
   const [selectedFileNameModelDoc, setSelectedFileNameModelDoc] = useState("");
@@ -114,7 +113,7 @@ function CreateAIAgent() {
       setSelectedFileNameModel(selectedFile.name);
     }
   };
-  const handleFileChangeDatasetImg = (event) => {
+  const handleFileChangeAIAgentImg = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       const reader = new FileReader();
@@ -128,7 +127,7 @@ function CreateAIAgent() {
       };
 
       reader.readAsDataURL(selectedFile);
-      setSelectedFileNameDatasetImg(selectedFile.name);
+      setSelectedFileNameAIAgentImg(selectedFile.name);
     }
   };
   const handleFileChangeLicense = (event) => {
@@ -642,7 +641,7 @@ function CreateAIAgent() {
             </div>
             <div
               className="d-flex py-2 flex-column"
-              onClick={handleDatasetImgClick}
+              onClick={handleAIAgentImgClick}
             >
               <div className="d-flex dataset-upload-image">
                 <div className="col-1">
@@ -658,9 +657,9 @@ function CreateAIAgent() {
                 <input
                   type="file"
                   id="aiagent-image-file"
-                  ref={fileInputRefDatasetImg}
+                  ref={fileInputRefAIAgentImg}
                   style={{ display: "none" }}
-                  onChange={handleFileChangeDatasetImg}
+                  onChange={handleFileChangeAIAgentImg}
                   accept=".jpeg, .png, .jpg"
                   required
                 ></input>
@@ -671,9 +670,9 @@ function CreateAIAgent() {
                   <span className="info-text">
                     Upload the image (.jpeg, .jpg, .png) of your AI Agent cover.
                   </span>
-                  {selectedFileNameDatasetImg && (
+                  {selectedFileNameAIAgentImg && (
                     <div className="d-flex dataset-selected-file-text">
-                      File: {selectedFileNameDatasetImg}
+                      File: {selectedFileNameAIAgentImg}
                     </div>
                   )}
                 </div>

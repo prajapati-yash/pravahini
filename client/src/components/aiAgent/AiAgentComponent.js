@@ -13,12 +13,12 @@ import { useAccount } from "wagmi";
 import { authorizationInstance } from "../Contract";
 
 function AiAgentComponent() {
-  const [activeComponent, setActiveComponent] = useState("allDatasets");
+  const [activeComponent, setActiveComponent] = useState("allAIAgents");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredDatasets, setFilteredDatasets] = useState([]);
+  const [filteredAIAgents, setFilteredAIAgents] = useState([]);
   const navigate = useNavigate();
-  const datasetDivRef = React.useRef(null);
-  const [allDatasets, setAllDatasets] = useState([]);
+  const aiAgentDivRef = React.useRef(null);
+  const [allAIAgents, setAllAIAgents] = useState([]);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const { address } = useAccount();
 
@@ -62,97 +62,97 @@ function AiAgentComponent() {
     verifyUserAccount();
   }, [navigate, address]);
 
-  const handleAllDatasetClick = (e) => {
+  const handleAllAIAgentClick = (e) => {
     e.preventDefault();
-    setActiveComponent("allDatasets");
-    setFilteredDatasets(allDatasets);
+    setActiveComponent("allAIAgents");
+    setFilteredAIAgents(allAIAgents);
 
-    if (datasetDivRef.current) {
-      datasetDivRef.current.scrollIntoView({
+    if (aiAgentDivRef.current) {
+      aiAgentDivRef.current.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
     }
   };
 
-  const handlePaidDatasetClick = (e) => {
+  const handlePaidAIAgentClick = (e) => {
     e.preventDefault();
-    setActiveComponent("paidDatasets");
+    setActiveComponent("paidAIAgents");
 
-    const filtered = allDatasets.filter((AIAgent) => {
+    const filtered = allAIAgents.filter((AIAgent) => {
       if(parseInt(AIAgent[10]._hex,16)==2){
         return null;
       }
       return AIAgent.isForSale;
     });
 
-    setFilteredDatasets(filtered);
+    setFilteredAIAgents(filtered);
   };
 
-  const handlePublicDatasetClick = (e) => {
+  const handlePublicAIAgentClick = (e) => {
     e.preventDefault();
-    setActiveComponent("publicDatasets");
+    setActiveComponent("publicAIAgents");
 
-    const filtered = allDatasets.filter((AIAgent) => {
+    const filtered = allAIAgents.filter((AIAgent) => {
       return AIAgent.isPublic;
     });
 
-    setFilteredDatasets(filtered);
+    setFilteredAIAgents(filtered);
   };
 
   const handlebuisnessAIAgent = (e) => {
     e.preventDefault();
     setActiveComponent("b&p");
 
-    const filtered = allDatasets.filter((AIAgent) => {
+    const filtered = allAIAgents.filter((AIAgent) => {
       // console.log(parseInt(dataset[11]._hex,16));
       if(parseInt(AIAgent[10]._hex,16)==2){
         return null;
       }
       return AIAgent.category === "Business & Productivity";
     });
-    setFilteredDatasets(filtered);
+    setFilteredAIAgents(filtered);
   };
 
   const handleCreativeAIAgent = (e) => {
     e.preventDefault();
     setActiveComponent("c&c");
 
-    const filtered = allDatasets.filter((AIAgent) => {
+    const filtered = allAIAgents.filter((AIAgent) => {
       return AIAgent.category === "Creative & Content Solutions";
     });
-    setFilteredDatasets(filtered);
+    setFilteredAIAgents(filtered);
   };
 
   const handleTechnicalAIAgent = (e) => {
     e.preventDefault();
     setActiveComponent("t&i");
 
-    const filtered = allDatasets.filter((AIAgent) => {
+    const filtered = allAIAgents.filter((AIAgent) => {
       return AIAgent.category === "Technical & IT Services";
     });
-    setFilteredDatasets(filtered);
+    setFilteredAIAgents(filtered);
   };
 
   const handlePersonalAIAgent = (e) => {
     e.preventDefault();
     setActiveComponent("p&p");
 
-    const filtered = allDatasets.filter((AIAgent) => {
+    const filtered = allAIAgents.filter((AIAgent) => {
       return AIAgent.category === "Personal & Professional Assistance";
     });
-    setFilteredDatasets(filtered);
+    setFilteredAIAgents(filtered);
   };
 
   const handleSearchChange = (query) => {
-    setActiveComponent("allDatasets");
+    setActiveComponent("allAIAgents");
     setSearchQuery(query);
 
-    const filtered = allDatasets.filter((item) =>
+    const filtered = allAIAgents.filter((item) =>
       item.title.toLowerCase().includes(query.toLowerCase())
     );
 
-    setFilteredDatasets(filtered);
+    setFilteredAIAgents(filtered);
   };
 
   const allData = async () => {
@@ -160,28 +160,27 @@ function AiAgentComponent() {
       const con = await AiAgentInstance();
       console.log(con);
       const getAIAgentsDetails = await con.getAllAIAgents();
-console.log(getAIAgentsDetails);  
       const filteredAIAgents = getAIAgentsDetails.filter((AIAgent) => {
         return AIAgent.isPublic || AIAgent.isForSale;
       });
-      setAllDatasets(filteredAIAgents);
+      setAllAIAgents(filteredAIAgents);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    async function fetchDatasets() {
-      setActiveComponent("allDatasets");
+    async function fetchAIAgents() {
+      setActiveComponent("allAIAgents");
       await allData();
       setIsPageLoading(false);
     }
-    fetchDatasets();
+    fetchAIAgents();
   }, []);
 
   useEffect(() => {
-    setFilteredDatasets(allDatasets);
-  }, [allDatasets]);
+    setFilteredAIAgents(allAIAgents);
+  }, [allAIAgents]);
 
   return (
     <div className="dataset-dashboard-main">
@@ -231,27 +230,27 @@ console.log(getAIAgentsDetails);
                 >
                   <a
                     className={`dropdown-item ${
-                      activeComponent === "allDatasets" ? "active-button" : ""
+                      activeComponent === "allAIAgents" ? "active-button" : ""
                     }`}
-                    onClick={handleAllDatasetClick}
+                    onClick={handleAllAIAgentClick}
                   >
                     All
                   </a>
                   <a
                     className={`dropdown-item ${
-                      activeComponent === "paidDatasets" ? "active-button" : ""
+                      activeComponent === "paidAIAgents" ? "active-button" : ""
                     }`}
-                    onClick={handlePaidDatasetClick}
+                    onClick={handlePaidAIAgentClick}
                   >
                     Paid
                   </a>
                   <a
                     className={`dropdown-item ${
-                      activeComponent === "publicDatasets"
+                      activeComponent === "publicAIAgents"
                         ? "active-button"
                         : ""
                     }`}
-                    onClick={handlePublicDatasetClick}
+                    onClick={handlePublicAIAgentClick}
                   >
                     Free
                   </a>
@@ -269,9 +268,9 @@ console.log(getAIAgentsDetails);
           <button
             type="button"
             className={`mx-sm-3 mx-2 all-dataset-dash-btn ${
-              activeComponent === "allDatasets" ? "active-button" : ""
+              activeComponent === "allAIAgents" ? "active-button" : ""
             }`}
-            onClick={handleAllDatasetClick}
+            onClick={handleAllAIAgentClick}
           >
             All AI Agents
           </button>
@@ -330,11 +329,11 @@ console.log(getAIAgentsDetails);
               <li>
                 <a
                   className={`dropdown-item ${
-                    activeComponent === "allDatasets" ? "active-button" : ""
+                    activeComponent === "allAIAgents" ? "active-button" : ""
                   }`}
-                  onClick={handleAllDatasetClick}
+                  onClick={handleAllAIAgentClick}
                 >
-                  All Datasets
+                  All AI Agents
                 </a>
               </li>
               <li>
@@ -383,14 +382,14 @@ console.log(getAIAgentsDetails);
 
         {/* All dataset component */}
 
-        <div ref={datasetDivRef}>
+        <div ref={aiAgentDivRef}>
           <div className="row px-0 all-datasets-main mt-4 py-3 px-sm-3 container-fluid justify-content-around">
             {isPageLoading ? (
               <div className="d-flex justify-content-center">
                 <ClipLoader color="#4250ff" />
               </div>
-            ) : filteredDatasets.length > 0 ? (
-              filteredDatasets.map((item, key) => { 
+            ) : filteredAIAgents.length > 0 ? (
+              filteredAIAgents.map((item, key) => { 
                 console.log(item);
                 // Skip rendering when key is 2
                 if (parseInt(item[10]._hex,16) === 2) {
@@ -434,7 +433,7 @@ console.log(getAIAgentsDetails);
                 );
               })
             ) : (
-              <div>No Datasets Available</div>
+              <div>No AI Agents Available</div>
             )}
           </div>
         </div>

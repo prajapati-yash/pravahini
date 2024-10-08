@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/model/SingleModel.css";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import { modelInstance } from "../Contract";
+import { AiAgentInstance } from "../Contract";
 import { ethers } from "ethers";
 import lighthouse from "@lighthouse-web3/sdk";
 import { useAccount } from "wagmi";
@@ -218,7 +218,7 @@ function SingleAIAgent() {
     };
   };
 
-  const handleBuyModel = async () => {
+  const handleBuyAIAgent = async () => {
     try {
       toast.info("Process is in Progress", {
         position: "top-left",
@@ -238,7 +238,7 @@ function SingleAIAgent() {
         if (!provider) {
           console.log("Metamask is not installed, please install!");
         }
-        const con = await modelInstance();
+        const con = await AiAgentInstance();
         // const price = parseInt(model[4]._hex, 16);
         // console.log(model);
         // // console.log("Ether value: ", ethers.utils.parseEther(price.toString()));
@@ -250,11 +250,11 @@ function SingleAIAgent() {
     ? "0"
     : parseInt(AIAgent[3]._hex, 16)
   : null;
-
+console.log(con)
 const tx = price !== null
   ? await con.purchaseModel(
-    AIAgent.length > 10  && AIAgent[10] && AIAgent[10]._hex
-        ? parseInt(AIAgent[10]._hex, 16)
+    AIAgent.length > 10  && AIAgent[11] && AIAgent[11]._hex
+        ? parseInt(AIAgent[11]._hex, 16)
         : null,
       {
         value: ethers.utils.parseEther(price.toString()),
@@ -267,7 +267,7 @@ const tx = price !== null
         setbtnloading(false);
 
         const status = await con.getPurchaseStatus(
-          parseInt(AIAgent[10]._hex, 16),
+          parseInt(AIAgent[11]._hex, 16),
           address
         );
         const cid = AIAgent[6];
@@ -279,7 +279,7 @@ const tx = price !== null
           cid,
           signedMessage,
           3,
-          { "1.modelId": parseInt(AIAgent[10]._hex, 16).toString() }
+          { "1.modelId": parseInt(AIAgent[11]._hex, 16).toString() }
         );
 
         const { masterKey: recoveredKey } = await recoverKey(shards);
@@ -386,7 +386,7 @@ useEffect(() => {
 }, [address]);
 
 useEffect(() => {
-  if (location.pathname === "/model-marketplace/single-model") {
+  if (location.pathname === "/ai-agents-marketplace/single-ai-agent") {
     const jwtToken = Cookies.get("jwtToken");
     if(!address){
       setPopupVisible(false);
@@ -513,10 +513,10 @@ const handleBackClick = () => {
 
             <div className="py-2">
               <div className="single-model-details-head">
-                Price of Model (in BTT)
+                Price of AI Agent (in BTT)
               </div>
               <div className="single-model-details-value">
-                {parseInt(AIAgent[4]._hex, 16) === 0  ? "0" : parseInt(AIAgent[3]._hex, 16)}
+                {parseInt(AIAgent[3]._hex, 16) === 0  ? "0" : parseInt(AIAgent[3]._hex, 16)}
               </div>
             </div>
             {AIAgent.isForSale ? (
@@ -525,7 +525,7 @@ const handleBackClick = () => {
                   type="submit"
                   className="btn rounded-pill my-2 py-sm-3 px-sm-5 model-buy-btn"
                   disabled={!AIAgent[9]}
-                  onClick={handleBuyModel}
+                  onClick={handleBuyAIAgent}
                 >
                   {btnloading ? (
                     <>
