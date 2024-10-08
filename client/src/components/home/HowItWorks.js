@@ -33,9 +33,25 @@ const howWorksContent = [
   },
   {
     number: "6",
+    head: "AI Agent Marketplace :",
+    title: "Explore and utilize various AI agents for your projects and tasks.",
+  },
+  {
+    number: "7",
+    head: "Code Editor :",
+    title: "Use our integrated code editor for seamless development and testing of your ML models and AI agents.",
+  },
+  {
+    number: "8",
     head: "Decentralized Computation :",
     title:
       "Here you can use decentralized computing for your ML model computations. To facilitate this, we provide two robust containers tailored to meet your specific requirements.",
+  },
+    {
+    number: "9",
+    head: "Reviews and Ratings :",
+    title:
+      "Provide feedback on datasets, models, and AI agents. Rate your experience and leave reviews to help other users make informed decisions.",
   },
 ];
 
