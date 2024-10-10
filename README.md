@@ -8,16 +8,16 @@ In Sanskrit, the term "प्रवाहिनी" (Pravāhinī) is used to des
 
 ## Key Features
 
-- **Data Marketplace**: Access a diverse range of datasets from various categories, both free and paid.
-
-- **Model Marketplace**: Discover and purchase pre-trained machine learning models for your AI projects.
-
-- **Decentralized Computation**: Harness the power of decentralized computing for resource-intensive tasks.
-
-- **Enhanced Security**: Implement robust security measures, including data encryption, authentication, and smart contract auditing.
-
-- **User-Friendly Interface**: Ensure an intuitive and streamlined user experience with advanced data visualization tools.
-
+- **AI Marketplace:** - A comprehensive marketplace for datasets and pre-trained models tailored for AI applications, facilitating resource discovery for machine learning projects.
+- **Decentralized Computation:** - Process machine learning tasks across multiple nodes, maximizing efficiency and scalability through decentralized systems.
+- **Data Visualization:** - Interactive tools for visualizing datasets, uncovering patterns, and gaining deeper insights.
+- **Commenting Feature:** - Foster collaboration by allowing users to comment and share feedback on datasets and models.
+- **Computation Notifications:** - Receive instant email updates when machine learning tasks are completed, ensuring users stay informed.
+- **Plagiarism Checker:** - Detects and prevents dataset duplication to maintain originality and data integrity.
+- **AI Model for Categorization:** - Automatically categorize datasets and models with a machine learning model, streamlining resource discovery.
+- **Integrated Code Editor:** - Access a built-in code editor for seamless coding, testing, and editing machine learning models within the platform.
+- **AI Agent Marketplace:** - Discover, list, and purchase AI agents for specific tasks, complete with search and filtering features.
+- **AI Agent Rating & Review:** - Rate and review AI agents to provide feedback, improving agent quality and user satisfaction.
 
 ## Benefits
 
