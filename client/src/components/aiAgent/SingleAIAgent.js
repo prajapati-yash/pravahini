@@ -217,6 +217,18 @@ function SingleAIAgent() {
       publicKey: address,
     };
   };
+  const handleBuyAIAgentToast = async () => {
+    toast.info("Thank you for your patience! We're working on improving this feature. Soon, you'll be able to purchase AI agents right here.", {
+      position: "top-right",  // You can change this based on your preferred position
+      autoClose: 5000,  // Auto close after 5 seconds
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    
+  }
 
   const handleBuyAIAgent = async () => {
     try {
@@ -524,8 +536,8 @@ const handleBackClick = () => {
                 <button
                   type="submit"
                   className="btn rounded-pill my-2 py-sm-3 px-sm-5 model-buy-btn"
-                  disabled={!AIAgent[9]}
-                  onClick={handleBuyAIAgent}
+                  disabled={!AIAgent[10]}
+                  onClick={handleBuyAIAgentToast}
                 >
                   {btnloading ? (
                     <>
