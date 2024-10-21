@@ -145,18 +145,17 @@ function CreateModel() {
       let modelCid = "";
 
       if (isForSale) {
-        console.log("Paid Dataset....");
 
         const sig = await encryptionSignature();
+        const file = uploadModel.files[0];
         const outputModel = await lighthouse.uploadEncrypted(
-          uploadModel.files,
+          file,
           process.env.REACT_APP_LIGHTHOUSE_API_KEY,
           sig.publicKey,
           sig.signedMessage,
           null,
           progressCallback
         );
-
         modelCid = outputModel.data[0].Hash;
 
         // Conditions to add

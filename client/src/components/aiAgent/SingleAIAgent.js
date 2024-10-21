@@ -264,7 +264,7 @@ function SingleAIAgent() {
   : null;
 console.log(con)
 const tx = price !== null
-  ? await con.purchaseModel(
+  ? await con.purchaseAIAgent(
     AIAgent.length > 10  && AIAgent[11] && AIAgent[11]._hex
         ? parseInt(AIAgent[11]._hex, 16)
         : null,
@@ -291,9 +291,8 @@ const tx = price !== null
           cid,
           signedMessage,
           3,
-          { "1.modelId": parseInt(AIAgent[11]._hex, 16).toString() }
+          { "1.AIAgentId": parseInt(AIAgent[11]._hex, 16).toString() }
         );
-
         const { masterKey: recoveredKey } = await recoverKey(shards);
 
         const fileType = "application/gzip";
@@ -303,7 +302,6 @@ const tx = price !== null
           fileType
         );
 
-        // console.log("Decrypted file", model_file);
 
         const url = window.URL.createObjectURL(model_file);
         const a = document.createElement("a");

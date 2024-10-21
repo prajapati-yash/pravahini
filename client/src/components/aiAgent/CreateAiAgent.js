@@ -64,7 +64,6 @@ function CreateAIAgent() {
         keyFeatures: createAIAgent.AIAgentKeyFeatures,
         useCase: createAIAgent.AIAgentUseCase
       });
-      console.log('Saved to database:', response.data);
     } catch (error) {
       console.error('Error saving to database:', error);
       toast.error('Failed to save additional data to database');
@@ -183,7 +182,33 @@ function CreateAIAgent() {
   const progressCallback = (progressData) => {
     let percentageDone =
       100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
-    // console.log(percentageDone);
+    console.log(percentageDone);
+  };
+  const signAuthMessage = async () => {
+    if (window.ethereum) {
+      try {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        if (accounts.length === 0) {
+          throw new Error("No accounts returned from Wallet.");
+        }
+        const signerAddress = accounts[0];
+        const { message } = (await lighthouse.getAuthMessage(signerAddress))
+          .data;
+        const signature = await window.ethereum.request({
+          method: "personal_sign",
+          params: [message, signerAddress],
+        });
+        return { signature, signerAddress };
+      } catch (error) {
+        console.error("Error signing message with Wallet", error);
+        return null;
+      }
+    } else {
+      console.log("Please install Wallet!");
+      return null;
+    }
   };
 
   const uploadData = async () => {
@@ -192,23 +217,34 @@ function CreateAIAgent() {
       const uploadAIAgentImage = document.getElementById("aiagent-image-file");
       const uploadLicense = document.getElementById("ai-agent-license-file");
       const uploadDocument = document.getElementById("ai-agent-doc-file");
-
-
+     
       let AIAgentCid = "";
-
+console.log("is for sale", isForSale);  
       if (isForSale) {
-        const sig = await encryptionSignature();
-        const outputModel = await lighthouse.uploadEncrypted(
-          uploadAIAgent.files,
+        // const sig = await encryptionSignature();
+        // const file = uploadAIAgent.files;
+        // console.log("file", uploadAIAgent);
+        // console.log(file , process.env.REACT_APP_LIGHTHOUSE_API_KEY, sig.publicKey, sig.signedMessage);
+        // const outputModel = await lighthouse.uploadEncrypted(
+        //   uploadAIAgent.files,
+        //   process.env.REACT_APP_LIGHTHOUSE_API_KEY,
+        //   sig.publicKey,
+        //   sig.signedMessage,
+        //   null,
+        //   progressCallback
+        // );
+        // console.log("outputModel", outputModel);
+        const encryptionAuth = await signAuthMessage();
+        const { signature, signerAddress } = encryptionAuth;
+        const file = uploadAIAgent.files;
+        const output = await lighthouse.uploadEncrypted(
+          file,
           process.env.REACT_APP_LIGHTHOUSE_API_KEY,
-          sig.publicKey,
-          sig.signedMessage,
-          null,
+          signerAddress,
+          signature,
           progressCallback
         );
-
-        AIAgentCid = outputModel.data[0].Hash;
-
+        AIAgentCid = output.data[0].Hash;
         // Conditions to add
         const conditions = [
           {
