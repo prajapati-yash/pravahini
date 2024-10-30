@@ -29,7 +29,7 @@ function RegistrationPage() {
     userImage: "",
     userEmail:"",
   });
-  
+  const isFormDataComplete = Object.values(formData).every((value) => value);
 // here if already registered user then redirect to user-dashboard
   useEffect(() => {
     // const fetchUserData = async () => {
@@ -88,6 +88,7 @@ function RegistrationPage() {
   const fileInputRef = useRef(null);
   const [selectedFileName, setSelectedFileName] = useState("");
 
+  const [showTooltip, setShowTooltip] = useState(false);
   const handleLogoClick = () => {
     fileInputRef.current.click();
   };
@@ -216,7 +217,7 @@ const createUserAccount = async () => {
             onClick={handleLogoClick}
           >
             <img className="img-upload" src={upload} id="img-upload"></img>
-            <div className="upload-text">Upload Image</div>
+            <div className="upload-text">Upload Image*</div>
             <input
               type="file"
               ref={fileInputRef}
@@ -231,7 +232,7 @@ const createUserAccount = async () => {
           <div className="selected-image">
             {selectedFileName && <p>Selected Image: {selectedFileName}</p>}
           </div>
-            <p className="text-white">Upload the Image to display it on User Dashboard!<span style={{color: "#FFB800"}}>*</span></p>
+            <p className="text-white">Upload the Image to display it on User Dashboard!<span style={{color: "#FFB800"}}></span></p>
 
           {/* Registration Details */}
 
@@ -381,6 +382,14 @@ const createUserAccount = async () => {
               type="submit"
               className="btn rounded-pill my-2 py-sm-2 px-sm-5 px-4 register-btn"
               onClick={createUserAccount}
+              // disabled={!isFormDataComplete}
+              title={!isFormDataComplete ? "Fill all the details" : ""}
+              onMouseEnter={() =>  setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+              style={{
+                cursor: !isFormDataComplete ? "not-allowed" : "pointer",
+                opacity: !isFormDataComplete ? 0.7 : 1,
+              }}
             >
               {btnloading ? (
                 <>
@@ -390,6 +399,25 @@ const createUserAccount = async () => {
                 <>Register</>
               )}
             </button>
+            {showTooltip &&!isFormDataComplete && (
+        <div
+          style={{
+            position: "absolute",
+            // bottom: "100%", // Position above the button
+            left: "50%",
+            transform: "translateX(-50%)",
+            backgroundColor: "#333",
+            color: "#fff",
+            padding: "5px 10px",
+            borderRadius: "5px",
+            fontSize: "12px",
+            whiteSpace: "nowrap",
+            zIndex: 1000,
+          }}
+        >
+          Fill all the details
+        </div>
+      )}
           </div>
           <ToastContainer />
         </div>

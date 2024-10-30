@@ -71,11 +71,21 @@ function SingleAIAgent() {
       fetchAIAgentData();
     // }
   }, [AIAgent]);
+  const handleRatingSubmit = async (newRating) => {
+    try {
+      // Set the user's rating immediately
+      setUserRating(newRating);
 
-  const handleRatingSubmit = (newRating) => {
-    setUserRating(newRating);
-    // Optionally, you can update the average rating and count here
-    // or refetch the rating data from the server
+      // Optionally, fetch the latest rating data after submission
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/rating/get-ai-agent-rating/${parseInt(AIAgent[11]._hex,16)}`);
+
+      const updatedData = response.data;
+
+      setAverageRating(updatedData.averageRating);
+      setRatingCount(updatedData.ratingCount);
+    } catch (error) {
+      console.error("Error fetching updated rating data:", error);
+    }
   };
   useEffect(() => {
     const fetchRating = async () => {
@@ -88,7 +98,7 @@ function SingleAIAgent() {
     };
 
     fetchRating();
-  }, [AIAgent,userRating  ]);
+  }, [AIAgent,userRating ]);
 
   const handleRatingChange = (newRating) => {
     setRating(newRating);
