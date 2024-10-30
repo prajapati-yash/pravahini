@@ -36,22 +36,22 @@ const BTTChain = {
 
 const BTTMainChain = {
   id: 199,
-  name: "BitTorrent Chain Donau",
-  network: "BitTorrent Chain Donau",
+  name: "BitTorrent Chain Mainnet",
+  network: "BitTorrent Chain Mainnet",
   iconUrl: "https://testscan.bt.io/static/media/BTT.e13a6c4e.svg",
   iconBackground: "#fff",
   nativeCurrency: {
     decimals: 18,
-    name: "BitTorrent Chain Donau",
+    name: "BitTorrent Chain Mainnet",
     symbol: "BTT",
   },
   rpcUrls: {
-    default: "https://rpc.bt.io/",
+    default: "https://rpc.bittorrentchain.io/",
   },
   blockExplorers: {
     default: {
-      name: "BitTorrent Chain Donau",
-      url: "https://bttcscan.com",
+      name: "BitTorrent Chain Mainnet",
+      url: "https://scan.bittorrentchain.io",
     },
   },
   testnet: false,

@@ -212,28 +212,28 @@ const createUserAccount = async () => {
           <img className="register-hero-img" src={registerImg} />
         </div>
         <div className="content-component col-lg-5">
-          <div
-            className="d-flex pb-3 upload-container"
-            onClick={handleLogoClick}
-          >
-            <img className="img-upload" src={upload} id="img-upload"></img>
-            <div className="upload-text">Upload Image*</div>
-            <input
-              type="file"
-              ref={fileInputRef}
-              style={{ display: "none" }}
-              onChange={handleFileChange}
-
-              required
-            ></input>
-
-          </div>
-
-          <div className="selected-image">
-            {selectedFileName && <p>Selected Image: {selectedFileName}</p>}
-          </div>
-            <p className="text-white">Upload the Image to display it on User Dashboard!<span style={{color: "#FFB800"}}></span></p>
-
+        <div className="d-flex flex-column flex-lg-row  py-sm-1 py-md-1 register-input-component">
+    <div className="d-flex col-6 col-xl-4 register-input-text-component">
+      <img className="col-2 register-input-img" src={upload} />
+      <div className="col-lg-5 col-xl-4 px-sm-4 px-3 register-input-text">
+        Upload Image
+        <span style={{ color: "#FFB800", fontSize: "1.2rem" }}>*</span>
+      </div>
+    </div>
+    <div className="d-flex col-6 register-input-field">
+      <input
+        type="file"
+        id="file-upload"
+        name="file-upload"
+        className="py-md-1 py-sm-1 input-form-data"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        required
+        style={{width: 215}}
+      />
+    </div>
+  
+  </div>
           {/* Registration Details */}
 
           <div className="">
@@ -399,7 +399,7 @@ const createUserAccount = async () => {
                 <>Register</>
               )}
             </button>
-            {showTooltip &&!isFormDataComplete && (
+            {/* {showTooltip &&!isFormDataComplete && (
         <div
           style={{
             position: "absolute",
@@ -417,7 +417,7 @@ const createUserAccount = async () => {
         >
           Fill all the details
         </div>
-      )}
+      )} */}
           </div>
           <ToastContainer />
         </div>
