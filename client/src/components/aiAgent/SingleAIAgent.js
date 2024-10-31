@@ -292,7 +292,7 @@ const tx = price !== null
           parseInt(AIAgent[11]._hex, 16),
           address
         );
-        const cid = AIAgent[6];
+        const cid = AIAgent[5];
 
         const { publicKey, signedMessage } = await encryptionSignature();
 
@@ -301,17 +301,16 @@ const tx = price !== null
           cid,
           signedMessage,
           3,
-          { "1.AIAgentId": parseInt(AIAgent[11]._hex, 16).toString() }
+          { "1.modelId": parseInt(AIAgent[11]._hex, 16).toString() }
         );
         const { masterKey: recoveredKey } = await recoverKey(shards);
 
-        const fileType = "application/gzip";
+        const fileType = "application/zip";
         const model_file = await lighthouse.decryptFile(
           cid,
           recoveredKey,
           fileType
         );
-
 
         const url = window.URL.createObjectURL(model_file);
         const a = document.createElement("a");
@@ -545,7 +544,7 @@ const handleBackClick = () => {
                   type="submit"
                   className="btn rounded-pill my-2 py-sm-3 px-sm-5 model-buy-btn"
                   disabled={!AIAgent[10]}
-                  onClick={handleBuyAIAgentToast}
+                  onClick={handleBuyAIAgent}
                 >
                   {btnloading ? (
                     <>

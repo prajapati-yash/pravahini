@@ -21,9 +21,9 @@ function SubscribedAIAgents() {
           console.log("Metamask is not installed, please install!");
         }
         const con = await AiAgentInstance();
-        console.log("con",con);
+        // console.log("con",con);
         const getDatasetDetails = await con.getAllAIAgentsSubscriptionOfUser();
-        console.log("detailsss",getDatasetDetails);
+        // console.log("detailsss",getDatasetDetails);
         setAllSubscribedDatasets(getDatasetDetails);
         // console.log(allSubscribedDatasets);
       }

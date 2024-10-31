@@ -513,7 +513,7 @@ function SingleDataset() {
                       type="submit"
                       className="btn rounded-pill my-2 py-sm-3 px-sm-5 dataset-buy-btn"
                       disabled={!dataset[10]}
-                      onClick={handleBuyDatasetToast}
+                      onClick={handleBuyDataset}
                     >
                       {btnloading ? (
                         <>

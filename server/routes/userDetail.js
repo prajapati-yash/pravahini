@@ -50,7 +50,7 @@ router.put('/register', async (req, res) => {
 router.get('/register', async (req, res) => {
     try {
       const {address}= req.query; // Get the user ID from the query parameter
-      console.log(address);
+      // console.log(address);
       const user = await userDetailSchema.findOne({address});
       // console.log(user); // Log the user object
       res.json(user);

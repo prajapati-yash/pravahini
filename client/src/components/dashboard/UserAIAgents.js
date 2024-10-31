@@ -23,7 +23,7 @@ function UserAIAgents() {
         const con = await AiAgentInstance();
         const getDatasetDetails = await con.getAllAIAgentsOfUser();
         setAllUserAIAgents(getDatasetDetails);
-        console.log(allUserAIAgents);
+        // console.log(allUserAIAgents);
       }
     } catch (error) {
       console.log(error);

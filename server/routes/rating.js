@@ -6,13 +6,13 @@
 router.post('/rate-ai-agent', async (req, res) => {
     console.log('Received rating request');
     try {
-      console.log('Request body:', req.body);
+      // console.log('Request body:', req.body);
       const { aiAgentId, rating, userId } = req.body;
       
       let aiAgent = await AIAgent.findOne({ aiAgentId });
       
       if (!aiAgent) {
-        console.log('AI Agent not found. Creating new AI Agent with ID:', aiAgentId);
+        // console.log('AI Agent not found. Creating new AI Agent with ID:', aiAgentId);
         aiAgent = new AIAgent({
           aiAgentId,
           ratingsSum: rating,
@@ -20,7 +20,7 @@ router.post('/rate-ai-agent', async (req, res) => {
           averageRating: rating
         });
       } else {
-        console.log('Updating existing AI Agent with ID:', aiAgentId);
+        // console.log('Updating existing AI Agent with ID:', aiAgentId);
         // Update existing AI Agent's rating information
         aiAgent.ratingsSum = (aiAgent.ratingsSum || 0) + rating;
         aiAgent.ratingCount = (aiAgent.ratingCount || 0) + 1;
@@ -62,8 +62,8 @@ router.get('/get-ai-agent-rating/:aiAgentId', async (req, res) => {
       // Extracting userId (or userAddress) from query parameters
       const { userId } = req.query;
   
-      console.log('Fetching rating for AI Agent with ID:', aiAgentId);
-      console.log('User Address:', userId);
+      // console.log('Fetching rating for AI Agent with ID:', aiAgentId);
+      // console.log('User Address:', userId);
   
       // Find the AI Agent's details by ID
       const aiAgent = await AIAgent.findOne({ aiAgentId });

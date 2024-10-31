@@ -442,7 +442,7 @@ const handleBackClick = () => {
                   type="submit"
                   className="btn rounded-pill my-2 py-sm-3 px-sm-5 model-buy-btn"
                   disabled={!model[10]}
-                  onClick={handleBuyModelToast}
+                  onClick={handleBuyModel}
                 >
                   {btnloading ? (
                     <>
